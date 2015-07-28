@@ -1,0 +1,32 @@
+//
+//  bwUtil.cpp
+//  ofxObjLoader_test2
+//
+//  Created by White, Bob on 4/13/15.
+//
+//
+
+#include "bwUtil.h"
+
+namespace bwUtil
+{
+    //takes an interger and outputs a string with double digits.
+    string dDigiter(int i) {
+        string output;
+        if(i<10){
+            output = "0"+ofToString(i);
+        } else {
+            output = ofToString(i);
+        }
+        return output;
+    }
+    
+    float presetMidiNotes(float i){
+        float returnedMidiNote;
+        
+        returnedMidiNote = 80-i;
+        
+        return returnedMidiNote;
+    }
+    
+}

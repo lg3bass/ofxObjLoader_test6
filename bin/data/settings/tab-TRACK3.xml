@@ -1,0 +1,60 @@
+<Widget>
+    <Kind>42</Kind>
+    <Name>(G)COPIES 3</Name>
+    <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(G)SCALE</Name>
+    <Value>50.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(G)ROTATE</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(G)TRANS-X</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(G)TRANS-Y</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(G)TRANS-Z</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>(L)COPIES 3</Name>
+    <Value>8</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(L)SCALE</Name>
+    <Value>4.862069130</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(L)ROTATE</Name>
+    <Value>-45.221679688</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(L)TRANS-X</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(L)TRANS-Y</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>(L)TRANS-Z</Name>
+    <Value>0.000000000</Value>
+</Widget>
