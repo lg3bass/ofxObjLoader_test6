@@ -6,9 +6,10 @@
 #include "objFileLoader.h"
 #include "vboMeshObj.h"
 #include "ofxUI.h"
+#include "ofxOsc.h"
 
 #define HOW_MANY 2
-
+#define PORT 7000
 
 class ofApp : public ofBaseApp{
 
@@ -88,6 +89,9 @@ class ofApp : public ofBaseApp{
         //ofxUI
         ofxUITabBar *guiTabBar;
         vector<ofxUICanvas *> guis;
+    
+        //ofxOSC
+        ofxOscReceiver receiver;
     
         void setup();
 		void update();

@@ -149,7 +149,11 @@ void vboMeshObj::draw(){
 }
 
 //--------------------------------------------------------------
-void vboMeshObj::update(){
+void vboMeshObj::update(int _frame){
+    
+    frame = _frame;
+    
+    /*
     if(params.isPlaying){
         
         if(frame < numFiles-1){
@@ -163,6 +167,7 @@ void vboMeshObj::update(){
         frame = 0;
         params.isPlaying = false;
     }
+     */
 
 }
 

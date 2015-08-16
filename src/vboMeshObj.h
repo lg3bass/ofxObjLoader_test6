@@ -68,7 +68,7 @@ class vboMeshObj {
     void setMatCap(string _img);
     void setShader(string _shader);
     void draw();
-    void update();
+    void update(int _frame);
     void advanceFrame();
     void play();
     void setupGui(int _index);

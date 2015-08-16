@@ -3,6 +3,11 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    // listen on the given port
+	cout << "listening for osc messages on port " << PORT << "\n";
+	receiver.setup(PORT);
+    
+    
     ofSetVerticalSync(true);
     ofSetFrameRate(60);
     ofDisableArbTex();
@@ -87,9 +92,9 @@ void ofApp::update(){
     */
      
      
-    track8.update();
-    track9.update();
-    track10.update();
+    //track8.update();
+    track9.update(0);
+    track10.update(0);
     
     /*
     track11.update();
@@ -102,6 +107,30 @@ void ofApp::update(){
     track18.update();
     track19.update();
     */
+    
+    while(receiver.hasWaitingMessages()){
+		// get the next message
+		ofxOscMessage m;
+		receiver.getNextMessage(&m);
+        if(m.getAddress() == "/track8"){
+            //
+            track8.update(m.getArgAsInt32(0));
+			//cout << "track 8 frame: " << ofToString(m.getArgAsInt32(0)) << endl;
+		}
+        if(m.getAddress() == "/track9"){
+            //
+            track9.update(m.getArgAsInt32(0));
+			//cout << "track 8 frame: " << ofToString(m.getArgAsInt32(0)) << endl;
+		}
+        if(m.getAddress() == "/track10"){
+            //
+            track10.update(m.getArgAsInt32(0));
+			//cout << "track 8 frame: " << ofToString(m.getArgAsInt32(0)) << endl;
+		}
+        
+        
+    }
+    
 }
 
 //--------------------------------------------------------------
