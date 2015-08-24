@@ -4,10 +4,12 @@
 //--------------------------------------------------------------
 vboMeshObj::vboMeshObj() {
     frame = 0;
+    lastFrame = 0;
 
     //setup default params
     params.isPlaying = false;
     params.solo = false;
+    params.oscControlled = true;
     
     params.g_copies = 1;
     params.g_scale = 10.0;
@@ -149,27 +151,80 @@ void vboMeshObj::draw(){
 }
 
 //--------------------------------------------------------------
-void vboMeshObj::update(int _frame){
+void vboMeshObj::update(){
     
-    frame = _frame;
     
-    /*
+    //cout << "track 8 frame: " << frame << endl;
+
+    
+    
     if(params.isPlaying){
-        
-        if(frame < numFiles-1){
-            frame++;
+        if(params.oscControlled){
+            if(frame < incomingFrame){
+                
+                frame++;
+                cout << "track 8 frame: *" << frame << endl;
+            } else {
+                params.isPlaying = false;
+            }
         } else {
-            frame = 0;
-            params.isPlaying = false;
+            //key pressed functions
+            if(frame < numFiles-1){
+                frame++;
+            } else {
+                frame = 0;
+                params.isPlaying = false;
+            }
+        }
+        
+        
+
+        
+    } else {
+        
+        //key pressed functions
+//        frame = 0;
+//        params.isPlaying = false;
+    }
+    
+
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::processOSCFrame(int _frame){
+    
+    
+    //stop advancing
+    
+    //store the last frame.
+    lastFrame = frame;
+    //set the current frame.
+    incomingFrame = _frame;
+    
+    //first check if incoming frame is greater than current frame
+    if(incomingFrame > lastFrame){
+        params.isPlaying = false;
+        
+        //if the incoming frame is within the range x+9
+        if(incomingFrame > (lastFrame+1) && incomingFrame < (lastFrame+20)){
+            //cout << "---- frame rate has jumped" << endl;
+            params.isPlaying = true;
+        } else {
+            //else: just jump cut forward
+            frame = incomingFrame;
+            cout << "track 8 frame: " << frame << endl;
         }
         
     } else {
-        frame = 0;
-        params.isPlaying = false;
+    // else: jump cut backwards
+        frame = incomingFrame;
+        cout << "track 8 frame: " << frame << endl;
+        
     }
-     */
 
+    
 }
+
 
 //--------------------------------------------------------------
 void vboMeshObj::advanceFrame(){
@@ -181,9 +236,6 @@ void vboMeshObj::play() {
     
     counter = 0;
     params.isPlaying = true;
-    
-    
-    
     
 }
 
@@ -198,6 +250,7 @@ void vboMeshObj::setupGui(int _index){
     gui->addLabel("TRACK" + index);
     
     gui->addToggle("SOLO", &params.solo);
+    gui->addToggle("OSC", &params.oscControlled);
     
     gui->addLabel("GLOBAL");
     gui->addIntSlider("(G)COPIES " + index, 1, 12, &params.g_copies);
@@ -257,9 +310,13 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
 //--------------------------------------------------------------
 void vboMeshObj::keyPressed(int key)
 {
-    cout << "vboMeshObj::keyPressed" << ofToString(index) << "-KEY:" << ofToString(key) << endl;
-    ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::red);
-    params.isPlaying = true;
+    
+    if(!params.oscControlled){
+        cout << "vboMeshObj::keyPressed" << ofToString(index) << "-KEY:" << ofToString(key) << endl;
+        ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::red);
+        params.isPlaying = true;
+    }
+
     
 
 }
@@ -267,9 +324,12 @@ void vboMeshObj::keyPressed(int key)
 //--------------------------------------------------------------
 void vboMeshObj::keyReleased(int key)
 {
-    cout << ofToString(index) << " released from withing vboMeshObj" << endl;
-    ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::black);
-    params.isPlaying = false;
+    if(!params.oscControlled){
+        cout << ofToString(index) << " released from withing vboMeshObj" << endl;
+        ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::black);
+        params.isPlaying = false;
+    }
+
     
 
 }

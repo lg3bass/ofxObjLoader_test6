@@ -9,7 +9,7 @@ void ofApp::setup(){
     
     
     ofSetVerticalSync(true);
-    ofSetFrameRate(60);
+    //ofSetFrameRate(90);
     ofDisableArbTex();
         
     //1. get paths to the obj files.
@@ -92,9 +92,9 @@ void ofApp::update(){
     */
      
      
-    //track8.update();
-    track9.update(0);
-    track10.update(0);
+    track8.update();
+    track9.update();
+    track10.update();
     
     /*
     track11.update();
@@ -114,17 +114,17 @@ void ofApp::update(){
 		receiver.getNextMessage(&m);
         if(m.getAddress() == "/track8"){
             //
-            track8.update(m.getArgAsInt32(0));
+            track8.processOSCFrame(m.getArgAsInt32(0));
 			//cout << "track 8 frame: " << ofToString(m.getArgAsInt32(0)) << endl;
 		}
         if(m.getAddress() == "/track9"){
             //
-            track9.update(m.getArgAsInt32(0));
+            track9.processOSCFrame(m.getArgAsInt32(0));
 			//cout << "track 8 frame: " << ofToString(m.getArgAsInt32(0)) << endl;
 		}
         if(m.getAddress() == "/track10"){
             //
-            track10.update(m.getArgAsInt32(0));
+            track10.processOSCFrame(m.getArgAsInt32(0));
 			//cout << "track 8 frame: " << ofToString(m.getArgAsInt32(0)) << endl;
 		}
         
@@ -202,12 +202,6 @@ void ofApp::exit()
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
-    //NOT Working
-    //track8.keyPressed(key);
-    //track9.keyPressed(key);
-    //track10.keyPressed(key);
-    
     
     if(key & OF_KEY_MODIFIER){
         if(key >= OF_KEY_F1 && key <= OF_KEY_F12){
@@ -234,27 +228,17 @@ void ofApp::keyPressed(int key){
         {
             case '8':
             {
-                //pass the key command into the objFileLoader
                 track8.keyPressed(key);
             }
                 break;
             case '9':
             {
                 track9.keyPressed(key);
-//                cout << "9 pressed" << endl;
-//                guiTabBar->getWidget("TRACK9")->setColorBack(ofColor::red);
-//                //cout << guiTabBar->getActiveCanvas()->getName() << endl;
-//                track9.params.isPlaying = true;
             }
                 break;
             case '0':
             {
                 track10.keyPressed(key);
-//                cout << "10 pressed" << endl;
-//                guiTabBar->getWidget("TRACK10")->setColorBack(ofColor::red);
-//                //cout << guiTabBar->getActiveCanvas()->getName() << endl;
-//                
-//                track10.params.isPlaying = true;
             }
                 break;
             default:
@@ -365,13 +349,7 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    
-    //track8.keyReleased(key);
-    //track9.keyReleased(key);
-    //track10.keyReleased(key);
-    
-    
-    
+
     if(key & OF_KEY_MODIFIER){
         if(key >= OF_KEY_F1 && key <= OF_KEY_F12){
             //cout << "F KEY:" << key << endl;
@@ -403,18 +381,11 @@ void ofApp::keyReleased(int key){
             case '9':
             {
                 track9.keyReleased(key);
-//                cout << "9 released" << endl;
-//                guiTabBar->getWidget("TRACK9")->setColorBack(ofColor::black);
-//                
-//                track9.params.isPlaying = false;
             }
                 break;
             case '0':
             {
                 track10.keyReleased(key);
-//                cout << "10 released" << endl;
-//                guiTabBar->getWidget("TRACK10")->setColorBack(ofColor::black);
-//                track10.params.isPlaying = false;
             }
                 break;
             default:

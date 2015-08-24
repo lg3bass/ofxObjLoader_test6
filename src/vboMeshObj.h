@@ -21,8 +21,9 @@ class vboMeshObj {
     
     int frame;//current frame
     int numFiles;//total number of obj files.
-    
-    
+    int incomingFrame;
+    int lastFrame;
+
     
     int counter;
     
@@ -30,6 +31,7 @@ class vboMeshObj {
     struct guiParams {
         bool isPlaying;
         bool solo;
+        bool oscControlled;
                 
         int g_copies;
         float g_scale;
@@ -68,7 +70,8 @@ class vboMeshObj {
     void setMatCap(string _img);
     void setShader(string _shader);
     void draw();
-    void update(int _frame);
+    void update();
+    void processOSCFrame(int _frame);
     void advanceFrame();
     void play();
     void setupGui(int _index);
