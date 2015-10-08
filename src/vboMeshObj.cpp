@@ -3,31 +3,40 @@
 
 //--------------------------------------------------------------
 vboMeshObj::vboMeshObj() {
-    frame = 0;
-    lastFrame = 0;
+
 
     //setup default params
     params.isPlaying = false;
     params.solo = false;
     params.oscControlled = true;
+    params.mirrored = true;
+    params.tweenType = 11;
     
     params.g_copies = 1;
     params.g_scale = 10.0;
-    params.g_rot = 0.0;
+    //params.g_rot = 0.0;
+    params.g_rotate = ofVec3f(0.0,0.0,0.0);
     params.g_trans = ofVec3f(0.0,0.0,0.0);
     
     params.l_copies = 4;
     params.l_scale = 1.0;
-    params.l_rot = -90.0;
+    //params.l_rot = -90.0;
+    params.l_rotate = ofVec3f(0.0,0.0,-90.0);
     params.l_trans = ofVec3f(0.0,0.0,0.0);
     
+    params.mirror_distance = 10.0;
+    params.durration_in_ms = 1000.0;
     
+    frame = 0;
+
     
 }
 
 //--------------------------------------------------------------
 void vboMeshObj::setup(const objFileLoader::extObjFile &_input, string _img, string _shader, int _index){
   
+    frame = 0;//duplicate in constructor
+    
     index = _index;
     
     trackData = _input;
@@ -69,17 +78,20 @@ void vboMeshObj::reportParams(int _i){
     cout << "g_copies-" << params.g_copies << endl;
     cout << "g_scale-" << params.g_scale << endl;
     cout << "g_rot-" << params.g_rot << endl;
+    cout << "g_rotate-" << params.g_rotate << endl;
     cout << "g_trans-" << params.g_trans << endl;
     
     cout << "l_copies-" << params.l_copies << endl;
     cout << "l_scale-" << params.l_scale << endl;
     cout << "l_rot-" << params.l_rot << endl;
+    cout << "l_rotate-" << params.l_rotate << endl;
     cout << "l_trans:-" << params.l_trans << endl;
 }
 
 
 //--------------------------------------------------------------
 vector<ofVboMesh> vboMeshObj::passObjTwoVboMesh(vector<ofFile> _files){
+    //This function does the acutual loading to video card.
     
     ofMesh original;
     
@@ -102,13 +114,11 @@ vector<ofVboMesh> vboMeshObj::passObjTwoVboMesh(vector<ofFile> _files){
 
 //--------------------------------------------------------------
 void vboMeshObj::setupVboMesh(const objFileLoader::extObjFile &_input){
-    
-    frame = 0;
+
     numFiles = _input.numFiles;
     
     vboMesh1.clear();
     vboMesh1 = passObjTwoVboMesh(_input.objs);
-
     
 }
 
@@ -125,6 +135,8 @@ void vboMeshObj::setShader(string _shader){
 //--------------------------------------------------------------
 void vboMeshObj::draw(){
     
+    
+    
     //accumulate transform stacks.
     for(int j=0;j<params.g_copies;j++){
         glPushMatrix();
@@ -133,18 +145,51 @@ void vboMeshObj::draw(){
         //global trans
         glTranslatef(params.g_trans.x,params.g_trans.y,j*params.g_trans.z);
         //global rot
-        glRotatef(params.g_rot,0,0,1);//z axis.
+        
+        glRotatef(params.g_rotate.x,1,0,0);
+        glRotatef(params.g_rotate.y,0,1,0);
+        glRotatef(params.g_rotate.z,0,0,1);
+        
         for(int i=0;i<params.l_copies;i++){
             glPushMatrix();
-            glRotatef(i*params.l_rot,0,0,1);//z axis
+            
+            glRotatef(i*params.l_rotate.x,1,0,0);
+            glRotatef(i*params.l_rotate.y,0,1,0);
+            glRotatef(i*params.l_rotate.z,0,0,1);
+            
+            
             glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z);
+            
+            glScalef(params.l_scale,params.l_scale,params.l_scale);
+            
             shader.begin();
                 shader.setUniformTexture("tMatCap", matCap, 1);
                 vboMesh1[frame].draw();
             shader.end();
+            
             glPopMatrix();
         }
         
+        if(params.mirrored){
+            for(int i=params.l_copies;i>0;i--){
+                glPushMatrix();
+                
+                glRotatef(i*params.l_rotate.x,1,0,0);
+                glRotatef(i*params.l_rotate.y,0,1,0);
+                glRotatef(i*params.l_rotate.z,0,0,1);
+                
+                glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z+params.mirror_distance);
+                
+                glScalef(params.l_scale,params.l_scale,-params.l_scale);
+                
+                shader.begin();
+                shader.setUniformTexture("tMatCap", matCap, 1);
+                vboMesh1[frame].draw();
+                shader.end();
+                
+                glPopMatrix();
+            }
+        }
         glPopMatrix();
     }
     
@@ -152,90 +197,174 @@ void vboMeshObj::draw(){
 
 //--------------------------------------------------------------
 void vboMeshObj::update(){
-    
-    
-    //cout << "track 8 frame: " << frame << endl;
-
-    
-    
     if(params.isPlaying){
         if(params.oscControlled){
-            if(frame < incomingFrame){
-                
-                frame++;
-                cout << "track 8 frame: *" << frame << endl;
-            } else {
-                params.isPlaying = false;
+            switch (params.tweenType){
+                case 1:
+                    frame = tweenback.update();
+                    if(tweenback.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 2:
+                    frame = tweenbounce.update();
+                    if(tweenbounce.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 3:
+                    frame = tweencirc.update();
+                    if(tweencirc.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 4:
+                    frame = tweencubic.update();
+                    if(tweencubic.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 5:
+                    frame = tweenelastic.update();
+                    if(tweenelastic.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 6:
+                    frame = tweenexpo.update();
+                    if(tweenexpo.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 7:
+                    frame = tweenquad.update();
+                    if(tweenquad.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 8:
+                    frame = tweenquart.update();
+                    if(tweenquart.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 9:
+                    frame = tweenquint.update();
+                    if(tweenquint.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 10:
+                    frame = tweensine.update();
+                    if(tweensine.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
+                case 11:
+                    frame = tweenlinear.update();
+                    if(tweenlinear.isCompleted()){
+                        params.isPlaying = false;
+                    }
+                    break;
             }
+            //cout << "frame: " << frame << endl;
+            
         } else {
-            //key pressed functions
-            if(frame < numFiles-1){
-                frame++;
-            } else {
-                frame = 0;
-                params.isPlaying = false;
-            }
-        }
-        
-        
+            
+            //TODO-DO TWEEN CODE HERE TO ON KEY PRESS.
+            //NON OSC CONTROLL
+//            if(frame < numFiles-1){
+//                //timeline++;
+//                frame = round(timeline*frame_increment);
+//                cout << "timeline|frame:" << timeline << "|" << frame << endl;
+//
+//            } else {
+//                frame = 0;
+//                timeline = 0;
+//                params.isPlaying = false;
+//            }
+            
+            
+        }// oscControlled
+    }// is Playing
+    
+    //sets the button a color when a osc message is recieved.
+    setIndicator();
+}
 
-        
-    } else {
-        
-        //key pressed functions
-//        frame = 0;
-//        params.isPlaying = false;
+//--------------------------------------------------------------
+void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _segmentLength, int _tweenType){
+    
+    params.tweenType = _tweenType;
+    
+    //ofxTween
+    unsigned delay = 0;
+    unsigned duration = _durration;
+    unsigned start = _destinationFrame - _segmentLength;
+    unsigned end = _destinationFrame;
+    
+    
+    
+    
+    //TWEEN
+    switch(params.tweenType){
+        case 1:
+            tweenback.setParameters(1,easingback, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 2:
+            tweenbounce.setParameters(2,easingbounce, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 3:
+            tweencirc.setParameters(3,easingcirc, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 4:
+            tweencubic.setParameters(4,easingcubic, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 5:
+            tweenelastic.setParameters(5,easingelastic, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 6:
+            tweenexpo.setParameters(6,easingexpo, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 7:
+            tweenquad.setParameters(7,easingquad, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 8:
+            tweenquart.setParameters(8,easingquart, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 9:
+            tweenquint.setParameters(9,easingquint, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 10:
+            tweensine.setParameters(10,easingsine, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        case 11:
+            tweenlinear.setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+            break;
+        default:
+            tweenlinear.setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+            break;
     }
     
-
-}
-
-//--------------------------------------------------------------
-void vboMeshObj::processOSCFrame(int _frame){
-    
-    
-    //stop advancing
-    
-    //store the last frame.
-    lastFrame = frame;
-    //set the current frame.
-    incomingFrame = _frame;
-    
-    //first check if incoming frame is greater than current frame
-    if(incomingFrame > lastFrame){
-        params.isPlaying = false;
-        
-        //if the incoming frame is within the range x+9
-        if(incomingFrame > (lastFrame+1) && incomingFrame < (lastFrame+20)){
-            //cout << "---- frame rate has jumped" << endl;
-            params.isPlaying = true;
-        } else {
-            //else: just jump cut forward
-            frame = incomingFrame;
-            cout << "track 8 frame: " << frame << endl;
-        }
-        
-    } else {
-    // else: jump cut backwards
-        frame = incomingFrame;
-        cout << "track 8 frame: " << frame << endl;
-        
-    }
+    //tweenlinear.setParameters(1,easinglinear,ofxTween::easeOut,start,end,duration,delay);
+    //tweenquint.setParameters(1,easingquint,ofxTween::easeOut,start,end,duration,delay);
+    //tweenquad.setParameters(1,easingquad, ofxTween::easeOut,start,end,duration,delay);
 
     
-}
-
-
-//--------------------------------------------------------------
-void vboMeshObj::advanceFrame(){
-    frame++;
-}
-
-//--------------------------------------------------------------
-void vboMeshObj::play() {
     
-    counter = 0;
+    cout << "============================" << endl;
+    cout << "OSCMessage>frame:" << frame <<
+    ", durration:" << _durration <<
+    ", segmentEnd:" << _destinationFrame <<
+    ", params.tweenType:" << params.tweenType <<
+    endl;
+
+    //start the animation
     params.isPlaying = true;
+    
+    
+
+    
     
 }
 
@@ -245,56 +374,105 @@ void vboMeshObj::setupGui(int _index){
     string index = ofToString(_index);
     
     // TAKE 2
-    ofxUICanvas* gui = new ofxUICanvas();
+    gui = new ofxUICanvas();
+    
     gui->setName("TRACK" + index);
     gui->addLabel("TRACK" + index);
     
     gui->addToggle("SOLO", &params.solo);
-    gui->addToggle("OSC", &params.oscControlled);
     
+    gui->addToggle("OSC", &params.oscControlled);
+    gui->addToggle("MIRROR", &params.mirrored);
+    
+    //=====================
     gui->addLabel("GLOBAL");
     gui->addIntSlider("(G)COPIES " + index, 1, 12, &params.g_copies);
     
     gui->addSlider("(G)SCALE", 1.0, 50.0, &params.g_scale);
-    gui->addSlider("(G)ROTATE", -180.0, 180.0, &params.g_rot);
-    gui->addSlider("(G)TRANS-X", -100.0, 100.0, &params.g_trans.x);
-    gui->addSlider("(G)TRANS-Y", -100.0, 100.0, &params.g_trans.y);
-    gui->addSlider("(G)TRANS-Z", -100.0, 100.0, &params.g_trans.z);
     
-// Minimal Slider not passing a reliable value
-//    gui->addMinimalSlider("(G)SCALE", 1.0, 50.0, &params.g_scale,OFX_UI_FONT_SMALL);
-//    gui->addMinimalSlider("(G)ROTATE", -180.0, 180.0, &params.g_rot,OFX_UI_FONT_SMALL);
-//    gui->addMinimalSlider("(G)TRANS-X", -100.0, 100.0, &params.g_trans.x,OFX_UI_FONT_SMALL);
-//    gui->addMinimalSlider("(G)TRANS-Y", -100.0, 100.0, &params.g_trans.y,OFX_UI_FONT_SMALL);
-//    gui->addMinimalSlider("(G)TRANS-Z", -100.0, 100.0, &params.g_trans.z,OFX_UI_FONT_SMALL);
-
+    gui->addSlider("(G)ROTATE-X",-180.0,180.0, &params.g_rotate.x);
+    setGuiSnapUnits("(G)ROTATE-X",10.0);
+    gui->addSlider("(G)ROTATE-Y",-180.0,180.0, &params.g_rotate.y);
+    setGuiSnapUnits("(G)ROTATE-Y",10.0);
+    gui->addSlider("(G)ROTATE-Z",-180.0,180.0, &params.g_rotate.z);
+    setGuiSnapUnits("(G)ROTATE-Z",10.0);
+    gui->addSlider("(G)TRANS-X", -50.0, 50.0, &params.g_trans.x);
+    setGuiSnapUnits("(G)TRANS-X",5.0);
+    gui->addSlider("(G)TRANS-Y", -50.0, 50.0, &params.g_trans.y);
+    setGuiSnapUnits("(G)TRANS-Y",5.0);
+    gui->addSlider("(G)TRANS-Z", -50.0, 50.0, &params.g_trans.z);
+    setGuiSnapUnits("(G)TRANS-Z",5.0);
     
+    //====================
     gui->addLabel("LOCAL");
     gui->addIntSlider("(L)COPIES " + index, 1, 12, &params.l_copies);
 
     
-    gui->addSlider("(L)SCALE", 1.0, 50.0, &params.l_scale);
-    gui->addSlider("(L)ROTATE", -180.0, 180.0, &params.l_rot);
-    gui->addSlider("(L)TRANS-X", -100.0, 100.0, &params.l_trans.x);
-    gui->addSlider("(L)TRANS-Y", -100.0, 100.0, &params.l_trans.y);
-    gui->addSlider("(L)TRANS-Z", -100.0, 100.0, &params.l_trans.z);
-
-    // Minimal Slider not passing a reliable value
-//    gui->addMinimalSlider("(L)SCALE", 1.0, 50.0, &params.l_scale,OFX_UI_FONT_SMALL);
-//    gui->addMinimalSlider("(L)ROTATE", -180.0, 180.0, &params.l_rot,OFX_UI_FONT_SMALL);
-//    gui->addMinimalSlider("(L)TRANS-X", -100.0, 100.0, &params.l_trans.x,OFX_UI_FONT_SMALL);
-//    gui->addMinimalSlider("(L)TRANS-Y", -100.0, 100.0, &params.l_trans.y,OFX_UI_FONT_SMALL);
-//    gui->addMinimalSlider("(L)TRANS-Z", -100.0, 100.0, &params.l_trans.z,OFX_UI_FONT_SMALL);
+    gui->addSlider("(L)SCALE", 0.1, 1.0, &params.l_scale);
+    gui->addSlider("(L)ROTATE-X",-180.0,180.0,&params.l_rotate.x);
+    setGuiSnapUnits("(L)ROTATE-X",5.0);
+    gui->addSlider("(L)ROTATE-Y",-180.0,180.0,&params.l_rotate.y);
+    setGuiSnapUnits("(L)ROTATE-Y",5.0);
+    gui->addSlider("(L)ROTATE-Z",-180.0,180.0,&params.l_rotate.z);
+    setGuiSnapUnits("(L)ROTATE-Z",5.0);
     
-    //gui->add2DPad("PAD " + index, ofVec2f(-1, 1), ofVec2f(-1, 1), ofVec2f(0.0, 0.0));
+    gui->addSlider("(L)TRANS-X", -100.0, 100.0, &params.l_trans.x);
+    setGuiSnapUnits("(L)TRANS-X",5.0);
+    gui->addSlider("(L)TRANS-Y", -100.0, 100.0, &params.l_trans.y);
+    setGuiSnapUnits("(L)TRANS-Y",5.0);
+    gui->addSlider("(L)TRANS-Z", -100.0, 100.0, &params.l_trans.z);
+    setGuiSnapUnits("(L)TRANS-Z",5.0);
+
+    gui->addSlider("MIRROR DISTANCE",-40.0,40.0, &params.mirror_distance);
+    gui->addSlider("durration in ms",100.0,2000.0, &params.durration_in_ms);
+    setGuiSnapUnits("durration in ms",100.0);
+    
+
+    
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&vboMeshObj::guiEvent);
+    
+    
     
     //add this tracks gui to the tabbar
     ((ofApp*)ofGetAppPtr())->guiTabBar->addCanvas(gui);
     ((ofApp*)ofGetAppPtr())->guis.push_back(gui);
     
+    
+    //set increment and sticky(move to function)
+    
+//    ofxUISlider *sliderGX = (ofxUISlider *)gui->getWidget("(G)ROTATE-X");
+//    sliderGX->setStickyValue(10.0);
+//    sliderGX->setIncrement(10.0);
+//
+//    ofxUISlider *sliderGY = (ofxUISlider *)gui->getWidget("(G)ROTATE-Y");
+//    sliderGY->setStickyValue(10.0);
+//    sliderGY->setIncrement(10.0);
+//    
+//    ofxUISlider *sliderGZ = (ofxUISlider *)gui->getWidget("(G)ROTATE-Z");
+//    sliderGZ->setStickyValue(10.0);
+//    sliderGZ->setIncrement(10.0);
 }
+
+//--------------------------------------------------------------
+void vboMeshObj::setGuiSnapUnits(string _name, float _unit){
+    
+    ofxUISlider *slider = (ofxUISlider *)gui->getWidget(_name);
+    slider->setStickyValue(_unit);
+    slider->setIncrement(_unit);
+    
+}
+//--------------------------------------------------------------
+void vboMeshObj::setIndicator(){
+    
+    if(params.isPlaying){
+        ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::blue);
+    } else {
+        ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::black);
+
+    }
+}
+
 
 //--------------------------------------------------------------
 void vboMeshObj::guiEvent(ofxUIEventArgs &e)
@@ -304,30 +482,42 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
     string canvasParent = e.widget->getCanvasParent()->getName();
     
     //int sliderVal = e.widget->
-    cout << "vboMeshObj::" << canvasParent << "-" << kind << "-" << name << "-" << "END" << endl;
+    //cout << "vboMeshObj::" << canvasParent << "-" << kind << "-" << name << "-" << "END" << endl;
+    
+//    if (name == "(G)ROTATE-Z") {
+//        ofxUISlider *slider = (ofxUISlider *) e.widget;
+//        //cout << "Global Rotate Z" << endl;
+//        slider->setIncrement(10.0);//increment is for key commands
+//        slider->setStickyValue(10.0);
+//        cout << slider->getIncrement() << endl;
+//    }
+    
+
+    
 }
 
 //--------------------------------------------------------------
 void vboMeshObj::keyPressed(int key)
 {
-    
     if(!params.oscControlled){
-        cout << "vboMeshObj::keyPressed" << ofToString(index) << "-KEY:" << ofToString(key) << endl;
-        ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::red);
-        params.isPlaying = true;
+        //cout << "vboMeshObj::keyPressed" << ofToString(index) << "-KEY:" << ofToString(key) << endl;
+        if(!params.isPlaying){
+            ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::red);
+            params.isPlaying = true;
+            
+            //ofxTween
+            
+        }
     }
-
-    
-
 }
 
 //--------------------------------------------------------------
 void vboMeshObj::keyReleased(int key)
 {
     if(!params.oscControlled){
-        cout << ofToString(index) << " released from withing vboMeshObj" << endl;
+        //cout << ofToString(index) << " released from withing vboMeshObj" << endl;
         ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::black);
-        params.isPlaying = false;
+
     }
 
     

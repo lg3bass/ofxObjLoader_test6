@@ -7,6 +7,7 @@
 #include "ofParameter.h"
 #include "bwUtil.h"
 #include "ofxUI.h"
+#include "ofxTween.h"
 
 class vboMeshObj {
     
@@ -21,9 +22,6 @@ class vboMeshObj {
     
     int frame;//current frame
     int numFiles;//total number of obj files.
-    int incomingFrame;
-    int lastFrame;
-
     
     int counter;
     
@@ -32,17 +30,25 @@ class vboMeshObj {
         bool isPlaying;
         bool solo;
         bool oscControlled;
+        bool mirrored;
+        int tweenType;
                 
         int g_copies;
         float g_scale;
         float g_rot;
+        ofVec3f g_rotate;
         ofVec3f g_trans;
         
         
         int l_copies;
         float l_scale;
         float l_rot;
+        ofVec3f l_rotate;
         ofVec3f l_trans;
+        
+        float mirror_distance;
+        float durration_in_ms;
+        
     };
     
     
@@ -60,8 +66,38 @@ class vboMeshObj {
     ofParameter<ofVec3f> gui_lTrans;
     */
 
+    
+    //ofxTween
+    ofxTween tweenback;
+    ofxTween tweenbounce;
+    ofxTween tweencirc;
+    ofxTween tweencubic;
+    ofxTween tweenelastic;
+    ofxTween tweenexpo;
+    ofxTween tweenquad;
+    ofxTween tweenquart;
+    ofxTween tweenquint;
+    ofxTween tweensine;
+    ofxTween tweenlinear;
+    
+    ofxTween multitween;
+    
+    ofxEasingBack       easingback;
+    ofxEasingBounce     easingbounce;
+    ofxEasingCirc       easingcirc;
+    ofxEasingCubic      easingcubic;
+    ofxEasingElastic    easingelastic;
+    ofxEasingExpo       easingexpo;
+    ofxEasingQuad       easingquad;
+    ofxEasingQuart      easingquart;
+    ofxEasingQuint      easingquint;
+    ofxEasingSine       easingsine;
+    ofxEasingLinear 	easinglinear;
+    
     //constructor
     vboMeshObj();
+    
+    ofxUICanvas* gui;
     
     void setup(const objFileLoader::extObjFile &_input, string _img, string _shader,int _index);
     void reportParams(int _index);
@@ -71,10 +107,10 @@ class vboMeshObj {
     void setShader(string _shader);
     void draw();
     void update();
-    void processOSCFrame(int _frame);
-    void advanceFrame();
-    void play();
+    void OSCLaunch(int _destinationFrame, int _durration, int _segmentLength, int _tweenType);
     void setupGui(int _index);
+    void setGuiSnapUnits(string _name,float _unit);
+    void setIndicator();
     
     void guiEvent(ofxUIEventArgs &e);
     
@@ -82,9 +118,6 @@ class vboMeshObj {
     void keyReleased(int key);
     
     void exit();
-    
-
-    
     
     private:
 };

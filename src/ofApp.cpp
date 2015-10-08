@@ -3,6 +3,19 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    
+    //SYPHON
+    //much nicer than processing's vs.:)
+    ofSetWindowTitle("VMM 6");
+    mainOutputSyphonServer.setName("Screen Output");
+    
+    mClient.setup();
+    
+    mClient.setApplicationName("Simple Server");
+    mClient.setServerName("");
+    //END SYPHON
+    
+    
     // listen on the given port
 	cout << "listening for osc messages on port " << PORT << "\n";
 	receiver.setup(PORT);
@@ -28,25 +41,21 @@ void ofApp::setup(){
     track4.setup(appFileLoader.externalObjFiles[BOXSTAR],"ghost.jpg","sem",4);
     track5.setup(appFileLoader.externalObjFiles[UNBLOCKERBASS],"red_clay.jpg","sem",5);
     track6.setup(appFileLoader.externalObjFiles[TRACERS],"gJGSpecial_01.png","sem",6);
-    track7.setup(appFileLoader.externalObjFiles[STARBURST],"JG_Red.png","sem",7);
     */
-     
-     
+    track7.setup(appFileLoader.externalObjFiles[STARBURST],"JG_Red.png","sem",7);
     track8.setup(appFileLoader.externalObjFiles[WIERDARMS3],"JG_Gold.png","sem",8);
     track9.setup(appFileLoader.externalObjFiles[WIERDARMS2],"JG_Drink01.png","sem",9);
     track10.setup(appFileLoader.externalObjFiles[WIERDARMS1],"normals.jpg","sem",10);
+    track11.setup(appFileLoader.externalObjFiles[LIGHTNING10],"thuglee-03.jpg","sem",11);
+    track12.setup(appFileLoader.externalObjFiles[LIGHTNING9],"thuglee-backlight-01.jpg","sem",12);
+    track13.setup(appFileLoader.externalObjFiles[LIGHTNING8],"normals.jpg","sem",13);
+    track14.setup(appFileLoader.externalObjFiles[LIGHTNING7],"mshade3.jpg","sem",14);
+    track15.setup(appFileLoader.externalObjFiles[LIGHTNING6],"mshade4.jpg","sem",15);
+    track16.setup(appFileLoader.externalObjFiles[EXTRUDETRI],"material4.png","sem",16);
+    track17.setup(appFileLoader.externalObjFiles[EXTRUDESTAR],"material3.jpg","sem",17);
+    track18.setup(appFileLoader.externalObjFiles[EXTRUDEBALL],"mashrim2.jpg","sem",18);
+    track19.setup(appFileLoader.externalObjFiles[DIAMONDLAYERS],"mashrim.png","sem",19);
     
-    /*
-     track11.setup(appFileLoader.externalObjFiles[LIGHTNING10],"thuglee-03.jpg","sem");
-     track12.setup(appFileLoader.externalObjFiles[LIGHTNING9],"thuglee-backlight-01.jpg","sem");
-     track13.setup(appFileLoader.externalObjFiles[LIGHTNING8],"normals.jpg","sem");
-     track14.setup(appFileLoader.externalObjFiles[LIGHTNING7],"mshade3.jpg","sem");
-     track15.setup(appFileLoader.externalObjFiles[LIGHTNING6],"mshade4.jpg","sem");
-     track16.setup(appFileLoader.externalObjFiles[EXTRUDETRI],"material4.png","sem");
-     track17.setup(appFileLoader.externalObjFiles[EXTRUDESTAR],"material3.jpg","sem");
-     track18.setup(appFileLoader.externalObjFiles[EXTRUDEBALL],"mashrim2.jpg","sem");
-     track19.setup(appFileLoader.externalObjFiles[DIAMONDLAYERS],"mashrim.png","sem");
-     */
 
     //save an xml per gui.
     //guiTabBar->loadSettings("settings/", "tab-");
@@ -88,15 +97,11 @@ void ofApp::update(){
     track4.update();
     track5.update();
     track6.update();
-    track7.update();
     */
-     
-     
+    track7.update();
     track8.update();
     track9.update();
     track10.update();
-    
-    /*
     track11.update();
     track12.update();
     track13.update();
@@ -106,36 +111,92 @@ void ofApp::update(){
     track17.update();
     track18.update();
     track19.update();
-    */
     
     while(receiver.hasWaitingMessages()){
 		// get the next message
 		ofxOscMessage m;
 		receiver.getNextMessage(&m);
-        if(m.getAddress() == "/track8"){
-            //
-            track8.processOSCFrame(m.getArgAsInt32(0));
-			//cout << "track 8 frame: " << ofToString(m.getArgAsInt32(0)) << endl;
-		}
-        if(m.getAddress() == "/track9"){
-            //
-            track9.processOSCFrame(m.getArgAsInt32(0));
-			//cout << "track 8 frame: " << ofToString(m.getArgAsInt32(0)) << endl;
-		}
-        if(m.getAddress() == "/track10"){
-            //
-            track10.processOSCFrame(m.getArgAsInt32(0));
-			//cout << "track 8 frame: " << ofToString(m.getArgAsInt32(0)) << endl;
-		}
         
         
+        cout << m.getAddress() << endl << "track:" << m.getArgAsInt32(0) <<
+        ", note:" << m.getArgAsInt32(1) <<
+        ", durration:" << m.getArgAsInt32(2) <<
+        ", velocity:" << m.getArgAsInt32(3) <<
+        ", isMuted:" << m.getArgAsInt32(4) <<
+        ", targetSegment:" << m.getArgAsInt32(5) <<
+        ", totalSegments:" << m.getArgAsInt32(6) <<
+        ", easing:" << m.getArgAsInt32(7) <<
+        endl;
+        
+        
+        if(m.getAddress() == "/play"){
+            
+            if(m.getArgAsInt32(0) == 7){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track7.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 8){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track8.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 10,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 9){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track9.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 10,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 10){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track10.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 10,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 11){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track11.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 12){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track12.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 13){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track13.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 14){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track14.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 15){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track15.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 16){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track16.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 17){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track17.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 18){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track18.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 19){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track19.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+        }
     }
-    
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofSetWindowTitle("fps: "+ofToString(ofGetFrameRate())+" - "+ofToString(ofGetWidth())+","+ofToString(ofGetHeight())+"easyCam:"+ofToString(modkey));
+
+    
+//    //SYPHON
+//    // Clear with alpha, so we can capture via syphon and composite elsewhere should we want.
+//    glClearColor(0.0, 0.0, 0.0, 0.0);
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    //=================================================
     
     ofBackgroundGradient(ofColor::white, ofColor::gray);
     ofEnableDepthTest();
@@ -149,17 +210,32 @@ void ofApp::draw(){
         track4.draw();
         track5.draw();
         track6.draw();
+     */
         track7.draw();
-    */
-    
-    
         track8.draw();
         track9.draw();
         track10.draw();
+        track11.draw();
+        track12.draw();
+        track13.draw();
+        track14.draw();
+        track15.draw();
+        track16.draw();
+        track17.draw();
+        track18.draw();
+        track19.draw();
     
     
     cam.end();
-        
+
+    
+//    //SYPHON
+//    mClient.draw(50, 50);
+//    mainOutputSyphonServer.publishScreen();
+//    //=======================================
+    
+
+    
     drawLights();// <-- NOT SURE I NEED THIS WITH MATCAP
     
     //Need this.
@@ -184,6 +260,8 @@ void ofApp::exit()
         delete g;
     }
     delete guiTabBar;
+
+    
     /*
     track1.exit();
     track2.exit();
@@ -191,13 +269,22 @@ void ofApp::exit()
     track4.exit();
     track5.exit();
     track6.exit();
-    track7.exit();
     */
      
-    
+    track7.exit();
     track8.exit();
     track9.exit();
     track10.exit();
+    track11.exit();
+    track12.exit();
+    track13.exit();
+    track14.exit();
+    track15.exit();
+    track16.exit();
+    track17.exit();
+    track18.exit();
+    track19.exit();
+    
 }
 
 //--------------------------------------------------------------
@@ -226,6 +313,11 @@ void ofApp::keyPressed(int key){
     } else {
         switch (key)
         {
+            case '7':
+            {
+                track7.keyPressed(key);
+            }
+                break;
             case '8':
             {
                 track8.keyPressed(key);
@@ -274,15 +366,12 @@ void ofApp::keyPressed(int key){
         track4.frame++;
         track5.frame++;
         track6.frame++;
+         */
+
         track7.frame++;
-        */
-         
-         
         track8.frame++;
         track9.frame++;
         track10.frame++;
-        
-        /*
         track11.frame++;
         track12.frame++;
         track13.frame++;
@@ -292,7 +381,7 @@ void ofApp::keyPressed(int key){
         track17.frame++;
         track18.frame++;
         track19.frame++;
-        */
+    
         
     }
     
@@ -373,6 +462,11 @@ void ofApp::keyReleased(int key){
     } else {
         switch (key)
         {
+            case '7':
+            {
+                track7.keyReleased(key);
+            }
+                break;
             case '8':
             {
                 track8.keyReleased(key);

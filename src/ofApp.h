@@ -1,12 +1,15 @@
 #pragma once
 #include "ofAppGlutWindow.h"
 #include "ofMain.h"
+#include "ofxSyphon.h"
 //#include "ofxAutoReloadedShader.h"
 #include "ofxGui.h"
 #include "objFileLoader.h"
 #include "vboMeshObj.h"
 #include "ofxUI.h"
 #include "ofxOsc.h"
+#include "ofxTween.h"
+
 
 #define HOW_MANY 2
 #define PORT 7000
@@ -36,6 +39,11 @@ class ofApp : public ofBaseApp{
             EXTRUDEBALL = 18,
             DIAMONDLAYERS = 19
         };
+    
+    
+        //SYPHON
+        ofxSyphonServer mainOutputSyphonServer;
+        ofxSyphonClient mClient;
     
         ofEasyCam cam;
     
@@ -93,6 +101,9 @@ class ofApp : public ofBaseApp{
         //ofxOSC
         ofxOscReceiver receiver;
     
+
+
+    
         void setup();
 		void update();
 		void draw();
@@ -110,6 +121,5 @@ class ofApp : public ofBaseApp{
         void drawLights();
         void guiTabEvent(ofxUIEventArgs &e);
 
-    
     
 };
