@@ -136,8 +136,11 @@ void ofApp::update(){
                 track7.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
             }
             if(m.getArgAsInt32(0) == 8){
-                //OSCLaunch(<destination frame>, <durration>, <segment length>
-                track8.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 10,m.getArgAsInt32(7));
+                if(m.getArgAsInt32(3) > 64) {
+                    //OSCLaunch(<destination frame>, <durration>, <segment length>
+                    track8.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 10,m.getArgAsInt32(7));
+                }
+                
             }
             if(m.getArgAsInt32(0) == 9){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>
