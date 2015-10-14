@@ -30,6 +30,7 @@ class vboMeshObj {
         bool isPlaying;
         bool solo;
         bool oscControlled;
+        bool randomized;
         bool mirrored;
         int tweenType;
                 
@@ -48,7 +49,9 @@ class vboMeshObj {
         
         float mirror_distance;
         float durration_in_ms;
-        
+        int currentSegment;
+        vector<int> cuePoints;
+        vector<int> durrationPoints;
     };
     
     
@@ -94,6 +97,13 @@ class vboMeshObj {
     ofxEasingSine       easingsine;
     ofxEasingLinear 	easinglinear;
     
+    //tween randLocalPosition
+    ofxTween positiontweenbounce_x;
+    ofxTween positiontweenbounce_y;
+    
+    //last position
+    ofVec3f lastPosition = ofVec3f(0.0,0.0,0.0);
+    
     //constructor
     vboMeshObj();
     
@@ -103,14 +113,18 @@ class vboMeshObj {
     void reportParams(int _index);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
     void setupVboMesh(const objFileLoader::extObjFile &_input);
+    void setCuePoints(string _cues);
+    void setDurrations(string _durrationList);
     void setMatCap(string _img);
     void setShader(string _shader);
     void draw();
     void update();
     void OSCLaunch(int _destinationFrame, int _durration, int _segmentLength, int _tweenType);
+    void KeyboardLaunch(int _key, int _durration, int _segmentLength, int _tweenType);
     void setupGui(int _index);
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();
+    void randLocalPosition();
     
     void guiEvent(ofxUIEventArgs &e);
     

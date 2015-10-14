@@ -6,7 +6,7 @@ void ofApp::setup(){
     
     //SYPHON
     //much nicer than processing's vs.:)
-    ofSetWindowTitle("VMM 6");
+    ofSetWindowTitle("VMM 7");
     mainOutputSyphonServer.setName("Screen Output");
     
     mClient.setup();
@@ -43,7 +43,13 @@ void ofApp::setup(){
     track6.setup(appFileLoader.externalObjFiles[TRACERS],"gJGSpecial_01.png","sem",6);
     */
     track7.setup(appFileLoader.externalObjFiles[STARBURST],"JG_Red.png","sem",7);
+    track7.setCuePoints("30");
+    track7.setDurrations("500");
     track8.setup(appFileLoader.externalObjFiles[WIERDARMS3],"JG_Gold.png","sem",8);
+    track8.setCuePoints("10,20,30,40,50,60,70,80,90,100,110");
+    track8.setDurrations("500,250,100,250,100,250,100,250,100,250,400");
+    
+    /*
     track9.setup(appFileLoader.externalObjFiles[WIERDARMS2],"JG_Drink01.png","sem",9);
     track10.setup(appFileLoader.externalObjFiles[WIERDARMS1],"normals.jpg","sem",10);
     track11.setup(appFileLoader.externalObjFiles[LIGHTNING10],"thuglee-03.jpg","sem",11);
@@ -55,7 +61,7 @@ void ofApp::setup(){
     track17.setup(appFileLoader.externalObjFiles[EXTRUDESTAR],"material3.jpg","sem",17);
     track18.setup(appFileLoader.externalObjFiles[EXTRUDEBALL],"mashrim2.jpg","sem",18);
     track19.setup(appFileLoader.externalObjFiles[DIAMONDLAYERS],"mashrim.png","sem",19);
-    
+    */
 
     //save an xml per gui.
     //guiTabBar->loadSettings("settings/", "tab-");
@@ -100,6 +106,8 @@ void ofApp::update(){
     */
     track7.update();
     track8.update();
+    
+    /*
     track9.update();
     track10.update();
     track11.update();
@@ -111,6 +119,7 @@ void ofApp::update(){
     track17.update();
     track18.update();
     track19.update();
+    */
     
     while(receiver.hasWaitingMessages()){
 		// get the next message
@@ -132,15 +141,12 @@ void ofApp::update(){
         if(m.getAddress() == "/play"){
             
             if(m.getArgAsInt32(0) == 7){
-                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
                 track7.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
             }
             if(m.getArgAsInt32(0) == 8){
-                if(m.getArgAsInt32(3) > 64) {
-                    //OSCLaunch(<destination frame>, <durration>, <segment length>
-                    track8.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 10,m.getArgAsInt32(7));
-                }
-                
+                //OSCLaunch(<destination frame>, <durration>, <segment length>
+                track8.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 10,m.getArgAsInt32(7));
             }
             if(m.getArgAsInt32(0) == 9){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>
@@ -216,6 +222,8 @@ void ofApp::draw(){
      */
         track7.draw();
         track8.draw();
+    
+    /*
         track9.draw();
         track10.draw();
         track11.draw();
@@ -227,6 +235,7 @@ void ofApp::draw(){
         track17.draw();
         track18.draw();
         track19.draw();
+     */
     
     
     cam.end();
@@ -276,6 +285,8 @@ void ofApp::exit()
      
     track7.exit();
     track8.exit();
+    
+    /*
     track9.exit();
     track10.exit();
     track11.exit();
@@ -287,6 +298,7 @@ void ofApp::exit()
     track17.exit();
     track18.exit();
     track19.exit();
+    */
     
 }
 
@@ -319,11 +331,22 @@ void ofApp::keyPressed(int key){
             case '7':
             {
                 track7.keyPressed(key);
+                //OSCLaunch(<key-unused>,<durration-unused>,<sequenceLength>,<easing>
+                track7.KeyboardLaunch(7, 500, 30, 11);
+                
+                if(modkey){
+                    track7.randLocalPosition();
+                }
+                
             }
                 break;
             case '8':
             {
                 track8.keyPressed(key);
+                track8.KeyboardLaunch(8, 500, 10, 11);
+                if(modkey){
+                    track8.randLocalPosition();
+                }
             }
                 break;
             case '9':
@@ -369,8 +392,6 @@ void ofApp::keyPressed(int key){
         track4.frame++;
         track5.frame++;
         track6.frame++;
-         */
-
         track7.frame++;
         track8.frame++;
         track9.frame++;
@@ -384,6 +405,7 @@ void ofApp::keyPressed(int key){
         track17.frame++;
         track18.frame++;
         track19.frame++;
+        */
     
         
     }
@@ -413,14 +435,6 @@ void ofApp::keyPressed(int key){
 //        cout << track10.parameters;
     }
 
-    if(key=='p'){
-        //ofxUICanvas* test = guiTabBar->getActiveCanvas();
-        //test->setColorFill(ofColor::blue);
-        
-        //guis[0]->getWidget("TRACK2")->setColorFill(ofColor::blue);
-        
-        
-    }
     
     if(key=='m'){
         if(minimized){

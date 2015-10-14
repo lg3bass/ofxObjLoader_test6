@@ -9,6 +9,7 @@ vboMeshObj::vboMeshObj() {
     params.isPlaying = false;
     params.solo = false;
     params.oscControlled = true;
+    params.randomized = false;
     params.mirrored = true;
     params.tweenType = 11;
     
@@ -26,6 +27,7 @@ vboMeshObj::vboMeshObj() {
     
     params.mirror_distance = 10.0;
     params.durration_in_ms = 1000.0;
+    params.currentSegment = 0;
     
     frame = 0;
 
@@ -70,6 +72,8 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input, string _img, str
     setupGui(_index);
     
     reportParams(_index);
+    
+    
 
 }
 
@@ -123,6 +127,51 @@ void vboMeshObj::setupVboMesh(const objFileLoader::extObjFile &_input){
 }
 
 //--------------------------------------------------------------
+void vboMeshObj::setCuePoints(string _cues){
+    vector<int> cuePoints;
+    
+    vector<string> numbersAsStrings = ofSplitString(_cues, ",");
+    
+    // now we push every number to the end of our integer vector
+    for (size_t i=0; i<numbersAsStrings.size(); i++){
+        int convertedNumber = ofToInt(numbersAsStrings[i]);
+        ofLogNotice() << convertedNumber;
+        cuePoints.push_back(convertedNumber);
+    }
+    
+    params.cuePoints = cuePoints;
+    
+//    //loop through and see what is in params.cuePoints
+//    for(vector<int>::iterator it = params.cuePoints.begin(); it != params.cuePoints.end(); ++it){
+//        cout << *it << endl;
+//    }
+    
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setDurrations(string _durrationList){
+    vector<int> durrationPoints;
+    
+    vector<string> numbersAsStrings = ofSplitString(_durrationList, ",");
+    
+    // now we push every number to the end of our integer vector
+    for (size_t i=0; i<numbersAsStrings.size(); i++){
+        int convertedNumber = ofToInt(numbersAsStrings[i]);
+        ofLogNotice() << convertedNumber;
+        durrationPoints.push_back(convertedNumber);
+    }
+    
+    params.durrationPoints = durrationPoints;
+    
+    //loop through and see what is in params.cuePoints
+    for(vector<int>::iterator it = params.durrationPoints.begin(); it != params.durrationPoints.end(); ++it){
+        cout << *it << endl;
+    }
+    
+    
+}
+
+//--------------------------------------------------------------
 void vboMeshObj::setMatCap(string _img){
     matCap.loadImage("matCap/"+_img);
 }
@@ -151,41 +200,42 @@ void vboMeshObj::draw(){
         glRotatef(params.g_rotate.z,0,0,1);
         
         for(int i=0;i<params.l_copies;i++){
+            
             glPushMatrix();
             
-            glRotatef(i*params.l_rotate.x,1,0,0);
-            glRotatef(i*params.l_rotate.y,0,1,0);
-            glRotatef(i*params.l_rotate.z,0,0,1);
+                glRotatef(i*params.l_rotate.x,1,0,0);
+                glRotatef(i*params.l_rotate.y,0,1,0);
+                glRotatef(i*params.l_rotate.z,0,0,1);
             
-            
-            glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z);
-            
-            glScalef(params.l_scale,params.l_scale,params.l_scale);
-            
-            shader.begin();
-                shader.setUniformTexture("tMatCap", matCap, 1);
-                vboMesh1[frame].draw();
-            shader.end();
+                glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z);
+                
+                glScalef(params.l_scale,params.l_scale,params.l_scale);
+                
+                shader.begin();
+                    shader.setUniformTexture("tMatCap", matCap, 1);
+                    vboMesh1[frame].draw();
+                shader.end();
             
             glPopMatrix();
+            
         }
         
         if(params.mirrored){
             for(int i=params.l_copies;i>0;i--){
                 glPushMatrix();
-                
-                glRotatef(i*params.l_rotate.x,1,0,0);
-                glRotatef(i*params.l_rotate.y,0,1,0);
-                glRotatef(i*params.l_rotate.z,0,0,1);
-                
-                glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z+params.mirror_distance);
-                
-                glScalef(params.l_scale,params.l_scale,-params.l_scale);
-                
-                shader.begin();
-                shader.setUniformTexture("tMatCap", matCap, 1);
-                vboMesh1[frame].draw();
-                shader.end();
+                    glRotatef(i*params.l_rotate.x,1,0,0);
+                    glRotatef(i*params.l_rotate.y,0,1,0);
+                    glRotatef(i*params.l_rotate.z,0,0,1);
+                    
+                    
+                    glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z+params.mirror_distance);
+                    
+                    glScalef(params.l_scale,params.l_scale,-params.l_scale);
+                    
+                    shader.begin();
+                    shader.setUniformTexture("tMatCap", matCap, 1);
+                    vboMesh1[frame].draw();
+                    shader.end();
                 
                 glPopMatrix();
             }
@@ -197,6 +247,8 @@ void vboMeshObj::draw(){
 
 //--------------------------------------------------------------
 void vboMeshObj::update(){
+    
+    
     if(params.isPlaying){
         if(params.oscControlled){
             switch (params.tweenType){
@@ -266,8 +318,10 @@ void vboMeshObj::update(){
                         params.isPlaying = false;
                     }
                     break;
-            }
-            //cout << "frame: " << frame << endl;
+                }
+                //cout << "frame: " << frame << endl;
+            
+
             
         } else {
             
@@ -284,9 +338,21 @@ void vboMeshObj::update(){
 //                params.isPlaying = false;
 //            }
             
-            
         }// oscControlled
     }// is Playing
+   
+    
+    
+    if(params.randomized){
+        //randomized positions.
+        params.l_trans = ofVec3f(positiontweenbounce_x.update(),positiontweenbounce_y.update(),params.l_trans.z);
+
+        if(positiontweenbounce_x.isCompleted()){
+            params.randomized = false;
+        }
+
+    }//end params.randomized
+    
     
     //sets the button a color when a osc message is recieved.
     setIndicator();
@@ -295,16 +361,15 @@ void vboMeshObj::update(){
 //--------------------------------------------------------------
 void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _segmentLength, int _tweenType){
     
+    
+    
     params.tweenType = _tweenType;
     
-    //ofxTween
+    //ofxTween -- Figure out where you are going.
     unsigned delay = 0;
     unsigned duration = _durration;
     unsigned start = _destinationFrame - _segmentLength;
     unsigned end = _destinationFrame;
-    
-    
-    
     
     //TWEEN
     switch(params.tweenType){
@@ -346,12 +411,7 @@ void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _segmentLe
             break;
     }
     
-    //tweenlinear.setParameters(1,easinglinear,ofxTween::easeOut,start,end,duration,delay);
-    //tweenquint.setParameters(1,easingquint,ofxTween::easeOut,start,end,duration,delay);
-    //tweenquad.setParameters(1,easingquad, ofxTween::easeOut,start,end,duration,delay);
 
-    
-    
     cout << "============================" << endl;
     cout << "OSCMessage>frame:" << frame <<
     ", durration:" << _durration <<
@@ -363,10 +423,46 @@ void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _segmentLe
     params.isPlaying = true;
     
     
-
+    //moved to ofApp;
+    //params.randomized = true;
+    //randLocalPosition();
+    
+//    float randStart = ofRandom(-15, 0);
+//    float randEnd = ofRandom(0, 15);
+//    unsigned durr = 500;
+//    unsigned del = 500;
+//    
+//    cout << randStart << ":" << randEnd << endl;
+//    
+//    positiontweenbounce_x.setParameters(12,easingsine, ofxTween::easeOut,randStart,randEnd,durr,del);
+//    
+//    randStart = ofRandom(-15, 0);
+//    randEnd = ofRandom(0, 15);
+//    
+//    cout << randStart << ":" << randEnd << endl;
+//    
+//    positiontweenbounce_y.setParameters(13,easingsine, ofxTween::easeOut,randStart,randEnd,durr,del);
     
     
 }
+
+//--------------------------------------------------------------
+void vboMeshObj::KeyboardLaunch(int _key, int _durration, int _segmentLength, int _tweenType){
+    
+    //play the segment
+    OSCLaunch(params.cuePoints[params.currentSegment], params.durrationPoints[params.currentSegment], _segmentLength, _tweenType);
+    
+    if(params.currentSegment < params.cuePoints.size()-1){
+        params.currentSegment++;
+    } else {
+        params.currentSegment = 0;
+    }
+    
+    
+    
+}
+
+
 
 //--------------------------------------------------------------
 void vboMeshObj::setupGui(int _index){
@@ -473,6 +569,29 @@ void vboMeshObj::setIndicator(){
     }
 }
 
+//--------------------------------------------------------------
+void vboMeshObj::randLocalPosition(){
+    
+    
+    params.randomized = true;
+    
+    //store the last position
+    lastPosition = params.l_trans;
+    
+    
+    float randStart = ofRandom(-15, 0);
+    float randEnd = ofRandom(0, 15);
+    unsigned durration = 1000;
+    unsigned delay = 500;
+    
+    cout << randStart << ":" << randEnd << endl;
+    
+    positiontweenbounce_x.setParameters(12,easingback, ofxTween::easeOut,lastPosition.x,randEnd,durration,delay);
+    positiontweenbounce_y.setParameters(13,easingback, ofxTween::easeOut,lastPosition.y,randEnd,durration,delay);
+    
+    
+    
+}
 
 //--------------------------------------------------------------
 void vboMeshObj::guiEvent(ofxUIEventArgs &e)
@@ -505,7 +624,7 @@ void vboMeshObj::keyPressed(int key)
             ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::red);
             params.isPlaying = true;
             
-            //ofxTween
+            
             
         }
     }
