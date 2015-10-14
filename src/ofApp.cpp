@@ -3,6 +3,15 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    std::string file = "example.json";
+    
+    // Now parse the JSON
+    bool parsingSuccessful = result.open(file);
+    
+    if (parsingSuccessful)
+    {
+        ofLogNotice("ofApp::setup") << result.getRawString();
+    }
     
     //SYPHON
     //much nicer than processing's vs.:)

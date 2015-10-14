@@ -1,0 +1,406 @@
+{
+	"track7" : {
+		"objSeq-basefilename" : "07_starBurstObj_OBJ_Seq",
+		"objSeq-type" : "one-shot",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "both",
+		"objSeq-cues" : [ 30 ],
+		"objSeq-segmentLengths" : [ 30 ],
+		"objSeq-midpoint-cues" : [ 15 ],
+		"objSeq-durations" : [ 600 ],
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 1,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, 0.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track8" : {
+		"objSeq-basefilename" : "08_oddityWierdArms03_11-110_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110 ],
+		"objSeq-segmentLengths" : [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+		"objSeq-midpoint-cues" : [10],
+		"objSeq-durations" : [600, 250, 250, 250, 250, 250, 250, 250, 250, 250, 600 ],
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track9" : {
+		"objSeq-basefilename" : "09_oddityWierdArms02_6-60_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [ 10, 20, 30, 40, 50, 60 ],
+		"objSeq-segmentLengths" : [10,10,10,10,10,10],
+		"objSeq-midpoint-cues" : [ 10, 20, 30, 40, 50, 60 ],
+		"objSeq-durations" : [600, 250, 250, 250, 250, 600 ],
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track10" : {
+		"objSeq-basefilename" : "10_oddityWierdArms01_8-80_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [ 10, 20, 30, 40, 50, 60, 70, 80 ],
+		"objSeq-segmentLengths" : [10, 10, 10, 10, 10, 10, 10, 10, 10],
+		"objSeq-midpoint-cues" : [ 10, 20, 30, 40, 50, 60, 70, 80 ],
+		"objSeq-durations" : [600, 250, 250, 250, 250, 250, 250, 600 ],
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 6,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -60.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track11" : {
+		"objSeq-basefilename" : "11_loftedSurface10_sn1_6-180_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [30,60,90,120,150,180],
+		"objSeq-segmentLengths" : [30, 30, 30, 30, 30, 30],
+		"objSeq-midpoint-cues" : [15,45,75,105,135,165],
+		"objSeq-durations" : [500, 250, 250, 250, 250, 250],
+		"objSeq-files" : 180,
+		"objSeq-segLen" : 30,
+		"objSeq-numOfSeg" : 6,
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track12" : {
+		"objSeq-basefilename" : "12_loftedSurface9_sn1_10-300_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [30,60,90,120,150,180,210,240,270,300],
+		"objSeq-segmentLengths" : [30, 30, 30, 30, 30, 30, 30, 30, 30, 30 ],
+		"objSeq-midpoint-cues" : [15,45,75,105,135,165,195,225,255,285],
+		"objSeq-durations" : [500, 250, 250, 250, 250, 250, 250, 250, 250, 250 ],
+		"objSeq-files" : 300,
+		"objSeq-segLen" : 30,
+		"objSeq-numOfSeg" : 10,
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track13" : {
+		"objSeq-basefilename" : "13_loftedSurface8_sn1_10-300_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [30,60,90,120,150,180,210,240,270,300],
+		"objSeq-segmentLengths" : [30, 30, 30, 30, 30, 30, 30, 30, 30, 30 ],
+		"objSeq-midpoint-cues" : [15,45,75,105,135,165,195,225,255,285],
+		"objSeq-durations" : [500, 250, 250, 250, 250, 250, 250, 250, 250, 250 ],
+		"objSeq-files" : 300,
+		"objSeq-segLen" : 30,
+		"objSeq-numOfSeg" : 10,
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track14" : {
+		"objSeq-basefilename" : "14_loftedSurface7_sn1_4-120_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [30,60,90,120],
+		"objSeq-segmentLengths" : [30, 30, 30, 30 ],
+		"objSeq-midpoint-cues" : [15,45,75,105],
+		"objSeq-durations" : [500, 250, 250, 250],
+		"objSeq-files" : 120,
+		"objSeq-segLen" : 30,
+		"objSeq-numOfSeg" : 4,
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track15" : {
+		"objSeq-basefilename" : "15_loftedSurface6_sn1_6-180_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [30,60,90,120,150,180],
+		"objSeq-segmentLengths" : [30, 30, 30, 30, 30, 30 ],
+		"objSeq-midpoint-cues" : [15,45,75,105,135,165],
+		"objSeq-durations" : [500, 250, 250, 250, 250, 250],
+		"objSeq-files" : 180,
+		"objSeq-segLen" : 30,
+		"objSeq-numOfSeg" : 6,
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track16" : {
+		"objSeq-basefilename" : "16_extrudeTri01_sn0_5-150_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [30,60,90,120,150],
+		"objSeq-segmentLengths" : [30, 30, 30, 30, 30 ],
+		"objSeq-midpoint-cues" : [15,45,75,105,135],
+		"objSeq-durations" : [500, 250, 250, 250, 250],
+		"objSeq-files" : 150,
+		"objSeq-segLen" : 30,
+		"objSeq-numOfSeg" : 5,
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track17" : {
+		"objSeq-basefilename" : "17_extrudeStar01_sn2_4-140_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [30,60,90,120],
+		"objSeq-segmentLengths" : [30, 30, 30, 30],
+		"objSeq-midpoint-cues" : [15,45,75,105],
+		"objSeq-durations" : [500, 250, 250, 250],
+		"objSeq-files" : 120,
+		"objSeq-segLen" : 30,
+		"objSeq-numOfSeg" : 4,
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track18" : {
+		"objSeq-basefilename" : "18_extrudeBall00_sn0_5-150_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [30,60,90,120,150],
+		"objSeq-segmentLengths" : [30, 30, 30, 30, 30],
+		"objSeq-midpoint-cues" : [15,45,75,105,135],
+		"objSeq-durations" : [500, 250, 250, 250, 250],
+		"objSeq-files" : 150,
+		"objSeq-segLen" : 30,
+		"objSeq-numOfSeg" : 5,
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	},
+	"track19" : {
+		"objSeq-basefilename" : "19_diamondLayers_OBJ_Seq",
+		"objSeq-type" : "sequence",
+		"objSeq-playRandom" : false,
+		"objSeq-noteEvents" : "noteOn",
+		"objSeq-cues" : [30,60,90,120],
+		"objSeq-segmentLengths" : [30, 30, 30, 30],
+		"objSeq-midpoint-cues" : [15,45,75,105],
+		"objSeq-durations" : [500, 250, 250, 250],
+		"objSeq-files" : 120,
+		"objSeq-segLen" : 30,
+		"objSeq-numOfSeg" : 4,
+		"scene" : {
+			"global" : {
+				"g-copies" : 1,
+				"g-scale" : [ 1.0, 1.0, 1.0],
+				"g-rotate" : [0.0, 0.0, 0.0],
+				"g-trans" : [0.0, 0.0, 0.0]
+			},
+			"local" : {
+				"l-copies" : 4,
+				"l-scale" : [ 1.0, 1.0, 1.0],
+				"l-rotate" : [0.0, 0.0, -90.0],
+				"l-trans" : [0.0, 0.0, 0.0]
+			},
+			"animation" : {
+				"spin" : [0.0, 0.0, 0.0],
+				"spin-rate" : 10.0,
+				"fft" : false
+			}
+		}
+	}	
+}

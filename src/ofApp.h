@@ -9,6 +9,7 @@
 #include "ofxUI.h"
 #include "ofxOsc.h"
 #include "ofxTween.h"
+#include "ofxJSON.h"
 
 
 #define HOW_MANY 2
@@ -40,7 +41,9 @@ class ofApp : public ofBaseApp{
             DIAMONDLAYERS = 19
         };
     
-    
+        //JSON
+        ofxJSONElement result;
+        
         //SYPHON
         ofxSyphonServer mainOutputSyphonServer;
         ofxSyphonClient mClient;
