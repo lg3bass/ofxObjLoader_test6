@@ -3,15 +3,20 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    std::string file = "example.json";
+    std::string file = "vmm_tracks.json";
     
     // Now parse the JSON
     bool parsingSuccessful = result.open(file);
-    
-    if (parsingSuccessful)
-    {
-        ofLogNotice("ofApp::setup") << result.getRawString();
-    }
+
+// MOVED TO TRACK
+//    if (parsingSuccessful) {
+//        
+//        ofxJSONElement json_track8 = result["track"+ofToString(8)];
+//        ofLogNotice("json_track8:") << json_track8.getRawString();
+//        
+//        getTrackJSON(WIERDARMS3, "objSeq-cues");
+//        getTrackJSON(WIERDARMS3, "objSeq-durations");
+//    }
     
     //SYPHON
     //much nicer than processing's vs.:)
@@ -40,38 +45,42 @@ void ofApp::setup(){
     guiTabBar = new ofxUITabBar();
     ofAddListener(guiTabBar->newGUIEvent,this,&ofApp::guiTabEvent);
     
-    
-    //2. load all the assets.
-    
-    /*
-    track1.setup(appFileLoader.externalObjFiles[BANDTUBE],"red_bob.jpg","sem",1);
-    track2.setup(appFileLoader.externalObjFiles[BASSSTAR],"generator8.jpg","sem",2);
-    track3.setup(appFileLoader.externalObjFiles[BLOCKSTAR],"silver.jpg","sem",3);
-    track4.setup(appFileLoader.externalObjFiles[BOXSTAR],"ghost.jpg","sem",4);
-    track5.setup(appFileLoader.externalObjFiles[UNBLOCKERBASS],"red_clay.jpg","sem",5);
-    track6.setup(appFileLoader.externalObjFiles[TRACERS],"gJGSpecial_01.png","sem",6);
-    */
-    track7.setup(appFileLoader.externalObjFiles[STARBURST],"JG_Red.png","sem",7);
-    track7.setCuePoints("30");
-    track7.setDurrations("500");
-    track8.setup(appFileLoader.externalObjFiles[WIERDARMS3],"JG_Gold.png","sem",8);
-    track8.setCuePoints("10,20,30,40,50,60,70,80,90,100,110");
-    track8.setDurrations("500,250,100,250,100,250,100,250,100,250,400");
-    
-    /*
-    track9.setup(appFileLoader.externalObjFiles[WIERDARMS2],"JG_Drink01.png","sem",9);
-    track10.setup(appFileLoader.externalObjFiles[WIERDARMS1],"normals.jpg","sem",10);
-    track11.setup(appFileLoader.externalObjFiles[LIGHTNING10],"thuglee-03.jpg","sem",11);
-    track12.setup(appFileLoader.externalObjFiles[LIGHTNING9],"thuglee-backlight-01.jpg","sem",12);
-    track13.setup(appFileLoader.externalObjFiles[LIGHTNING8],"normals.jpg","sem",13);
-    track14.setup(appFileLoader.externalObjFiles[LIGHTNING7],"mshade3.jpg","sem",14);
-    track15.setup(appFileLoader.externalObjFiles[LIGHTNING6],"mshade4.jpg","sem",15);
-    track16.setup(appFileLoader.externalObjFiles[EXTRUDETRI],"material4.png","sem",16);
-    track17.setup(appFileLoader.externalObjFiles[EXTRUDESTAR],"material3.jpg","sem",17);
-    track18.setup(appFileLoader.externalObjFiles[EXTRUDEBALL],"mashrim2.jpg","sem",18);
-    track19.setup(appFileLoader.externalObjFiles[DIAMONDLAYERS],"mashrim.png","sem",19);
-    */
-
+    if (parsingSuccessful) {
+        //2. load all the assets.
+        
+        /*
+        track1.setup(appFileLoader.externalObjFiles[BANDTUBE],"red_bob.jpg","sem",1);
+        track2.setup(appFileLoader.externalObjFiles[BASSSTAR],"generator8.jpg","sem",2);
+        track3.setup(appFileLoader.externalObjFiles[BLOCKSTAR],"silver.jpg","sem",3);
+        track4.setup(appFileLoader.externalObjFiles[BOXSTAR],"ghost.jpg","sem",4);
+        track5.setup(appFileLoader.externalObjFiles[UNBLOCKERBASS],"red_clay.jpg","sem",5);
+        track6.setup(appFileLoader.externalObjFiles[TRACERS],"gJGSpecial_01.png","sem",6);
+        */
+        
+        //IDEALLY YOU WANT TO LOAD ALL THE DATA FROM THE JSON INCLUDING SHADERS
+        track7.setup(appFileLoader.externalObjFiles[STARBURST], result["track"+ofToString(7)]);
+        track8.setup(appFileLoader.externalObjFiles[WIERDARMS3], result["track"+ofToString(8)]);
+        track9.setup(appFileLoader.externalObjFiles[WIERDARMS2],result["track"+ofToString(9)]);
+        track10.setup(appFileLoader.externalObjFiles[WIERDARMS1],result["track"+ofToString(10)]);
+        track11.setup(appFileLoader.externalObjFiles[LIGHTNING10],result["track"+ofToString(11)]);
+        
+        
+        
+        /*
+        track9.setup(appFileLoader.externalObjFiles[WIERDARMS2],"JG_Drink01.png","sem",9);
+        track10.setup(appFileLoader.externalObjFiles[WIERDARMS1],"normals.jpg","sem",10);
+        track11.setup(appFileLoader.externalObjFiles[LIGHTNING10],"thuglee-03.jpg","sem",11);
+        track12.setup(appFileLoader.externalObjFiles[LIGHTNING9],"thuglee-backlight-01.jpg","sem",12);
+        track13.setup(appFileLoader.externalObjFiles[LIGHTNING8],"normals.jpg","sem",13);
+        track14.setup(appFileLoader.externalObjFiles[LIGHTNING7],"mshade3.jpg","sem",14);
+        track15.setup(appFileLoader.externalObjFiles[LIGHTNING6],"mshade4.jpg","sem",15);
+        track16.setup(appFileLoader.externalObjFiles[EXTRUDETRI],"material4.png","sem",16);
+        track17.setup(appFileLoader.externalObjFiles[EXTRUDESTAR],"material3.jpg","sem",17);
+        track18.setup(appFileLoader.externalObjFiles[EXTRUDEBALL],"mashrim2.jpg","sem",18);
+        track19.setup(appFileLoader.externalObjFiles[DIAMONDLAYERS],"mashrim.png","sem",19);
+        */
+        
+    }
     //save an xml per gui.
     //guiTabBar->loadSettings("settings/", "tab-");
     
@@ -115,11 +124,11 @@ void ofApp::update(){
     */
     track7.update();
     track8.update();
-    
-    /*
     track9.update();
     track10.update();
     track11.update();
+    
+    /*
     track12.update();
     track13.update();
     track14.update();
@@ -231,11 +240,11 @@ void ofApp::draw(){
      */
         track7.draw();
         track8.draw();
-    
-    /*
         track9.draw();
         track10.draw();
         track11.draw();
+    
+        /*
         track12.draw();
         track13.draw();
         track14.draw();
@@ -342,9 +351,9 @@ void ofApp::keyPressed(int key){
                 track7.keyPressed(key);
                 //OSCLaunch(<key-unused>,<durration-unused>,<sequenceLength>,<easing>
                 track7.KeyboardLaunch(7, 500, 30, 11);
-                
                 if(modkey){
-                    track7.randLocalPosition();
+                    //randLocalPosition(<lowRand>,<highRand>,<durration>,<delay>);
+                    track7.randLocalPosition(-15,15,600,400);
                 }
                 
             }
@@ -354,18 +363,26 @@ void ofApp::keyPressed(int key){
                 track8.keyPressed(key);
                 track8.KeyboardLaunch(8, 500, 10, 11);
                 if(modkey){
-                    track8.randLocalPosition();
+                    track8.randLocalPosition(-15,15,600,400);
                 }
             }
                 break;
             case '9':
             {
                 track9.keyPressed(key);
+                track9.KeyboardLaunch(9, 500, 10, 11);
+                if(modkey){
+                    track9.randLocalPosition(-15,15,600,400);
+                }
             }
                 break;
             case '0':
             {
                 track10.keyPressed(key);
+                track10.KeyboardLaunch(10, 500, 10, 11);
+                if(modkey){
+                    track10.randLocalPosition(-15,15,600,400);
+                }
             }
                 break;
             default:
@@ -586,3 +603,21 @@ void ofApp::guiTabEvent(ofxUIEventArgs &e)
     cout << "ofApp::Selected Track:" << name << endl;
 }
 
+//--------------------------------------------------------------
+void ofApp::getTrackJSON(int _track, string _param){
+    
+            cout << "[track" << _track << "]" << "[" << _param << "]:";
+            
+            for(int j=0;j<result["track"+ofToString(_track)][_param].size();j++){
+                
+                //durrations list
+                cout << result["track"+ofToString(_track)][_param][j].asInt();
+                
+                if(j<result["track"+ofToString(_track)][_param].size()-1){
+                    cout << ",";
+                }
+                
+            }
+            cout << endl;
+    
+}

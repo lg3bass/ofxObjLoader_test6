@@ -34,7 +34,7 @@
 		<key>4A8C45F93D483F89F355487F85EC116FE3437C18</key>
 		<string>../..</string>
 		<key>5DB7C332A3A89035E93556A2A38BF414005BA671</key>
-		<string>../../../../../addons/ofxJSON</string>
+		<string>../../../addons/ofxJSON</string>
 		<key>6B5D1DE462D521A98972DF70F1147E20268C546A</key>
 		<string>../../../addons/ofxTween</string>
 		<key>7E804D925461714118DB355C65BC964B41D94376</key>

@@ -8,12 +8,15 @@
 #include "bwUtil.h"
 #include "ofxUI.h"
 #include "ofxTween.h"
+#include "ofxJSON.h"
 
 class vboMeshObj {
     
     public:
     objFileLoader::extObjFile trackData;
-
+    ofxJSONElement jsonTrackData;
+    
+    
     vector<ofVboMesh> vboMesh1;
     ofImage matCap;
     ofShader shader;
@@ -109,12 +112,11 @@ class vboMeshObj {
     
     ofxUICanvas* gui;
     
-    void setup(const objFileLoader::extObjFile &_input, string _img, string _shader,int _index);
+    void setup(const objFileLoader::extObjFile &_input, ofxJSONElement _trackData);
+    vector<int> parseJSON(string _param);
     void reportParams(int _index);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
     void setupVboMesh(const objFileLoader::extObjFile &_input);
-    void setCuePoints(string _cues);
-    void setDurrations(string _durrationList);
     void setMatCap(string _img);
     void setShader(string _shader);
     void draw();
@@ -124,7 +126,7 @@ class vboMeshObj {
     void setupGui(int _index);
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();
-    void randLocalPosition();
+    void randLocalPosition(float _start, float _end, int _durration, int _delay);
     
     void guiEvent(ofxUIEventArgs &e);
     

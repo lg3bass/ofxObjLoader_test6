@@ -35,19 +35,21 @@ vboMeshObj::vboMeshObj() {
 }
 
 //--------------------------------------------------------------
-void vboMeshObj::setup(const objFileLoader::extObjFile &_input, string _img, string _shader, int _index){
-  
-    frame = 0;//duplicate in constructor
+void vboMeshObj::setup(const objFileLoader::extObjFile &_input, ofxJSONElement _trackData){
+    jsonTrackData = _trackData;
     
-    index = _index;
+    index = jsonTrackData["index"].asInt();
     
+    //print out the json data.
+    ofLogNotice("json_track")<< index << ": " << jsonTrackData.getRawString();
+
     trackData = _input;
     
     //load all the vboMeshes
     setupVboMesh(trackData);
     
-    setMatCap(_img);
-    setShader(_shader);
+    setMatCap(jsonTrackData["matCap-img"].asString());
+    setShader(jsonTrackData["matCap-shader"].asString());
     
     /*
     parameters.setName("testName");
@@ -68,15 +70,39 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input, string _img, str
     */
     
     
-    //setup the ofxUI GUI
-    setupGui(_index);
+    frame = 0;//duplicate in constructor
     
-    reportParams(_index);
+    //setup the ofxUI GUI
+    setupGui(index);
+    
+
+    //setup more params
+    params.cuePoints = parseJSON("objSeq-cues");
+    params.durrationPoints = parseJSON("objSeq-durations");
+    
+    
+    //output all my params to check
+    reportParams(index);
     
     
 
 }
 
+//--------------------------------------------------------------
+vector<int> vboMeshObj::parseJSON(string _param){
+    
+    vector<int> returnedVector;
+    
+    for (int i=0; i<jsonTrackData[_param].size(); i++){
+        int convertedNumber = jsonTrackData[_param][i].asInt();
+        //ofLogNotice() << convertedNumber;
+        returnedVector.push_back(convertedNumber);
+    }
+    
+    return returnedVector;
+}
+
+//--------------------------------------------------------------
 void vboMeshObj::reportParams(int _i){
     cout << "reported params-" << ofToString(_i) << endl;
     cout << "g_copies-" << params.g_copies << endl;
@@ -126,50 +152,6 @@ void vboMeshObj::setupVboMesh(const objFileLoader::extObjFile &_input){
     
 }
 
-//--------------------------------------------------------------
-void vboMeshObj::setCuePoints(string _cues){
-    vector<int> cuePoints;
-    
-    vector<string> numbersAsStrings = ofSplitString(_cues, ",");
-    
-    // now we push every number to the end of our integer vector
-    for (size_t i=0; i<numbersAsStrings.size(); i++){
-        int convertedNumber = ofToInt(numbersAsStrings[i]);
-        ofLogNotice() << convertedNumber;
-        cuePoints.push_back(convertedNumber);
-    }
-    
-    params.cuePoints = cuePoints;
-    
-//    //loop through and see what is in params.cuePoints
-//    for(vector<int>::iterator it = params.cuePoints.begin(); it != params.cuePoints.end(); ++it){
-//        cout << *it << endl;
-//    }
-    
-}
-
-//--------------------------------------------------------------
-void vboMeshObj::setDurrations(string _durrationList){
-    vector<int> durrationPoints;
-    
-    vector<string> numbersAsStrings = ofSplitString(_durrationList, ",");
-    
-    // now we push every number to the end of our integer vector
-    for (size_t i=0; i<numbersAsStrings.size(); i++){
-        int convertedNumber = ofToInt(numbersAsStrings[i]);
-        ofLogNotice() << convertedNumber;
-        durrationPoints.push_back(convertedNumber);
-    }
-    
-    params.durrationPoints = durrationPoints;
-    
-    //loop through and see what is in params.cuePoints
-    for(vector<int>::iterator it = params.durrationPoints.begin(); it != params.durrationPoints.end(); ++it){
-        cout << *it << endl;
-    }
-    
-    
-}
 
 //--------------------------------------------------------------
 void vboMeshObj::setMatCap(string _img){
@@ -458,8 +440,6 @@ void vboMeshObj::KeyboardLaunch(int _key, int _durration, int _segmentLength, in
         params.currentSegment = 0;
     }
     
-    
-    
 }
 
 
@@ -570,26 +550,22 @@ void vboMeshObj::setIndicator(){
 }
 
 //--------------------------------------------------------------
-void vboMeshObj::randLocalPosition(){
-    
-    
-    params.randomized = true;
+void vboMeshObj::randLocalPosition(float _start, float _end, int _durration, int _delay){
     
     //store the last position
     lastPosition = params.l_trans;
     
-    
-    float randStart = ofRandom(-15, 0);
-    float randEnd = ofRandom(0, 15);
-    unsigned durration = 1000;
-    unsigned delay = 500;
-    
-    cout << randStart << ":" << randEnd << endl;
-    
-    positiontweenbounce_x.setParameters(12,easingback, ofxTween::easeOut,lastPosition.x,randEnd,durration,delay);
-    positiontweenbounce_y.setParameters(13,easingback, ofxTween::easeOut,lastPosition.y,randEnd,durration,delay);
+    float randX = ofRandom(_start, _end);
+    float randY = ofRandom(_start, _end);
+    //unsigned durration = 1000;
+    //unsigned delay = 500;
     
     
+    positiontweenbounce_x.setParameters(12,easingback, ofxTween::easeOut,lastPosition.x,randX,_durration,_delay);
+    positiontweenbounce_y.setParameters(13,easingback, ofxTween::easeOut,lastPosition.y,randY,_durration,_delay);
+    
+    //start the animation
+    params.randomized = true;
     
 }
 

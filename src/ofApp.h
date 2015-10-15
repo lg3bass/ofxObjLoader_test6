@@ -123,6 +123,8 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
         void drawLights();
         void guiTabEvent(ofxUIEventArgs &e);
+    
+        void getTrackJSON(int _track, string _param);
 
     
 };
