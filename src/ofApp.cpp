@@ -63,22 +63,16 @@ void ofApp::setup(){
         track9.setup(appFileLoader.externalObjFiles[WIERDARMS2],result["track"+ofToString(9)]);
         track10.setup(appFileLoader.externalObjFiles[WIERDARMS1],result["track"+ofToString(10)]);
         track11.setup(appFileLoader.externalObjFiles[LIGHTNING10],result["track"+ofToString(11)]);
-        
-        
-        
-        /*
-        track9.setup(appFileLoader.externalObjFiles[WIERDARMS2],"JG_Drink01.png","sem",9);
-        track10.setup(appFileLoader.externalObjFiles[WIERDARMS1],"normals.jpg","sem",10);
-        track11.setup(appFileLoader.externalObjFiles[LIGHTNING10],"thuglee-03.jpg","sem",11);
-        track12.setup(appFileLoader.externalObjFiles[LIGHTNING9],"thuglee-backlight-01.jpg","sem",12);
-        track13.setup(appFileLoader.externalObjFiles[LIGHTNING8],"normals.jpg","sem",13);
-        track14.setup(appFileLoader.externalObjFiles[LIGHTNING7],"mshade3.jpg","sem",14);
-        track15.setup(appFileLoader.externalObjFiles[LIGHTNING6],"mshade4.jpg","sem",15);
-        track16.setup(appFileLoader.externalObjFiles[EXTRUDETRI],"material4.png","sem",16);
-        track17.setup(appFileLoader.externalObjFiles[EXTRUDESTAR],"material3.jpg","sem",17);
-        track18.setup(appFileLoader.externalObjFiles[EXTRUDEBALL],"mashrim2.jpg","sem",18);
-        track19.setup(appFileLoader.externalObjFiles[DIAMONDLAYERS],"mashrim.png","sem",19);
-        */
+
+        track12.setup(appFileLoader.externalObjFiles[LIGHTNING9],result["track"+ofToString(12)]);
+        track13.setup(appFileLoader.externalObjFiles[LIGHTNING8],result["track"+ofToString(13)]);
+        track14.setup(appFileLoader.externalObjFiles[LIGHTNING7],result["track"+ofToString(14)]);
+        track15.setup(appFileLoader.externalObjFiles[LIGHTNING6],result["track"+ofToString(15)]);
+        track16.setup(appFileLoader.externalObjFiles[EXTRUDETRI],result["track"+ofToString(16)]);
+        track17.setup(appFileLoader.externalObjFiles[EXTRUDESTAR],result["track"+ofToString(17)]);
+        track18.setup(appFileLoader.externalObjFiles[EXTRUDEBALL],result["track"+ofToString(18)]);
+        track19.setup(appFileLoader.externalObjFiles[DIAMONDLAYERS],result["track"+ofToString(19)]);
+
         
     }
     //save an xml per gui.
@@ -127,8 +121,6 @@ void ofApp::update(){
     track9.update();
     track10.update();
     track11.update();
-    
-    /*
     track12.update();
     track13.update();
     track14.update();
@@ -137,7 +129,7 @@ void ofApp::update(){
     track17.update();
     track18.update();
     track19.update();
-    */
+    
     
     while(receiver.hasWaitingMessages()){
 		// get the next message
@@ -161,6 +153,7 @@ void ofApp::update(){
             if(m.getArgAsInt32(0) == 7){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
                 track7.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+    
             }
             if(m.getArgAsInt32(0) == 8){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>
@@ -210,6 +203,52 @@ void ofApp::update(){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>
                 track19.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
             }
+        } else if (m.getAddress() == "/randomTrans"){
+            
+            switch (m.getArgAsInt32(0)) {
+                case 7:
+                    track7.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 8:
+                    track8.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 9:
+                    track9.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 10:
+                    track10.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 11:
+                    track11.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 12:
+                    track12.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 13:
+                    track13.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 14:
+                    track14.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 15:
+                    track15.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 16:
+                    track16.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 17:
+                    track17.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 18:
+                    track18.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 19:
+                    track19.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                default:
+                    break;
+            }
+            
         }
     }
 }
@@ -243,8 +282,6 @@ void ofApp::draw(){
         track9.draw();
         track10.draw();
         track11.draw();
-    
-        /*
         track12.draw();
         track13.draw();
         track14.draw();
@@ -253,7 +290,6 @@ void ofApp::draw(){
         track17.draw();
         track18.draw();
         track19.draw();
-     */
     
     
     cam.end();
@@ -303,8 +339,6 @@ void ofApp::exit()
      
     track7.exit();
     track8.exit();
-    
-    /*
     track9.exit();
     track10.exit();
     track11.exit();
@@ -316,7 +350,6 @@ void ofApp::exit()
     track17.exit();
     track18.exit();
     track19.exit();
-    */
     
 }
 
@@ -603,6 +636,7 @@ void ofApp::guiTabEvent(ofxUIEventArgs &e)
     cout << "ofApp::Selected Track:" << name << endl;
 }
 
+//THIS FUNCTION IS NOT NEEDED ANYMORE
 //--------------------------------------------------------------
 void ofApp::getTrackJSON(int _track, string _param){
     

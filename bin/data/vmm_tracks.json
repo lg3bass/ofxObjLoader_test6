@@ -175,6 +175,7 @@
 		}
 	},
 	"track12" : {
+		"index" : 12,
 		"objSeq-basefilename" : "12_loftedSurface9_sn1_10-300_OBJ_Seq",
 		"objSeq-type" : "sequence",
 		"objSeq-playRandom" : false,
@@ -186,6 +187,8 @@
 		"objSeq-files" : 300,
 		"objSeq-segLen" : 30,
 		"objSeq-numOfSeg" : 10,
+		"matCap-img" : "thuglee-backlight-01.jpg",
+		"matCap-shader" : "sem",
 		"scene" : {
 			"global" : {
 				"g-copies" : 1,
@@ -207,6 +210,7 @@
 		}
 	},
 	"track13" : {
+		"index" : 13,
 		"objSeq-basefilename" : "13_loftedSurface8_sn1_10-300_OBJ_Seq",
 		"objSeq-type" : "sequence",
 		"objSeq-playRandom" : false,
@@ -218,6 +222,8 @@
 		"objSeq-files" : 300,
 		"objSeq-segLen" : 30,
 		"objSeq-numOfSeg" : 10,
+		"matCap-img" : "normals.jpg",
+		"matCap-shader" : "sem",
 		"scene" : {
 			"global" : {
 				"g-copies" : 1,
@@ -239,6 +245,7 @@
 		}
 	},
 	"track14" : {
+		"index" : 14,
 		"objSeq-basefilename" : "14_loftedSurface7_sn1_4-120_OBJ_Seq",
 		"objSeq-type" : "sequence",
 		"objSeq-playRandom" : false,
@@ -250,6 +257,8 @@
 		"objSeq-files" : 120,
 		"objSeq-segLen" : 30,
 		"objSeq-numOfSeg" : 4,
+		"matCap-img" : "mshade3.jpg",
+		"matCap-shader" : "sem",
 		"scene" : {
 			"global" : {
 				"g-copies" : 1,
@@ -271,6 +280,7 @@
 		}
 	},
 	"track15" : {
+		"index" : 15,
 		"objSeq-basefilename" : "15_loftedSurface6_sn1_6-180_OBJ_Seq",
 		"objSeq-type" : "sequence",
 		"objSeq-playRandom" : false,
@@ -282,6 +292,8 @@
 		"objSeq-files" : 180,
 		"objSeq-segLen" : 30,
 		"objSeq-numOfSeg" : 6,
+		"matCap-img" : "mshade4.jpg",
+		"matCap-shader" : "sem",
 		"scene" : {
 			"global" : {
 				"g-copies" : 1,
@@ -303,6 +315,7 @@
 		}
 	},
 	"track16" : {
+		"index" : 16,
 		"objSeq-basefilename" : "16_extrudeTri01_sn0_5-150_OBJ_Seq",
 		"objSeq-type" : "sequence",
 		"objSeq-playRandom" : false,
@@ -314,6 +327,8 @@
 		"objSeq-files" : 150,
 		"objSeq-segLen" : 30,
 		"objSeq-numOfSeg" : 5,
+		"matCap-img" : "material4.png",
+		"matCap-shader" : "sem",
 		"scene" : {
 			"global" : {
 				"g-copies" : 1,
@@ -335,6 +350,7 @@
 		}
 	},
 	"track17" : {
+		"index" : 17,
 		"objSeq-basefilename" : "17_extrudeStar01_sn2_4-140_OBJ_Seq",
 		"objSeq-type" : "sequence",
 		"objSeq-playRandom" : false,
@@ -346,6 +362,8 @@
 		"objSeq-files" : 120,
 		"objSeq-segLen" : 30,
 		"objSeq-numOfSeg" : 4,
+		"matCap-img" : "material3.jpg",
+		"matCap-shader" : "sem",
 		"scene" : {
 			"global" : {
 				"g-copies" : 1,
@@ -367,6 +385,7 @@
 		}
 	},
 	"track18" : {
+		"index" : 18,
 		"objSeq-basefilename" : "18_extrudeBall00_sn0_5-150_OBJ_Seq",
 		"objSeq-type" : "sequence",
 		"objSeq-playRandom" : false,
@@ -378,6 +397,8 @@
 		"objSeq-files" : 150,
 		"objSeq-segLen" : 30,
 		"objSeq-numOfSeg" : 5,
+		"matCap-img" : "mashrim2.jpg",
+		"matCap-shader" : "sem",
 		"scene" : {
 			"global" : {
 				"g-copies" : 1,
@@ -399,6 +420,7 @@
 		}
 	},
 	"track19" : {
+		"index" : 19,
 		"objSeq-basefilename" : "19_diamondLayers_OBJ_Seq",
 		"objSeq-type" : "sequence",
 		"objSeq-playRandom" : false,
@@ -410,6 +432,8 @@
 		"objSeq-files" : 120,
 		"objSeq-segLen" : 30,
 		"objSeq-numOfSeg" : 4,
+		"matCap-img" : "mashrim.png",
+		"matCap-shader" : "sem",
 		"scene" : {
 			"global" : {
 				"g-copies" : 1,
