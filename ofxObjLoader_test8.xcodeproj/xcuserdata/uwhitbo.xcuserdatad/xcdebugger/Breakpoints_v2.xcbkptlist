@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/ofApp.cpp"
-            timestampString = "466653546.942669"
+            timestampString = "466980557.704488"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "598"
-            endingLineNumber = "598"
-            landmarkName = "ofApp::gotMessage(ofMessage msg)"
+            startingLineNumber = "676"
+            endingLineNumber = "676"
+            landmarkName = "ofApp::keyReleased(int key)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

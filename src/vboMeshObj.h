@@ -127,6 +127,7 @@ class vboMeshObj {
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();
     void randLocalPosition(float _start, float _end, int _durration, int _delay);
+    void clear();
     
     void guiEvent(ofxUIEventArgs &e);
     

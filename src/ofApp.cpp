@@ -249,7 +249,54 @@ void ofApp::update(){
                     break;
             }
             
+        } else if (m.getAddress() == "/clear"){
+            switch (m.getArgAsInt32(0)) {
+                case 7:
+                    track7.clear();
+                    break;
+                case 8:
+                    track8.clear();
+                    break;
+                case 9:
+                    track9.clear();
+                    break;
+                case 10:
+                    track10.clear();
+                    break;
+                case 11:
+                    track11.clear();
+                    break;
+                case 12:
+                    track12.clear();
+                    break;
+                case 13:
+                    track13.clear();
+                    break;
+                case 14:
+                    track14.clear();
+                    break;
+                case 15:
+                    track15.clear();
+                    break;
+                case 16:
+                    track16.clear();
+                    break;
+                case 17:
+                    track17.clear();
+                    break;
+                case 18:
+                    track18.clear();
+                    break;
+                case 19:
+                    track19.clear();
+                    break;
+                default:
+                    break;
+            }
+            
+            
         }
+
     }
 }
 
@@ -379,6 +426,84 @@ void ofApp::keyPressed(int key){
     } else {
         switch (key)
         {
+            case '1':
+            {
+                track11.keyPressed(key);
+                //OSCLaunch(<key-unused>,<durration-unused>,<sequenceLength>,<easing>
+                track11.KeyboardLaunch(7, 500, 30, 11);
+                if(modkey){
+                    //randLocalPosition(<lowRand>,<highRand>,<durration>,<delay>);
+                    track11.randLocalPosition(-15,15,600,400);
+                }
+                if(ctrlKey){
+                    track11.clear();
+                }
+                
+            }
+                break;
+            case '2':
+            {
+                track12.keyPressed(key);
+                //OSCLaunch(<key-unused>,<durration-unused>,<sequenceLength>,<easing>
+                track12.KeyboardLaunch(7, 500, 30, 11);
+                if(modkey){
+                    //randLocalPosition(<lowRand>,<highRand>,<durration>,<delay>);
+                    track12.randLocalPosition(-15,15,600,400);
+                }
+                if(ctrlKey){
+                    track12.clear();
+                }
+                
+            }
+                break;
+            case '3':
+            {
+                track13.keyPressed(key);
+                //OSCLaunch(<key-unused>,<durration-unused>,<sequenceLength>,<easing>
+                track13.KeyboardLaunch(7, 500, 30, 11);
+                if(modkey){
+                    //randLocalPosition(<lowRand>,<highRand>,<durration>,<delay>);
+                    track13.randLocalPosition(-15,15,600,400);
+                }
+                
+            }
+                break;
+            case '4':
+            {
+                track14.keyPressed(key);
+                //OSCLaunch(<key-unused>,<durration-unused>,<sequenceLength>,<easing>
+                track14.KeyboardLaunch(7, 500, 30, 11);
+                if(modkey){
+                    //randLocalPosition(<lowRand>,<highRand>,<durration>,<delay>);
+                    track14.randLocalPosition(-15,15,600,400);
+                }
+                
+            }
+                break;
+            case '5':
+            {
+                track15.keyPressed(key);
+                //OSCLaunch(<key-unused>,<durration-unused>,<sequenceLength>,<easing>
+                track15.KeyboardLaunch(7, 500, 30, 11);
+                if(modkey){
+                    //randLocalPosition(<lowRand>,<highRand>,<durration>,<delay>);
+                    track15.randLocalPosition(-15,15,600,400);
+                }
+                
+            }
+                break;
+            case '6':
+            {
+                track16.keyPressed(key);
+                //OSCLaunch(<key-unused>,<durration-unused>,<sequenceLength>,<easing>
+                track16.KeyboardLaunch(7, 500, 30, 11);
+                if(modkey){
+                    //randLocalPosition(<lowRand>,<highRand>,<durration>,<delay>);
+                    track16.randLocalPosition(-15,15,600,400);
+                }
+                
+            }
+                break;
             case '7':
             {
                 track7.keyPressed(key);

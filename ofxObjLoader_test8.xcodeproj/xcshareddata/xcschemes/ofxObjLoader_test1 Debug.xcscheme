@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
                BuildableName = "ofxObjLoader_test7.app"
-               BlueprintName = "ofxObjLoader_test7"
-               ReferencedContainer = "container:ofxObjLoader_test7.xcodeproj">
+               BlueprintName = "ofxObjLoader_test8"
+               ReferencedContainer = "container:ofxObjLoader_test8.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,8 +34,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
             BuildableName = "ofxObjLoader_test7.app"
-            BlueprintName = "ofxObjLoader_test7"
-            ReferencedContainer = "container:ofxObjLoader_test7.xcodeproj">
+            BlueprintName = "ofxObjLoader_test8"
+            ReferencedContainer = "container:ofxObjLoader_test8.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -54,8 +54,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
             BuildableName = "ofxObjLoader_test7.app"
-            BlueprintName = "ofxObjLoader_test7"
-            ReferencedContainer = "container:ofxObjLoader_test7.xcodeproj">
+            BlueprintName = "ofxObjLoader_test8"
+            ReferencedContainer = "container:ofxObjLoader_test8.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -73,8 +73,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
             BuildableName = "ofxObjLoader_test7.app"
-            BlueprintName = "ofxObjLoader_test7"
-            ReferencedContainer = "container:ofxObjLoader_test7.xcodeproj">
+            BlueprintName = "ofxObjLoader_test8"
+            ReferencedContainer = "container:ofxObjLoader_test8.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -570,6 +570,15 @@ void vboMeshObj::randLocalPosition(float _start, float _end, int _durration, int
 }
 
 //--------------------------------------------------------------
+void vboMeshObj::clear(){
+    //set the frame to 0
+    frame = 0;
+    params.isPlaying = false;
+    
+}
+
+
+//--------------------------------------------------------------
 void vboMeshObj::guiEvent(ofxUIEventArgs &e)
 {
     string name = e.widget->getName();
