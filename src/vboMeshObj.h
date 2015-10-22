@@ -22,14 +22,11 @@ class vboMeshObj {
     ofShader shader;
     
     int index;//keep track of what instance you are
-    
     int frame;//current frame
-    int numFiles;//total number of obj files.
-    
-    int counter;
     
     //drawing params
     struct guiParams {
+        bool isLoaded;
         bool isPlaying;
         bool solo;
         bool oscControlled;
@@ -116,7 +113,7 @@ class vboMeshObj {
     vector<int> parseJSON(string _param);
     void reportParams(int _index);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
-    void setupVboMesh(const objFileLoader::extObjFile &_input);
+    void loadVboMesh(const objFileLoader::extObjFile &_input);
     void setMatCap(string _img);
     void setShader(string _shader);
     void draw();

@@ -46,20 +46,18 @@ void ofApp::setup(){
     ofAddListener(guiTabBar->newGUIEvent,this,&ofApp::guiTabEvent);
     
     if (parsingSuccessful) {
-        //2. load all the assets.
+    //2. load all the assets.
         
-        /*
-        track1.setup(appFileLoader.externalObjFiles[BANDTUBE],"red_bob.jpg","sem",1);
-        track2.setup(appFileLoader.externalObjFiles[BASSSTAR],"generator8.jpg","sem",2);
-        track3.setup(appFileLoader.externalObjFiles[BLOCKSTAR],"silver.jpg","sem",3);
-        track4.setup(appFileLoader.externalObjFiles[BOXSTAR],"ghost.jpg","sem",4);
-        track5.setup(appFileLoader.externalObjFiles[UNBLOCKERBASS],"red_clay.jpg","sem",5);
-        track6.setup(appFileLoader.externalObjFiles[TRACERS],"gJGSpecial_01.png","sem",6);
-        */
         
-        //IDEALLY YOU WANT TO LOAD ALL THE DATA FROM THE JSON INCLUDING SHADERS
-        track7.setup(appFileLoader.externalObjFiles[STARBURST], result["track"+ofToString(7)]);
-        track8.setup(appFileLoader.externalObjFiles[WIERDARMS3], result["track"+ofToString(8)]);
+        track1.setup(appFileLoader.externalObjFiles[BANDTUBE],result["track"+ofToString(1)]);
+        track2.setup(appFileLoader.externalObjFiles[BASSSTAR],result["track"+ofToString(2)]);
+        track3.setup(appFileLoader.externalObjFiles[BLOCKSTAR],result["track"+ofToString(3)]);
+        track4.setup(appFileLoader.externalObjFiles[BOXSTAR],result["track"+ofToString(4)]);
+        track5.setup(appFileLoader.externalObjFiles[UNBLOCKERBASS],result["track"+ofToString(5)]);
+        track6.setup(appFileLoader.externalObjFiles[TRACERS],result["track"+ofToString(6)]);
+        
+        track7.setup(appFileLoader.externalObjFiles[STARBURST],result["track"+ofToString(7)]);
+        track8.setup(appFileLoader.externalObjFiles[WIERDARMS3],result["track"+ofToString(8)]);
         track9.setup(appFileLoader.externalObjFiles[WIERDARMS2],result["track"+ofToString(9)]);
         track10.setup(appFileLoader.externalObjFiles[WIERDARMS1],result["track"+ofToString(10)]);
         track11.setup(appFileLoader.externalObjFiles[LIGHTNING10],result["track"+ofToString(11)]);
@@ -108,14 +106,14 @@ void ofApp::update(){
         cam.enableMouseInput();
     }
     
-    /*
+    
     track1.update();
     track2.update();
     track3.update();
     track4.update();
     track5.update();
     track6.update();
-    */
+    
     track7.update();
     track8.update();
     track9.update();
@@ -149,11 +147,33 @@ void ofApp::update(){
         
         
         if(m.getAddress() == "/play"){
-            
+            if(m.getArgAsInt32(0) == 1){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
+                track2.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 2){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
+                track2.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 20,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 3){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
+                track3.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 4){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
+                track4.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 5){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
+                track5.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 20,m.getArgAsInt32(7));
+            }
+            if(m.getArgAsInt32(0) == 6){
+                //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
+                track6.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+            }
             if(m.getArgAsInt32(0) == 7){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
                 track7.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
-    
             }
             if(m.getArgAsInt32(0) == 8){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>
@@ -206,6 +226,24 @@ void ofApp::update(){
         } else if (m.getAddress() == "/randomTrans"){
             
             switch (m.getArgAsInt32(0)) {
+                case 1:
+                    track1.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 2:
+                    track2.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 3:
+                    track3.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 4:
+                    track4.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 5:
+                    track5.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
+                case 6:
+                    track6.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
+                    break;
                 case 7:
                     track7.randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
                     break;
@@ -251,6 +289,24 @@ void ofApp::update(){
             
         } else if (m.getAddress() == "/clear"){
             switch (m.getArgAsInt32(0)) {
+                case 1:
+                    track1.clear();
+                    break;
+                case 2:
+                    track2.clear();
+                    break;
+                case 3:
+                    track3.clear();
+                    break;
+                case 4:
+                    track4.clear();
+                    break;
+                case 5:
+                    track5.clear();
+                    break;
+                case 6:
+                    track6.clear();
+                    break;
                 case 7:
                     track7.clear();
                     break;
@@ -316,27 +372,26 @@ void ofApp::draw(){
     
     cam.begin();
     
-    /*
-        track1.draw();
-        track2.draw();
-        track3.draw();
-        track4.draw();
-        track5.draw();
-        track6.draw();
-     */
-        track7.draw();
-        track8.draw();
-        track9.draw();
-        track10.draw();
-        track11.draw();
-        track12.draw();
-        track13.draw();
-        track14.draw();
-        track15.draw();
-        track16.draw();
-        track17.draw();
-        track18.draw();
-        track19.draw();
+    
+    track1.draw();
+    track2.draw();
+    track3.draw();
+    track4.draw();
+    track5.draw();
+    track6.draw();
+    track7.draw();
+    track8.draw();
+    track9.draw();
+    track10.draw();
+    track11.draw();
+    track12.draw();
+    track13.draw();
+    track14.draw();
+    track15.draw();
+    track16.draw();
+    track17.draw();
+    track18.draw();
+    track19.draw();
     
     
     cam.end();
@@ -349,7 +404,7 @@ void ofApp::draw(){
     
 
     
-    drawLights();// <-- NOT SURE I NEED THIS WITH MATCAP
+    //drawLights();// <-- NOT SURE I NEED THIS WITH MATCAP, disabled 10/22/15
     
     //Need this.
     ofDisableDepthTest();
@@ -375,15 +430,13 @@ void ofApp::exit()
     delete guiTabBar;
 
     
-    /*
+    
     track1.exit();
     track2.exit();
     track3.exit();
     track4.exit();
     track5.exit();
     track6.exit();
-    */
-     
     track7.exit();
     track8.exit();
     track9.exit();

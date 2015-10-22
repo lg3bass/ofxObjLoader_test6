@@ -6,6 +6,7 @@ vboMeshObj::vboMeshObj() {
 
 
     //setup default params
+    params.isLoaded = false;
     params.isPlaying = false;
     params.solo = false;
     params.oscControlled = true;
@@ -36,20 +37,20 @@ vboMeshObj::vboMeshObj() {
 
 //--------------------------------------------------------------
 void vboMeshObj::setup(const objFileLoader::extObjFile &_input, ofxJSONElement _trackData){
-    jsonTrackData = _trackData;
     
+    trackData = _input;
+    jsonTrackData = _trackData;
     index = jsonTrackData["index"].asInt();
     
     //print out the json data.
     ofLogNotice("json_track")<< index << ": " << jsonTrackData.getRawString();
-
-    trackData = _input;
     
-    //load all the vboMeshes
-    setupVboMesh(trackData);
+    //load all the vboMeshes  -- moved below gui
+    //setupVboMesh(trackData);
     
-    setMatCap(jsonTrackData["matCap-img"].asString());
-    setShader(jsonTrackData["matCap-shader"].asString());
+    //moved below gui
+    //setMatCap(jsonTrackData["matCap-img"].asString());
+    //setShader(jsonTrackData["matCap-shader"].asString());
     
     /*
     parameters.setName("testName");
@@ -75,17 +76,20 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input, ofxJSONElement _
     //setup the ofxUI GUI
     setupGui(index);
     
-
+    //load all the vboMeshes
+    //setupVboMesh(trackData);
+    
+    setMatCap(jsonTrackData["matCap-img"].asString());
+    setShader(jsonTrackData["matCap-shader"].asString());
+    
+    
     //setup more params
     params.cuePoints = parseJSON("objSeq-cues");
     params.durrationPoints = parseJSON("objSeq-durations");
     
-    
     //output all my params to check
     reportParams(index);
     
-    
-
 }
 
 //--------------------------------------------------------------
@@ -135,6 +139,8 @@ vector<ofVboMesh> vboMeshObj::passObjTwoVboMesh(vector<ofFile> _files){
         //load all the obj files to the vboMeshBuffer. This is the reason why it takes so long to load.
         cout << (*it).getFileName() << endl;
         
+        //here is where I can set a progress bar
+        
     }
     
     return tempVboMeshSequence;
@@ -143,9 +149,7 @@ vector<ofVboMesh> vboMeshObj::passObjTwoVboMesh(vector<ofFile> _files){
 
 
 //--------------------------------------------------------------
-void vboMeshObj::setupVboMesh(const objFileLoader::extObjFile &_input){
-
-    numFiles = _input.numFiles;
+void vboMeshObj::loadVboMesh(const objFileLoader::extObjFile &_input){
     
     vboMesh1.clear();
     vboMesh1 = passObjTwoVboMesh(_input.objs);
@@ -166,45 +170,45 @@ void vboMeshObj::setShader(string _shader){
 //--------------------------------------------------------------
 void vboMeshObj::draw(){
     
-    
-    
-    //accumulate transform stacks.
-    for(int j=0;j<params.g_copies;j++){
-        glPushMatrix();
-        //global scale
-        glScalef(params.g_scale, params.g_scale, params.g_scale);//scale of this layer
-        //global trans
-        glTranslatef(params.g_trans.x,params.g_trans.y,j*params.g_trans.z);
-        //global rot
+    if(params.isLoaded){
         
-        glRotatef(params.g_rotate.x,1,0,0);
-        glRotatef(params.g_rotate.y,0,1,0);
-        glRotatef(params.g_rotate.z,0,0,1);
-        
-        for(int i=0;i<params.l_copies;i++){
-            
+        //accumulate transform stacks.
+        for(int j=0;j<params.g_copies;j++){
             glPushMatrix();
+            //global scale
+            glScalef(params.g_scale, params.g_scale, params.g_scale);//scale of this layer
+            //global trans
+            glTranslatef(params.g_trans.x,params.g_trans.y,j*params.g_trans.z);
+            //global rot
             
+            glRotatef(params.g_rotate.x,1,0,0);
+            glRotatef(params.g_rotate.y,0,1,0);
+            glRotatef(params.g_rotate.z,0,0,1);
+            
+            for(int i=0;i<params.l_copies;i++){
+                
+                glPushMatrix();
+                
                 glRotatef(i*params.l_rotate.x,1,0,0);
                 glRotatef(i*params.l_rotate.y,0,1,0);
                 glRotatef(i*params.l_rotate.z,0,0,1);
-            
+                
                 glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z);
                 
                 glScalef(params.l_scale,params.l_scale,params.l_scale);
                 
                 shader.begin();
-                    shader.setUniformTexture("tMatCap", matCap, 1);
-                    vboMesh1[frame].draw();
+                shader.setUniformTexture("tMatCap", matCap, 1);
+                vboMesh1[frame].draw();
                 shader.end();
+                
+                glPopMatrix();
+                
+            }
             
-            glPopMatrix();
-            
-        }
-        
-        if(params.mirrored){
-            for(int i=params.l_copies;i>0;i--){
-                glPushMatrix();
+            if(params.mirrored){
+                for(int i=params.l_copies;i>0;i--){
+                    glPushMatrix();
                     glRotatef(i*params.l_rotate.x,1,0,0);
                     glRotatef(i*params.l_rotate.y,0,1,0);
                     glRotatef(i*params.l_rotate.z,0,0,1);
@@ -218,11 +222,15 @@ void vboMeshObj::draw(){
                     shader.setUniformTexture("tMatCap", matCap, 1);
                     vboMesh1[frame].draw();
                     shader.end();
-                
-                glPopMatrix();
+                    
+                    glPopMatrix();
+                }
             }
+            glPopMatrix();
         }
-        glPopMatrix();
+        
+        
+        
     }
     
 }
@@ -306,19 +314,7 @@ void vboMeshObj::update(){
 
             
         } else {
-            
-            //TODO-DO TWEEN CODE HERE TO ON KEY PRESS.
-            //NON OSC CONTROLL
-//            if(frame < numFiles-1){
-//                //timeline++;
-//                frame = round(timeline*frame_increment);
-//                cout << "timeline|frame:" << timeline << "|" << frame << endl;
-//
-//            } else {
-//                frame = 0;
-//                timeline = 0;
-//                params.isPlaying = false;
-//            }
+            //non osc controlled block
             
         }// oscControlled
     }// is Playing
@@ -404,28 +400,6 @@ void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _segmentLe
     //start the animation
     params.isPlaying = true;
     
-    
-    //moved to ofApp;
-    //params.randomized = true;
-    //randLocalPosition();
-    
-//    float randStart = ofRandom(-15, 0);
-//    float randEnd = ofRandom(0, 15);
-//    unsigned durr = 500;
-//    unsigned del = 500;
-//    
-//    cout << randStart << ":" << randEnd << endl;
-//    
-//    positiontweenbounce_x.setParameters(12,easingsine, ofxTween::easeOut,randStart,randEnd,durr,del);
-//    
-//    randStart = ofRandom(-15, 0);
-//    randEnd = ofRandom(0, 15);
-//    
-//    cout << randStart << ":" << randEnd << endl;
-//    
-//    positiontweenbounce_y.setParameters(13,easingsine, ofxTween::easeOut,randStart,randEnd,durr,del);
-    
-    
 }
 
 //--------------------------------------------------------------
@@ -454,7 +428,7 @@ void vboMeshObj::setupGui(int _index){
     
     gui->setName("TRACK" + index);
     gui->addLabel("TRACK" + index);
-    
+    gui->addToggle("LOADED", &params.isLoaded);
     gui->addToggle("SOLO", &params.solo);
     
     gui->addToggle("OSC", &params.oscControlled);
@@ -595,6 +569,20 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
 //        slider->setStickyValue(10.0);
 //        cout << slider->getIncrement() << endl;
 //    }
+    
+    if (name == "LOADED") {
+        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+        cout << "LOADED:" << ofToString(toggle->getValue()) << endl;
+        
+        if(params.isLoaded){
+            //load all the vboMeshes
+            loadVboMesh(trackData);
+        }
+        if(!params.isLoaded){
+            vboMesh1.clear();
+        }
+        
+    }
     
 
     
