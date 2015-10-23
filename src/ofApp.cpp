@@ -134,7 +134,7 @@ void ofApp::update(){
 		ofxOscMessage m;
 		receiver.getNextMessage(&m);
         
-        
+        /*
         cout << m.getAddress() << endl << "track:" << m.getArgAsInt32(0) <<
         ", note:" << m.getArgAsInt32(1) <<
         ", durration:" << m.getArgAsInt32(2) <<
@@ -144,12 +144,12 @@ void ofApp::update(){
         ", totalSegments:" << m.getArgAsInt32(6) <<
         ", easing:" << m.getArgAsInt32(7) <<
         endl;
-        
+        */
         
         if(m.getAddress() == "/play"){
             if(m.getArgAsInt32(0) == 1){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
-                track2.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+                track1.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
             }
             if(m.getArgAsInt32(0) == 2){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
