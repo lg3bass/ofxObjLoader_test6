@@ -11,6 +11,7 @@ objFileLoader::objFileLoader(){
 void objFileLoader::setup(){
     
     loadObjFiles("obj");
+    loadMatCapFiles("matCap");
     
 }
 
@@ -62,11 +63,51 @@ void objFileLoader::loadObjFiles(string _path){
         cout << externalObjFiles[j].name << ":" << objDirectory.size() << endl;
         //list files in obj directory
         cout << externalObjFiles[j].name << "-obj:" << externalObjFiles[j].objs.size() << endl;
-        cout << externalObjFiles[j].name << "-mtl:" << externalObjFiles[j].mtls.size() << endl;
+        //cout << externalObjFiles[j].name << "-mtl:" << externalObjFiles[j].mtls.size() << endl;
         //display externalObjFiles[].numFiles
         cout << "externalObjFiles[<var>].numFiles " << externalObjFiles[j].numFiles << endl;
     }
     
+}
 
+//--------------------------------------------------------------
+void objFileLoader::loadMatCapFiles(string _path) {
+
+    //get the directories
+    string path = _path;
+    ofDirectory dir(path);
+    dir.allowExt("png");
+    dir.allowExt("jpg");
+    dir.listDir();
+    
+    int fileCounter = 0;
+
+    cout << "MATCAPS:" << endl;
+    
+    //create a vector of files
+    vector<ofFile> matCapDirectoryFiles = dir.getFiles();
+
+    
+    //run through the dir to collect all the files.
+    for(int j=0;j<matCapDirectoryFiles.size();j++){
+
+        if(matCapDirectoryFiles[j].getExtension() == "png"){
+            externalMatCapFiles.push_back(matCapDirectoryFiles[j].getBaseName()+".png");
+            fileCounter++;
+        }
+        if(matCapDirectoryFiles[j].getExtension() == "jpg"){
+            externalMatCapFiles.push_back(matCapDirectoryFiles[j].getBaseName()+".jpg");
+            fileCounter++;
+        }
+        
+        
+        ofSort(externalMatCapFiles);
+        
+    
+        cout << externalMatCapFiles[j] << endl;
+        
+    }
+
+    
     
 }

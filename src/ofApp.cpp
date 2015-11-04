@@ -20,7 +20,7 @@ void ofApp::setup(){
     
     //SYPHON
     //much nicer than processing's vs.:)
-    ofSetWindowTitle("VMM 7");
+    ofSetWindowTitle("VMM 8");
     mainOutputSyphonServer.setName("Screen Output");
     
     mClient.setup();
@@ -113,7 +113,6 @@ void ofApp::update(){
     track4.update();
     track5.update();
     track6.update();
-    
     track7.update();
     track8.update();
     track9.update();
@@ -349,6 +348,40 @@ void ofApp::update(){
                 default:
                     break;
             }
+            
+            
+        } else if (m.getAddress() == "/bass"){
+            
+            //cout << ofToString(m.getArgAsInt32(0)) << endl;
+            
+            //m.getArgAsInt32(0) = value from REF filter.
+            //m.getArgAsString(1) = note length.
+            
+            int noteLength = 4;
+            
+            
+            if(m.getArgAsString(1) == "4n"){
+                noteLength = 4;
+            } else if (m.getArgAsString(1) == "8n"){
+                noteLength = 8;
+            } else if (m.getArgAsString(1) == "16n"){
+                noteLength = 16;
+            } else if (m.getArgAsString(1) == "32n"){
+                noteLength = 32;
+            } else if (m.getArgAsString(1) == "64n"){
+                noteLength = 64;
+            } else if (m.getArgAsString(1) == "128n"){
+                noteLength = 128;
+            } else {
+                noteLength = 4;
+            }
+            
+            //DrawCircle(m.getArgAsInt32(0), noteLength, 40);
+            
+            //do the calculations to affect the local x and y
+            
+            
+            track4.pulsate(m.getArgAsInt32(0), noteLength);
             
             
         }
@@ -807,6 +840,7 @@ void ofApp::guiTabEvent(ofxUIEventArgs &e)
     string name = e.widget->getName();
     int kind = e.widget->getKind();
     string canvasParent = e.widget->getCanvasParent()->getName();
+    
     
     //if you want to set the highlighted item.
     //e.widget->setColorFill(ofColor::yellow);

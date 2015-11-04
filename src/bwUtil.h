@@ -7,4 +7,6 @@ namespace bwUtil
     string dDigiter(int i);
     
     float presetMidiNotes(float i);
+    
+    void loadFilesFromDirectory();
 }

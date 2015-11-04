@@ -23,6 +23,9 @@ class objFileLoader {
     void loadObjFiles(string _path);
     vector<extObjFile> externalObjFiles;
     
+    void loadMatCapFiles(string _path);
+    vector<string> externalMatCapFiles;
+    
     private:
     
 };

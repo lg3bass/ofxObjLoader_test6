@@ -8,7 +8,7 @@ vboMeshObj::vboMeshObj() {
     //setup default params
     params.isLoaded = false;
     params.isPlaying = false;
-    params.solo = false;
+    params.still = false;
     params.oscControlled = true;
     params.randomized = false;
     params.mirrored = true;
@@ -27,11 +27,23 @@ vboMeshObj::vboMeshObj() {
     params.l_trans = ofVec3f(0.0,0.0,0.0);
     
     params.mirror_distance = 10.0;
-    params.durration_in_ms = 1000.0;
     params.currentSegment = 0;
+    params.stillFrame = 0;
+    params.totalFrames = 0;
     
+    
+    //current frame;
     frame = 0;
+    
+    params.spin = ofVec3f(0.0,0.0,0.0);
+    params.spinRange = ofVec3f(0.0,0.0,0.0);
+    params.spinX = false;
+    params.spinY = false;
+    params.spinZ = false;
+    params.ltransMod = 0;
 
+
+    
     
 }
 
@@ -73,22 +85,35 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input, ofxJSONElement _
     
     frame = 0;//duplicate in constructor
     
-    //setup the ofxUI GUI
-    setupGui(index);
+
     
     //load all the vboMeshes
     //setupVboMesh(trackData);
     
-    setMatCap(jsonTrackData["matCap-img"].asString());
+    //setMatCap(jsonTrackData["matCap-img"].asString()); -- OLD
+
+
     setShader(jsonTrackData["matCap-shader"].asString());
     
     
     //setup more params
     params.cuePoints = parseJSON("objSeq-cues");
     params.durrationPoints = parseJSON("objSeq-durations");
+    params.stillFrame = jsonTrackData["objSeq-still"].asInt();
+    params.totalFrames = jsonTrackData["objSeq-files"].asInt();
+    
+    //get all the matcaps from ofApp
+    matcaps = ((ofApp*)ofGetAppPtr())->appFileLoader.externalMatCapFiles;
+    
+    setMatCap(0);
+    
+    //setup the ofxUI GUI
+    setupGui(index);
     
     //output all my params to check
     reportParams(index);
+    
+
     
 }
 
@@ -119,7 +144,8 @@ void vboMeshObj::reportParams(int _i){
     cout << "l_scale-" << params.l_scale << endl;
     cout << "l_rot-" << params.l_rot << endl;
     cout << "l_rotate-" << params.l_rotate << endl;
-    cout << "l_trans:-" << params.l_trans << endl;
+    cout << "l_trans-" << params.l_trans << endl;
+    cout << "totalFrames-" << params.totalFrames << endl;
 }
 
 
@@ -158,8 +184,9 @@ void vboMeshObj::loadVboMesh(const objFileLoader::extObjFile &_input){
 
 
 //--------------------------------------------------------------
-void vboMeshObj::setMatCap(string _img){
-    matCap.loadImage("matCap/"+_img);
+void vboMeshObj::setMatCap(int _imgIndex){
+    string matCapFile = "matCap/"+ofToString(matcaps[_imgIndex]);
+    matCap.loadImage(matCapFile);
 }
 
 //--------------------------------------------------------------
@@ -181,9 +208,23 @@ void vboMeshObj::draw(){
             glTranslatef(params.g_trans.x,params.g_trans.y,j*params.g_trans.z);
             //global rot
             
-            glRotatef(params.g_rotate.x,1,0,0);
-            glRotatef(params.g_rotate.y,0,1,0);
-            glRotatef(params.g_rotate.z,0,0,1);
+            if(params.spinX){
+                glRotatef(sin((ofGetFrameNum()*0.2)*params.spin.x)*params.spinRange.x,1,0,0);
+            } else {
+                glRotatef(params.g_rotate.x,1,0,0);
+            }
+            if(params.spinY){
+                glRotatef(sin((ofGetFrameNum()*0.2)*params.spin.y)*params.spinRange.y,0,1,0);
+            } else {
+                glRotatef(params.g_rotate.y,0,1,0);
+            }
+            if(params.spinZ){
+                glRotatef(sin((ofGetFrameNum()*0.2)*params.spin.z)*params.spinRange.z,0,0,1);
+            } else {
+                glRotatef(params.g_rotate.z,0,0,1);
+            }
+
+            //glRotatef(params.g_rotate.z,0,0,1);
             
             for(int i=0;i<params.l_copies;i++){
                 
@@ -197,9 +238,16 @@ void vboMeshObj::draw(){
                 
                 glScalef(params.l_scale,params.l_scale,params.l_scale);
                 
+                
                 shader.begin();
                 shader.setUniformTexture("tMatCap", matCap, 1);
-                vboMesh1[frame].draw();
+                if(params.still){
+                    vboMesh1[params.stillFrame].draw();
+                } else {
+                    vboMesh1[frame].draw();
+                }
+                
+                
                 shader.end();
                 
                 glPopMatrix();
@@ -214,13 +262,19 @@ void vboMeshObj::draw(){
                     glRotatef(i*params.l_rotate.z,0,0,1);
                     
                     
-                    glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z+params.mirror_distance);
+                    glTranslatef(params.l_trans.x, params.l_trans.y+params.ltransMod, params.l_trans.z+params.mirror_distance);
                     
                     glScalef(params.l_scale,params.l_scale,-params.l_scale);
                     
                     shader.begin();
                     shader.setUniformTexture("tMatCap", matCap, 1);
-                    vboMesh1[frame].draw();
+                    
+                    if(params.still){
+                        vboMesh1[params.stillFrame].draw();
+                    } else {
+                        vboMesh1[frame].draw();
+                    }
+                    
                     shader.end();
                     
                     glPopMatrix();
@@ -308,16 +362,18 @@ void vboMeshObj::update(){
                         params.isPlaying = false;
                     }
                     break;
-                }
-                //cout << "frame: " << frame << endl;
+            }
+            //cout << "frame: " << frame << endl;
             
-
+            
             
         } else {
             //non osc controlled block
             
         }// oscControlled
     }// is Playing
+        
+    
    
     
     
@@ -426,82 +482,178 @@ void vboMeshObj::setupGui(int _index){
     // TAKE 2
     gui = new ofxUICanvas();
     
+    gui->setWidth(150);
+    
+    gui->setWidgetSpacing(2);
+    
     gui->setName("TRACK" + index);
-    gui->addLabel("TRACK" + index);
+    
+    gui->addLabel(jsonTrackData["objSeq-basefilename"].asString());
+   
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+     gui->addSpacer(100, 5);
+    gui->addDropDownList("MATCAP", matcaps, 250, 0,0);
+    
+    gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
+   
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addToggle("LOADED", &params.isLoaded);
-    gui->addToggle("SOLO", &params.solo);
+    
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    
+    gui->addToggle("STILL", &params.still);
     
     gui->addToggle("OSC", &params.oscControlled);
     gui->addToggle("MIRROR", &params.mirrored);
     
-    //=====================
-    gui->addLabel("GLOBAL");
-    gui->addIntSlider("(G)COPIES " + index, 1, 12, &params.g_copies);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
-    gui->addSlider("(G)SCALE", 1.0, 50.0, &params.g_scale);
+    gui->addIntSlider("FRAME", 1, params.totalFrames, &params.stillFrame, 300,8,0,0);
+    gui->addSlider("MIRROR",-40.0,40.0, &params.mirror_distance,150,8,0,0);
     
-    gui->addSlider("(G)ROTATE-X",-180.0,180.0, &params.g_rotate.x);
+    gui->addSpacer(320, 1);
+    
+    //copies
+    gui->addIntSlider("(G)COPIES " + index, 1, 12, &params.g_copies,150,8,0,0);
+    
+    //scale
+    gui->addSlider("(G)SCALE", 1.0, 50.0, &params.g_scale,150,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("g-scale-bs", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gScaleMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    //global Rotate
+    gui->addSlider("(G)ROTATE-X",-180.0,180.0, &params.g_rotate.x,150,8,0,0);
     setGuiSnapUnits("(G)ROTATE-X",10.0);
-    gui->addSlider("(G)ROTATE-Y",-180.0,180.0, &params.g_rotate.y);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("g-rot-x", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gRotXMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSlider("(G)ROTATE-Y",-180.0,180.0, &params.g_rotate.y,150,8,0,0);
     setGuiSnapUnits("(G)ROTATE-Y",10.0);
-    gui->addSlider("(G)ROTATE-Z",-180.0,180.0, &params.g_rotate.z);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("g-rot-y", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gRotYMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSlider("(G)ROTATE-Z",-180.0,180.0, &params.g_rotate.z,150,8,0,0);
     setGuiSnapUnits("(G)ROTATE-Z",10.0);
-    gui->addSlider("(G)TRANS-X", -50.0, 50.0, &params.g_trans.x);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("g-rot-z", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gRotZMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    //global translate
+    gui->addSlider("(G)TRANS-X", -50.0, 50.0, &params.g_trans.x,150,8,0,0);
     setGuiSnapUnits("(G)TRANS-X",5.0);
-    gui->addSlider("(G)TRANS-Y", -50.0, 50.0, &params.g_trans.y);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("g-trans-x", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gTransXMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSlider("(G)TRANS-Y", -50.0, 50.0, &params.g_trans.y,150,8,0,0);
     setGuiSnapUnits("(G)TRANS-Y",5.0);
-    gui->addSlider("(G)TRANS-Z", -50.0, 50.0, &params.g_trans.z);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("g-trans-y", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gTransYMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+
+    
+    gui->addSlider("(G)TRANS-Z", -50.0, 50.0, &params.g_trans.z,150,8,0,0);
     setGuiSnapUnits("(G)TRANS-Z",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("g-trans-z", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gTransZMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSpacer(320, 1);
+    
+    
+    //LOCAL
+    gui->addIntSlider("(L)COPIES " + index, 1, 12, &params.l_copies,150,8,150,0);
+
+    
+    gui->addSlider("(L)SCALE", 0.1, 1.0, &params.l_scale,150,8,150,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("l-scale-bs", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lScaleMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSlider("(L)ROTATE-X",-180.0,180.0,&params.l_rotate.x,150,8,0,0);
+    setGuiSnapUnits("(L)ROTATE-X",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("l-rot-x", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lRotXMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSlider("(L)ROTATE-Y",-180.0,180.0,&params.l_rotate.y,150,8,0,0);
+    setGuiSnapUnits("(L)ROTATE-Y",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("l-rot-y", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lRotYMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSlider("(L)ROTATE-Z",-180.0,180.0,&params.l_rotate.z,150,8,0,0);
+    setGuiSnapUnits("(L)ROTATE-Z",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("l-rot-z", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lRotZMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    
+    gui->addSlider("(L)TRANS-X", -100.0, 100.0, &params.l_trans.x,150,8,0,0);
+    setGuiSnapUnits("(L)TRANS-X",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("l-trans-x", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lTransXMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSlider("(L)TRANS-Y", -100.0, 100.0, &params.l_trans.y,150,8,0,0);
+    setGuiSnapUnits("(L)TRANS-Y",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("l-trans-y", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lTransYMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSlider("(L)TRANS-Z", -100.0, 100.0, &params.l_trans.z,150,8,0,0);
+    setGuiSnapUnits("(L)TRANS-Z",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("l-trans-z", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lTransZMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
     
     //====================
-    gui->addLabel("LOCAL");
-    gui->addIntSlider("(L)COPIES " + index, 1, 12, &params.l_copies);
-
+    //spin controls
+    gui->addLabelToggle("spinX", &params.spinX,50,12,0,0,false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addSlider("Spin X", -1.0, 1.0, &params.spin.x,100,8,0,0);
+    gui->addSlider("Spin Range X", 5,45,&params.spinRange.x,100,8,0,0);
     
-    gui->addSlider("(L)SCALE", 0.1, 1.0, &params.l_scale);
-    gui->addSlider("(L)ROTATE-X",-180.0,180.0,&params.l_rotate.x);
-    setGuiSnapUnits("(L)ROTATE-X",5.0);
-    gui->addSlider("(L)ROTATE-Y",-180.0,180.0,&params.l_rotate.y);
-    setGuiSnapUnits("(L)ROTATE-Y",5.0);
-    gui->addSlider("(L)ROTATE-Z",-180.0,180.0,&params.l_rotate.z);
-    setGuiSnapUnits("(L)ROTATE-Z",5.0);
     
-    gui->addSlider("(L)TRANS-X", -100.0, 100.0, &params.l_trans.x);
-    setGuiSnapUnits("(L)TRANS-X",5.0);
-    gui->addSlider("(L)TRANS-Y", -100.0, 100.0, &params.l_trans.y);
-    setGuiSnapUnits("(L)TRANS-Y",5.0);
-    gui->addSlider("(L)TRANS-Z", -100.0, 100.0, &params.l_trans.z);
-    setGuiSnapUnits("(L)TRANS-Z",5.0);
-
-    gui->addSlider("MIRROR DISTANCE",-40.0,40.0, &params.mirror_distance);
-    gui->addSlider("durration in ms",100.0,2000.0, &params.durration_in_ms);
-    setGuiSnapUnits("durration in ms",100.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
-
+    gui->addLabelToggle("spinY", &params.spinY,50,12,0,0,false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addSlider("Spin Y", -0.1, 0.1, &params.spin.y,100,8,0,0);
+    gui->addSlider("Spin Range Y", 5,45,&params.spinRange.y,100,8,0,0);
     
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addLabelToggle("spinZ", &params.spinZ,50,12,0,0,false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addSlider("Spin Z", -0.1, 0.1, &params.spin.z,100,8,0,0);
+    gui->addSlider("Spin Range Z", 5,45,&params.spinRange.z,100,8,0,0);
+    
+    //FINALIZE THE GUI
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&vboMeshObj::guiEvent);
-    
-    
     
     //add this tracks gui to the tabbar
     ((ofApp*)ofGetAppPtr())->guiTabBar->addCanvas(gui);
     ((ofApp*)ofGetAppPtr())->guis.push_back(gui);
-    
-    
-    //set increment and sticky(move to function)
-    
-//    ofxUISlider *sliderGX = (ofxUISlider *)gui->getWidget("(G)ROTATE-X");
-//    sliderGX->setStickyValue(10.0);
-//    sliderGX->setIncrement(10.0);
-//
-//    ofxUISlider *sliderGY = (ofxUISlider *)gui->getWidget("(G)ROTATE-Y");
-//    sliderGY->setStickyValue(10.0);
-//    sliderGY->setIncrement(10.0);
-//    
-//    ofxUISlider *sliderGZ = (ofxUISlider *)gui->getWidget("(G)ROTATE-Z");
-//    sliderGZ->setStickyValue(10.0);
-//    sliderGZ->setIncrement(10.0);
 }
 
 //--------------------------------------------------------------
@@ -551,6 +703,14 @@ void vboMeshObj::clear(){
     
 }
 
+//--------------------------------------------------------------
+void vboMeshObj::pulsate(int _amp, int _noteLength){
+    
+    //cout << "amplitude:" << _amp << endl;
+    params.ltransMod = _amp;
+    
+}
+
 
 //--------------------------------------------------------------
 void vboMeshObj::guiEvent(ofxUIEventArgs &e)
@@ -581,6 +741,29 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         if(!params.isLoaded){
             vboMesh1.clear();
         }
+        
+    } else if(name == "STILL"){
+        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+        if(toggle->getValue()){
+            params.still = true;
+        
+        } else {
+            params.still = false;
+        }
+    } else if(name == "MATCAP"){
+        ofxUIDropDownList *dd = (ofxUIDropDownList *) e.widget;
+        
+        //dd->activateToggle("silver.jpg");
+        
+        
+        if(!dd->getSelectedIndeces().empty()){
+            cout << "setting the matcap" << endl;
+            setMatCap(dd->getSelectedIndeces()[0]);
+        }
+        
+        
+        cout << ofToString(dd->getSelectedIndeces()) << endl;
+
         
     }
     

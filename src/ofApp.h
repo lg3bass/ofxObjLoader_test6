@@ -10,6 +10,7 @@
 #include "ofxOsc.h"
 #include "ofxTween.h"
 #include "ofxJSON.h"
+#include "bwUtil.h"
 
 
 #define HOW_MANY 2

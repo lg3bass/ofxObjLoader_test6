@@ -24,11 +24,13 @@ class vboMeshObj {
     int index;//keep track of what instance you are
     int frame;//current frame
     
+    vector<string> matcaps;
+    
     //drawing params
     struct guiParams {
         bool isLoaded;
         bool isPlaying;
-        bool solo;
+        bool still;
         bool oscControlled;
         bool randomized;
         bool mirrored;
@@ -48,10 +50,19 @@ class vboMeshObj {
         ofVec3f l_trans;
         
         float mirror_distance;
-        float durration_in_ms;
         int currentSegment;
         vector<int> cuePoints;
         vector<int> durrationPoints;
+        int stillFrame;
+        int totalFrames;
+        
+        bool spinX;
+        bool spinY;
+        bool spinZ;
+        ofVec3f spin;
+        ofVec3f spinRange;
+        int ltransMod;
+        
     };
     
     
@@ -114,7 +125,7 @@ class vboMeshObj {
     void reportParams(int _index);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
     void loadVboMesh(const objFileLoader::extObjFile &_input);
-    void setMatCap(string _img);
+    void setMatCap(int _imgIndex);
     void setShader(string _shader);
     void draw();
     void update();
@@ -125,6 +136,7 @@ class vboMeshObj {
     void setIndicator();
     void randLocalPosition(float _start, float _end, int _durration, int _delay);
     void clear();
+    void pulsate(int _amp, int _noteLength);
     
     void guiEvent(ofxUIEventArgs &e);
     
