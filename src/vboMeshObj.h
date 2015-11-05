@@ -35,19 +35,24 @@ class vboMeshObj {
         bool randomized;
         bool mirrored;
         int tweenType;
-                
+        
+        //global
         int g_copies;
         float g_scale;
         float g_rot;
         ofVec3f g_rotate;
         ofVec3f g_trans;
         
-        
+        //local
         int l_copies;
         float l_scale;
         float l_rot;
         ofVec3f l_rotate;
         ofVec3f l_trans;
+        
+        //object
+        ofVec3f o_rotate;
+        
         
         float mirror_distance;
         int currentSegment;

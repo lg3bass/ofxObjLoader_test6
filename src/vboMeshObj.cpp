@@ -26,6 +26,8 @@ vboMeshObj::vboMeshObj() {
     params.l_rotate = ofVec3f(0.0,0.0,-90.0);
     params.l_trans = ofVec3f(0.0,0.0,0.0);
     
+    params.o_rotate = ofVec3f(0.0,0.0,0.0);
+    
     params.mirror_distance = 10.0;
     params.currentSegment = 0;
     params.stillFrame = 0;
@@ -200,12 +202,12 @@ void vboMeshObj::draw(){
     if(params.isLoaded){
         
         //accumulate transform stacks.
-        for(int j=0;j<params.g_copies;j++){
+        for(int j=1;j<params.g_copies+1;j++){
             glPushMatrix();
             //global scale
             glScalef(params.g_scale, params.g_scale, params.g_scale);//scale of this layer
             //global trans
-            glTranslatef(params.g_trans.x,params.g_trans.y,j*params.g_trans.z);
+            glTranslatef(j*params.g_trans.x,j*params.g_trans.y,j*params.g_trans.z);
             //global rot
             
             if(params.spinX){
@@ -229,24 +231,31 @@ void vboMeshObj::draw(){
             for(int i=0;i<params.l_copies;i++){
                 
                 glPushMatrix();
-                
                 glRotatef(i*params.l_rotate.x,1,0,0);
                 glRotatef(i*params.l_rotate.y,0,1,0);
                 glRotatef(i*params.l_rotate.z,0,0,1);
-                
+
                 glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z);
-                
+            
                 glScalef(params.l_scale,params.l_scale,params.l_scale);
-                
                 
                 shader.begin();
                 shader.setUniformTexture("tMatCap", matCap, 1);
-                if(params.still){
-                    vboMesh1[params.stillFrame].draw();
-                } else {
-                    vboMesh1[frame].draw();
-                }
                 
+                    glPushMatrix();
+                    if(params.still){
+                    
+                        
+                        glRotatef(params.o_rotate.x,1,0,0);
+                        glRotatef(params.o_rotate.y,0,1,0);
+                        glRotatef(params.o_rotate.z,0,0,1);
+                        vboMesh1[params.stillFrame].draw();
+                        
+                    } else {
+                        vboMesh1[frame].draw();
+                        
+                    }
+                    glPopMatrix();
                 
                 shader.end();
                 
@@ -261,7 +270,6 @@ void vboMeshObj::draw(){
                     glRotatef(i*params.l_rotate.y,0,1,0);
                     glRotatef(i*params.l_rotate.z,0,0,1);
                     
-                    
                     glTranslatef(params.l_trans.x, params.l_trans.y+params.ltransMod, params.l_trans.z+params.mirror_distance);
                     
                     glScalef(params.l_scale,params.l_scale,-params.l_scale);
@@ -269,11 +277,20 @@ void vboMeshObj::draw(){
                     shader.begin();
                     shader.setUniformTexture("tMatCap", matCap, 1);
                     
-                    if(params.still){
-                        vboMesh1[params.stillFrame].draw();
-                    } else {
-                        vboMesh1[frame].draw();
-                    }
+                        glPushMatrix();
+                        if(params.still){
+                            
+                            
+                            glRotatef(params.o_rotate.x,1,0,0);
+                            glRotatef(params.o_rotate.y,0,1,0);
+                            glRotatef(params.o_rotate.z,0,0,1);
+                            vboMesh1[params.stillFrame].draw();
+                        
+                        } else {
+                            vboMesh1[frame].draw();
+                            
+                        }
+                        glPopMatrix();
                     
                     shader.end();
                     
@@ -491,7 +508,7 @@ void vboMeshObj::setupGui(int _index){
     gui->addLabel(jsonTrackData["objSeq-basefilename"].asString());
    
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-     gui->addSpacer(100, 5);
+    gui->addSpacer(100, 5);
     gui->addDropDownList("MATCAP", matcaps, 250, 0,0);
     
     gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
@@ -624,6 +641,16 @@ void vboMeshObj::setupGui(int _index){
     gui->addSlider("lTransZMod",0.0, 0.1, 0.5,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
+    
+    gui->addSpacer(320, 1);
+    //====================
+    //object space
+    gui->addSlider("(O)ROTATE-X",-180.0,180.0,&params.o_rotate.x,150,8,0,0);
+    setGuiSnapUnits("(O)ROTATE-X",5.0);
+    gui->addSlider("(O)ROTATE-Y",-180.0,180.0,&params.o_rotate.y,150,8,0,0);
+    setGuiSnapUnits("(O)ROTATE-Y",5.0);
+    gui->addSlider("(O)ROTATE-Z",-180.0,180.0,&params.o_rotate.z,150,8,0,0);
+    setGuiSnapUnits("(O)ROTATE-Z",5.0);
     
     //====================
     //spin controls
