@@ -105,7 +105,9 @@ class ofApp : public ofBaseApp{
         //ofxOSC
         ofxOscReceiver receiver;
     
-
+    
+        //myBass
+        float amplitude;
 
     
         void setup();

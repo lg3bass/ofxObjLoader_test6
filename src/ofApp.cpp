@@ -160,7 +160,7 @@ void ofApp::update(){
             }
             if(m.getArgAsInt32(0) == 4){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
-                track4.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 30,m.getArgAsInt32(7));
+                track4.OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), 20,m.getArgAsInt32(7));
             }
             if(m.getArgAsInt32(0) == 5){
                 //OSCLaunch(<destination frame>, <durration>, <segment length>, <easingProfile>
@@ -352,10 +352,12 @@ void ofApp::update(){
             
         } else if (m.getAddress() == "/bass"){
             
-            //cout << ofToString(m.getArgAsInt32(0)) << endl;
             
             //m.getArgAsInt32(0) = value from REF filter.
             //m.getArgAsString(1) = note length.
+
+            
+            amplitude = m.getArgAsInt32(0);
             
             int noteLength = 4;
             
@@ -376,12 +378,33 @@ void ofApp::update(){
                 noteLength = 4;
             }
             
-            //DrawCircle(m.getArgAsInt32(0), noteLength, 40);
+
             
-            //do the calculations to affect the local x and y
+            //pass in the data from the bass osc stream.  We only want to pull this in once. Only send if it's loaded
             
             
-            track4.pulsate(m.getArgAsInt32(0), noteLength);
+            if(track1.params.isLoaded){track1.bassControl(amplitude, noteLength);}
+            if(track2.params.isLoaded){track2.bassControl(amplitude, noteLength);}
+            if(track3.params.isLoaded){track3.bassControl(amplitude, noteLength);}
+            if(track4.params.isLoaded){track4.bassControl(amplitude, noteLength);}
+            if(track5.params.isLoaded){track5.bassControl(amplitude, noteLength);}
+            if(track6.params.isLoaded){track6.bassControl(amplitude, noteLength);}
+            if(track7.params.isLoaded){track7.bassControl(amplitude, noteLength);}
+            if(track8.params.isLoaded){track8.bassControl(amplitude, noteLength);}
+            if(track9.params.isLoaded){track9.bassControl(amplitude, noteLength);}
+            if(track10.params.isLoaded){track10.bassControl(amplitude, noteLength);}
+            if(track11.params.isLoaded){track11.bassControl(amplitude, noteLength);}
+            if(track12.params.isLoaded){track12.bassControl(amplitude, noteLength);}
+            if(track13.params.isLoaded){track13.bassControl(amplitude, noteLength);}
+            if(track14.params.isLoaded){track14.bassControl(amplitude, noteLength);}
+            if(track15.params.isLoaded){track15.bassControl(amplitude, noteLength);}
+            if(track16.params.isLoaded){track16.bassControl(amplitude, noteLength);}
+            if(track17.params.isLoaded){track17.bassControl(amplitude, noteLength);}
+            if(track18.params.isLoaded){track18.bassControl(amplitude, noteLength);}
+            if(track19.params.isLoaded){track19.bassControl(amplitude, noteLength);}
+            
+            
+            
             
             
         }

@@ -4,6 +4,8 @@
 //--------------------------------------------------------------
 vboMeshObj::vboMeshObj() {
 
+    //current frame;
+    frame = 0;
 
     //setup default params
     params.isLoaded = false;
@@ -14,28 +16,10 @@ vboMeshObj::vboMeshObj() {
     params.mirrored = true;
     params.tweenType = 11;
     
-    params.g_copies = 1;
-    params.g_scale = 10.0;
-    //params.g_rot = 0.0;
-    params.g_rotate = ofVec3f(0.0,0.0,0.0);
-    params.g_trans = ofVec3f(0.0,0.0,0.0);
-    
-    params.l_copies = 4;
-    params.l_scale = 1.0;
-    //params.l_rot = -90.0;
-    params.l_rotate = ofVec3f(0.0,0.0,-90.0);
-    params.l_trans = ofVec3f(0.0,0.0,0.0);
-    
-    params.o_rotate = ofVec3f(0.0,0.0,0.0);
-    
     params.mirror_distance = 10.0;
     params.currentSegment = 0;
     params.stillFrame = 0;
     params.totalFrames = 0;
-    
-    
-    //current frame;
-    frame = 0;
     
     params.spin = ofVec3f(0.0,0.0,0.0);
     params.spinRange = ofVec3f(0.0,0.0,0.0);
@@ -44,6 +28,51 @@ vboMeshObj::vboMeshObj() {
     params.spinZ = false;
     params.ltransMod = 0;
 
+    //global
+    params.g_copies = 1;
+    params.gScale = false;
+    params.g_scale = 10.0;
+    params.gScaleMod = 0.0;
+    params.gScaleModVal = 0.0;
+    params.gTransX = false;
+    params.gTransY = false;
+    params.gTransZ = false;
+    params.g_trans = ofVec3f(0.0,0.0,0.0);
+    params.gTransMod = ofVec3f(0.0,0.0,0.0);
+    params.gTransModVal = ofVec3f(0.0,0.0,0.0);
+    params.gRotX = false;
+    params.gRotY = false;
+    params.gRotY = false;
+    params.g_rotate = ofVec3f(0.0,0.0,0.0);
+    params.gRotateMod = ofVec3f(0.0,0.0,0.0);
+    params.gRotateModVal = ofVec3f(0.0,0.0,0.0);
+    
+    //local
+    params.l_copies = 4;
+    params.lScale = false;
+    params.l_scale = 1.0;
+    params.lScaleMod = 0.0;
+    params.lScaleModVal = 0.0;
+    params.lTransX = false;
+    params.lTransY = false;
+    params.lTransZ = false;
+    params.l_trans = ofVec3f(0.0,0.0,0.0);
+    params.lTransMod = ofVec3f(0.0,0.0,0.0);
+    params.lTransModVal = ofVec3f(0.0,0.0,0.0);
+    params.lRotX = false;
+    params.lRotY = false;
+    params.lRotY = false;
+    params.l_rotate = ofVec3f(0.0,0.0,-90.0);
+    params.lRotateMod = ofVec3f(0.0,0.0,0.0);
+    params.lRotateModVal = ofVec3f(0.0,0.0,0.0);
+    
+    //object
+    params.oRotX = false;
+    params.oRotY = false;
+    params.oRotZ = false;
+    params.o_rotate = ofVec3f(0.0,0.0,0.0);
+    params.oRotateMod = ofVec3f(0.0,0.0,0.0);
+    params.oRotateModVal = ofVec3f(0.0,0.0,0.0);
 
     
     
@@ -84,19 +113,14 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input, ofxJSONElement _
     
     */
     
-    
     frame = 0;//duplicate in constructor
-    
-
     
     //load all the vboMeshes
     //setupVboMesh(trackData);
     
     //setMatCap(jsonTrackData["matCap-img"].asString()); -- OLD
 
-
     setShader(jsonTrackData["matCap-shader"].asString());
-    
     
     //setup more params
     params.cuePoints = parseJSON("objSeq-cues");
@@ -114,8 +138,6 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input, ofxJSONElement _
     
     //output all my params to check
     reportParams(index);
-    
-
     
 }
 
@@ -138,13 +160,10 @@ void vboMeshObj::reportParams(int _i){
     cout << "reported params-" << ofToString(_i) << endl;
     cout << "g_copies-" << params.g_copies << endl;
     cout << "g_scale-" << params.g_scale << endl;
-    cout << "g_rot-" << params.g_rot << endl;
     cout << "g_rotate-" << params.g_rotate << endl;
     cout << "g_trans-" << params.g_trans << endl;
-    
     cout << "l_copies-" << params.l_copies << endl;
     cout << "l_scale-" << params.l_scale << endl;
-    cout << "l_rot-" << params.l_rot << endl;
     cout << "l_rotate-" << params.l_rotate << endl;
     cout << "l_trans-" << params.l_trans << endl;
     cout << "totalFrames-" << params.totalFrames << endl;
@@ -231,30 +250,27 @@ void vboMeshObj::draw(){
             for(int i=0;i<params.l_copies;i++){
                 
                 glPushMatrix();
-                glRotatef(i*params.l_rotate.x,1,0,0);
-                glRotatef(i*params.l_rotate.y,0,1,0);
-                glRotatef(i*params.l_rotate.z,0,0,1);
+                glRotatef(i*params.l_rotate.x+params.lRotateModVal.x,1,0,0);
+                glRotatef(i*params.l_rotate.y+params.lRotateModVal.y,0,1,0);
+                glRotatef(i*params.l_rotate.z+params.lRotateModVal.z,0,0,1);
 
-                glTranslatef(params.l_trans.x, params.l_trans.y, params.l_trans.z);
+                glTranslatef(params.l_trans.x+params.lTransModVal.x, params.l_trans.y+params.lTransModVal.y, params.l_trans.z+params.lTransModVal.z);
             
-                glScalef(params.l_scale,params.l_scale,params.l_scale);
+                glScalef(params.l_scale+params.lScaleModVal,params.l_scale+params.lScaleModVal,params.l_scale+params.lScaleModVal);
                 
                 shader.begin();
                 shader.setUniformTexture("tMatCap", matCap, 1);
                 
                     glPushMatrix();
-                    if(params.still){
-                    
-                        
-                        glRotatef(params.o_rotate.x,1,0,0);
-                        glRotatef(params.o_rotate.y,0,1,0);
-                        glRotatef(params.o_rotate.z,0,0,1);
-                        vboMesh1[params.stillFrame].draw();
-                        
-                    } else {
-                        vboMesh1[frame].draw();
-                        
-                    }
+                        glRotatef(params.o_rotate.x+params.oRotateModVal.x,1,0,0);
+                        glRotatef(params.o_rotate.y+params.oRotateModVal.y,0,1,0);
+                        glRotatef(params.o_rotate.z+params.oRotateModVal.z,0,0,1);
+                        if(params.still){
+                            vboMesh1[params.stillFrame].draw();
+                        } else {
+                            vboMesh1[frame].draw();
+                            
+                        }
                     glPopMatrix();
                 
                 shader.end();
@@ -266,29 +282,25 @@ void vboMeshObj::draw(){
             if(params.mirrored){
                 for(int i=params.l_copies;i>0;i--){
                     glPushMatrix();
-                    glRotatef(i*params.l_rotate.x,1,0,0);
-                    glRotatef(i*params.l_rotate.y,0,1,0);
-                    glRotatef(i*params.l_rotate.z,0,0,1);
+                    glRotatef(i*params.l_rotate.x+params.lRotateModVal.x,1,0,0);
+                    glRotatef(i*params.l_rotate.y+params.lRotateModVal.y,0,1,0);
+                    glRotatef(i*params.l_rotate.z+params.lRotateModVal.z,0,0,1);
                     
-                    glTranslatef(params.l_trans.x, params.l_trans.y+params.ltransMod, params.l_trans.z+params.mirror_distance);
+                    glTranslatef(params.l_trans.x+params.lTransModVal.x, params.l_trans.y+params.lTransModVal.y, params.l_trans.z+params.lTransModVal.z+params.mirror_distance);
                     
-                    glScalef(params.l_scale,params.l_scale,-params.l_scale);
+                    glScalef(params.l_scale+params.lScaleModVal,params.l_scale+params.lScaleModVal,-(params.l_scale+params.lScaleModVal));
                     
                     shader.begin();
                     shader.setUniformTexture("tMatCap", matCap, 1);
                     
                         glPushMatrix();
+                        glRotatef(params.o_rotate.x+params.oRotateModVal.x,1,0,0);
+                        glRotatef(params.o_rotate.y+params.oRotateModVal.y,0,1,0);
+                        glRotatef(params.o_rotate.z+params.oRotateModVal.z,0,0,1);
                         if(params.still){
-                            
-                            
-                            glRotatef(params.o_rotate.x,1,0,0);
-                            glRotatef(params.o_rotate.y,0,1,0);
-                            glRotatef(params.o_rotate.z,0,0,1);
                             vboMesh1[params.stillFrame].draw();
-                        
                         } else {
                             vboMesh1[frame].draw();
-                            
                         }
                         glPopMatrix();
                     
@@ -465,7 +477,11 @@ void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _segmentLe
 
     cout << "============================" << endl;
     cout << "OSCMessage>frame:" << frame <<
+    ", _segmentLength:" << _segmentLength <<
+    ", start:" << start <<
+    ", end:" << end <<
     ", durration:" << _durration <<
+    ", delay:" << delay <<
     ", segmentEnd:" << _destinationFrame <<
     ", params.tweenType:" << params.tweenType <<
     endl;
@@ -536,53 +552,53 @@ void vboMeshObj::setupGui(int _index){
     //scale
     gui->addSlider("(G)SCALE", 1.0, 50.0, &params.g_scale,150,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("g-scale-bs", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("gScaleMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("g-scale-bs", "GUI/toggle.png", &params.gScale, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gScaleMod",0.0, 2.0, &params.gScaleMod,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     //global Rotate
     gui->addSlider("(G)ROTATE-X",-180.0,180.0, &params.g_rotate.x,150,8,0,0);
     setGuiSnapUnits("(G)ROTATE-X",10.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("g-rot-x", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("gRotXMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("g-rot-x", "GUI/toggle.png", &params.gRotX, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gRotXMod",0.0, 2.0, &params.gRotateMod.x,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSlider("(G)ROTATE-Y",-180.0,180.0, &params.g_rotate.y,150,8,0,0);
     setGuiSnapUnits("(G)ROTATE-Y",10.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("g-rot-y", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("gRotYMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("g-rot-y", "GUI/toggle.png", &params.gRotY, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gRotYMod",0.0, 2.0, &params.gRotateMod.y,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSlider("(G)ROTATE-Z",-180.0,180.0, &params.g_rotate.z,150,8,0,0);
     setGuiSnapUnits("(G)ROTATE-Z",10.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("g-rot-z", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("gRotZMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("g-rot-z", "GUI/toggle.png", &params.gRotZ, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gRotZMod",0.0, 2.0, &params.gRotateMod.z,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     //global translate
     gui->addSlider("(G)TRANS-X", -50.0, 50.0, &params.g_trans.x,150,8,0,0);
     setGuiSnapUnits("(G)TRANS-X",5.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("g-trans-x", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("gTransXMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("g-trans-x", "GUI/toggle.png", &params.gTransX, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gTransXMod",0.0, 2.0, &params.gTransMod.x,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSlider("(G)TRANS-Y", -50.0, 50.0, &params.g_trans.y,150,8,0,0);
     setGuiSnapUnits("(G)TRANS-Y",5.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("g-trans-y", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("gTransYMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("g-trans-y", "GUI/toggle.png", &params.gTransY, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gTransYMod",0.0, 2.0, &params.gTransMod.y,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
 
     
     gui->addSlider("(G)TRANS-Z", -50.0, 50.0, &params.g_trans.z,150,8,0,0);
     setGuiSnapUnits("(G)TRANS-Z",5.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("g-trans-z", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("gTransZMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("g-trans-z", "GUI/toggle.png", &params.gTransZ, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("gTransZMod",0.0, 2.0, &params.gTransMod.z,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSpacer(320, 1);
@@ -594,63 +610,76 @@ void vboMeshObj::setupGui(int _index){
     
     gui->addSlider("(L)SCALE", 0.1, 1.0, &params.l_scale,150,8,150,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("l-scale-bs", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("lScaleMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("l-scale-bs", "GUI/toggle.png", &params.lScale, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lScaleMod",0.0, 2.0, &params.lScaleMod,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSlider("(L)ROTATE-X",-180.0,180.0,&params.l_rotate.x,150,8,0,0);
     setGuiSnapUnits("(L)ROTATE-X",5.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("l-rot-x", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("lRotXMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("l-rot-x", "GUI/toggle.png", &params.lRotX, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lRotXMod",0.0, 2.0, &params.lRotateMod.x,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSlider("(L)ROTATE-Y",-180.0,180.0,&params.l_rotate.y,150,8,0,0);
     setGuiSnapUnits("(L)ROTATE-Y",5.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("l-rot-y", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("lRotYMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("l-rot-y", "GUI/toggle.png", &params.lRotY, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lRotYMod",0.0, 2.0, &params.lRotateMod.y,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSlider("(L)ROTATE-Z",-180.0,180.0,&params.l_rotate.z,150,8,0,0);
     setGuiSnapUnits("(L)ROTATE-Z",5.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("l-rot-z", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("lRotZMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("l-rot-z", "GUI/toggle.png", &params.lRotZ, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lRotZMod",0.0, 2.0, &params.lRotateMod.z,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     
     gui->addSlider("(L)TRANS-X", -100.0, 100.0, &params.l_trans.x,150,8,0,0);
     setGuiSnapUnits("(L)TRANS-X",5.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("l-trans-x", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("lTransXMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("l-trans-x", "GUI/toggle.png", &params.lTransX, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lTransXMod",0.0, 2.0, &params.lTransMod.x,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSlider("(L)TRANS-Y", -100.0, 100.0, &params.l_trans.y,150,8,0,0);
     setGuiSnapUnits("(L)TRANS-Y",5.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("l-trans-y", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("lTransYMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("l-trans-y", "GUI/toggle.png", &params.lTransY, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lTransYMod",0.0, 2.0, &params.lTransMod.y,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addSlider("(L)TRANS-Z", -100.0, 100.0, &params.l_trans.z,150,8,0,0);
     setGuiSnapUnits("(L)TRANS-Z",5.0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addMultiImageToggle("l-trans-z", "GUI/toggle.png", false, 20, 20,0,0,OFX_UI_FONT_SMALL);
-    gui->addSlider("lTransZMod",0.0, 0.1, 0.5,130,8,0,0);
+    gui->addMultiImageToggle("l-trans-z", "GUI/toggle.png", &params.lTransZ, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("lTransZMod",0.0, 2.0, &params.lTransMod.z,130,8,0,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    
     
     gui->addSpacer(320, 1);
     //====================
     //object space
     gui->addSlider("(O)ROTATE-X",-180.0,180.0,&params.o_rotate.x,150,8,0,0);
     setGuiSnapUnits("(O)ROTATE-X",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("o-rot-x", "GUI/toggle.png", &params.oRotX, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("oRotXMod",0.0, 2.0, &params.oRotateMod.x,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
     gui->addSlider("(O)ROTATE-Y",-180.0,180.0,&params.o_rotate.y,150,8,0,0);
     setGuiSnapUnits("(O)ROTATE-Y",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("o-rot-y", "GUI/toggle.png", &params.oRotY, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("oRotYMod",0.0, 2.0, &params.oRotateMod.y,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
     gui->addSlider("(O)ROTATE-Z",-180.0,180.0,&params.o_rotate.z,150,8,0,0);
     setGuiSnapUnits("(O)ROTATE-Z",5.0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addMultiImageToggle("o-rot-z", "GUI/toggle.png", &params.oRotZ, 20, 20,0,0,OFX_UI_FONT_SMALL);
+    gui->addSlider("oRotZMod",0.0, 2.0, &params.oRotateMod.z,130,8,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     //====================
     //spin controls
@@ -658,7 +687,6 @@ void vboMeshObj::setupGui(int _index){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addSlider("Spin X", -1.0, 1.0, &params.spin.x,100,8,0,0);
     gui->addSlider("Spin Range X", 5,45,&params.spinRange.x,100,8,0,0);
-    
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
@@ -731,10 +759,40 @@ void vboMeshObj::clear(){
 }
 
 //--------------------------------------------------------------
-void vboMeshObj::pulsate(int _amp, int _noteLength){
+void vboMeshObj::bassControl(float &_amp, int _noteLength){
     
-    //cout << "amplitude:" << _amp << endl;
-    params.ltransMod = _amp;
+    
+    //GLOBAL
+    params.gScale ? params.gScaleModVal = _amp * params.gScaleMod : params.gScaleModVal = 10.0;
+    
+    params.gRotX ? params.gRotateModVal.x = _amp * params.gRotateMod.x : params.gRotateModVal.x = 0.0;
+    params.gRotY ? params.gRotateModVal.y = _amp * params.gRotateMod.y : params.gRotateModVal.y = 0.0;
+    params.gRotZ ? params.gRotateModVal.z = _amp * params.gRotateMod.z : params.gRotateModVal.z = 0.0;
+
+    params.gTransX ? params.gTransModVal.x = _amp * params.gTransMod.x : params.gTransModVal.x = 0.0;
+    params.gTransY ? params.gTransModVal.y = _amp * params.gTransMod.y : params.gTransModVal.y = 0.0;
+    params.gTransZ ? params.gTransModVal.z = _amp * params.gTransMod.z : params.gTransModVal.z = 0.0;
+    
+    
+    
+    //LOCAL
+    params.lScale ? params.lScaleModVal = _amp * params.lScaleMod : params.lScaleModVal = 1.0;
+    
+    params.lRotX ? params.lRotateModVal.x = _amp * params.lRotateMod.x : params.lRotateModVal.x = 0.0;
+    params.lRotY ? params.lRotateModVal.y = _amp * params.lRotateMod.y : params.lRotateModVal.y = 0.0;
+    params.lRotZ ? params.lRotateModVal.z = _amp * params.lRotateMod.z : params.lRotateModVal.z = 0.0;
+    
+    params.lTransX ? params.lTransModVal.x = _amp * params.lTransMod.x : params.lTransModVal.x = 0.0;
+    params.lTransY ? params.lTransModVal.y = _amp * params.lTransMod.y : params.lTransModVal.y = 0.0;
+    params.lTransZ ? params.lTransModVal.z = _amp * params.lTransMod.z : params.lTransModVal.z = 0.0;
+    
+    
+    //OBJECT
+    
+    params.oRotX ? params.oRotateModVal.x = _amp * params.oRotateMod.x : params.oRotateModVal.x = 1.0;
+    params.oRotY ? params.oRotateModVal.y = _amp * params.oRotateMod.y : params.oRotateModVal.y = 1.0;
+    params.oRotZ ? params.oRotateModVal.z = _amp * params.oRotateMod.z : params.oRotateModVal.z = 1.0;
+    
     
 }
 

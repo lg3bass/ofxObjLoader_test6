@@ -35,25 +35,7 @@ class vboMeshObj {
         bool randomized;
         bool mirrored;
         int tweenType;
-        
-        //global
-        int g_copies;
-        float g_scale;
-        float g_rot;
-        ofVec3f g_rotate;
-        ofVec3f g_trans;
-        
-        //local
-        int l_copies;
-        float l_scale;
-        float l_rot;
-        ofVec3f l_rotate;
-        ofVec3f l_trans;
-        
-        //object
-        ofVec3f o_rotate;
-        
-        
+                
         float mirror_distance;
         int currentSegment;
         vector<int> cuePoints;
@@ -68,8 +50,54 @@ class vboMeshObj {
         ofVec3f spinRange;
         int ltransMod;
         
+        //mod params
+        //global
+        int g_copies;
+        bool gScale;
+        float g_scale;
+        float gScaleMod;
+        float gScaleModVal;
+        bool gTransX;
+        bool gTransY;
+        bool gTransZ;
+        ofVec3f g_trans;
+        ofVec3f gTransMod;
+        ofVec3f gTransModVal;
+        bool gRotX;
+        bool gRotY;
+        bool gRotZ;
+        ofVec3f g_rotate;
+        ofVec3f gRotateMod;
+        ofVec3f gRotateModVal;
+        
+        //local
+        int l_copies;
+        bool lScale;
+        float l_scale;
+        float lScaleMod;
+        float lScaleModVal;
+        bool lTransX;
+        bool lTransY;
+        bool lTransZ;
+        ofVec3f l_trans;
+        ofVec3f lTransMod;
+        ofVec3f lTransModVal;
+        bool lRotX;
+        bool lRotY;
+        bool lRotZ;
+        ofVec3f l_rotate;
+        ofVec3f lRotateMod;
+        ofVec3f lRotateModVal;
+        
+        //object
+        bool oRotX;
+        bool oRotY;
+        bool oRotZ;
+        ofVec3f o_rotate;
+        ofVec3f oRotateMod;
+        ofVec3f oRotateModVal;
+        
     };
-    
     
     guiParams params;
     
@@ -85,7 +113,6 @@ class vboMeshObj {
     ofParameter<ofVec3f> gui_lTrans;
     */
 
-    
     //ofxTween
     ofxTween tweenback;
     ofxTween tweenbounce;
@@ -141,7 +168,7 @@ class vboMeshObj {
     void setIndicator();
     void randLocalPosition(float _start, float _end, int _durration, int _delay);
     void clear();
-    void pulsate(int _amp, int _noteLength);
+    void bassControl(float &_amp, int _noteLength);
     
     void guiEvent(ofxUIEventArgs &e);
     
