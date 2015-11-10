@@ -224,9 +224,9 @@ void vboMeshObj::draw(){
         for(int j=1;j<params.g_copies+1;j++){
             glPushMatrix();
             //global scale
-            glScalef(params.g_scale, params.g_scale, params.g_scale);//scale of this layer
+            glScalef(params.g_scale+params.gScaleModVal, params.g_scale+params.gScaleModVal, params.g_scale+params.gScaleModVal);//scale of this layer
             //global trans
-            glTranslatef(j*params.g_trans.x,j*params.g_trans.y,j*params.g_trans.z);
+            glTranslatef(j*params.g_trans.x+params.gTransModVal.x,j*params.g_trans.y+params.gTransModVal.y,j*params.g_trans.z+params.gTransModVal.z);
             //global rot
             
             if(params.spinX){
@@ -763,7 +763,7 @@ void vboMeshObj::bassControl(float &_amp, int _noteLength){
     
     
     //GLOBAL
-    params.gScale ? params.gScaleModVal = _amp * params.gScaleMod : params.gScaleModVal = 10.0;
+    params.gScale ? params.gScaleModVal = _amp * params.gScaleMod : params.gScaleModVal = 0.0;
     
     params.gRotX ? params.gRotateModVal.x = _amp * params.gRotateMod.x : params.gRotateModVal.x = 0.0;
     params.gRotY ? params.gRotateModVal.y = _amp * params.gRotateMod.y : params.gRotateModVal.y = 0.0;
@@ -776,7 +776,7 @@ void vboMeshObj::bassControl(float &_amp, int _noteLength){
     
     
     //LOCAL
-    params.lScale ? params.lScaleModVal = _amp * params.lScaleMod : params.lScaleModVal = 1.0;
+    params.lScale ? params.lScaleModVal = _amp * params.lScaleMod : params.lScaleModVal = 0.0;
     
     params.lRotX ? params.lRotateModVal.x = _amp * params.lRotateMod.x : params.lRotateModVal.x = 0.0;
     params.lRotY ? params.lRotateModVal.y = _amp * params.lRotateMod.y : params.lRotateModVal.y = 0.0;
