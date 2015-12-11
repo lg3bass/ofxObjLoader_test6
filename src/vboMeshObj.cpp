@@ -3,13 +3,19 @@
 
 //--------------------------------------------------------------
 vboMeshObj::vboMeshObj() {
+    
+    
+
 
     //current frame;
     frame = 0;
 
     //setup default params
+    params.isSelected = false;
     params.isLoaded = false;
     params.isPlaying = false;
+    params.instancePlayingId = -1;// -1 = all
+    params.lastInstancePlayed = -1;
     params.still = false;
     params.oscControlled = true;
     params.randomized = false;
@@ -79,21 +85,31 @@ vboMeshObj::vboMeshObj() {
 }
 
 //--------------------------------------------------------------
-void vboMeshObj::setup(const objFileLoader::extObjFile &_input, ofxJSONElement _trackData){
+void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     
+    instances.reserve(50);//TIP: http://arturocastro.net/blog/2011/10/28/stl::vector/
+    for(int t=0; t<50;t++){
+        instance copy;
+        instances.push_back(copy);
+        instances[t].isPlaying = false;
+        instances[t].frame = 0;
+        instances[t].direction = 1;
+    }
+    
+    linearTweens.reserve(12);
+    for(int i=0; i<12;i++){
+        ofxTween tween;
+        linearTweens.push_back(tween);
+        
+    }
+    
+    //pull in the objFileLoader data
     trackData = _input;
-    jsonTrackData = _trackData;
+    
+    //separate out the JSON data.
+    jsonTrackData = _input.jsonData;
+    
     index = jsonTrackData["index"].asInt();
-    
-    //print out the json data.
-    ofLogNotice("json_track")<< index << ": " << jsonTrackData.getRawString();
-    
-    //load all the vboMeshes  -- moved below gui
-    //setupVboMesh(trackData);
-    
-    //moved below gui
-    //setMatCap(jsonTrackData["matCap-img"].asString());
-    //setShader(jsonTrackData["matCap-shader"].asString());
     
     /*
     parameters.setName("testName");
@@ -115,16 +131,14 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input, ofxJSONElement _
     
     frame = 0;//duplicate in constructor
     
-    //load all the vboMeshes
-    //setupVboMesh(trackData);
-    
-    //setMatCap(jsonTrackData["matCap-img"].asString()); -- OLD
-
     setShader(jsonTrackData["matCap-shader"].asString());
     
     //setup more params
     params.cuePoints = parseJSON("objSeq-cues");
     params.durrationPoints = parseJSON("objSeq-durations");
+    params.midpointCues = parseJSON("objSeq-midpoint-cues");
+    params.segmentLengths = parseJSON("objSeq-segmentLengths");
+    
     params.stillFrame = jsonTrackData["objSeq-still"].asInt();
     params.totalFrames = jsonTrackData["objSeq-files"].asInt();
     
@@ -268,8 +282,17 @@ void vboMeshObj::draw(){
                         if(params.still){
                             vboMesh1[params.stillFrame].draw();
                         } else {
-                            vboMesh1[frame].draw();
+                            //Which timeline do I draw?
+                            //timeline 1
+                            vboMesh1[instances[i].frame].draw();
                             
+                            //timeline 2
+                            //vboMesh1[instance[1].frame].draw();
+                            
+                            //timeline 3
+                            //vboMesh1[instance[2].frame].draw();
+                            
+                            //.....
                         }
                     glPopMatrix();
                 
@@ -300,7 +323,7 @@ void vboMeshObj::draw(){
                         if(params.still){
                             vboMesh1[params.stillFrame].draw();
                         } else {
-                            vboMesh1[frame].draw();
+                            vboMesh1[instances[i].frame].draw();
                         }
                         glPopMatrix();
                     
@@ -320,90 +343,104 @@ void vboMeshObj::draw(){
 
 //--------------------------------------------------------------
 void vboMeshObj::update(){
+    //OLD L1 encapsulation code.
+    //    if(params.isPlaying){
+    //
+    //    }// is Playing
     
     
-    if(params.isPlaying){
-        if(params.oscControlled){
-            switch (params.tweenType){
-                case 1:
-                    frame = tweenback.update();
-                    if(tweenback.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 2:
-                    frame = tweenbounce.update();
-                    if(tweenbounce.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 3:
-                    frame = tweencirc.update();
-                    if(tweencirc.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 4:
-                    frame = tweencubic.update();
-                    if(tweencubic.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 5:
-                    frame = tweenelastic.update();
-                    if(tweenelastic.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 6:
-                    frame = tweenexpo.update();
-                    if(tweenexpo.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 7:
-                    frame = tweenquad.update();
-                    if(tweenquad.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 8:
-                    frame = tweenquart.update();
-                    if(tweenquart.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 9:
-                    frame = tweenquint.update();
-                    if(tweenquint.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 10:
-                    frame = tweensine.update();
-                    if(tweensine.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-                case 11:
-                    frame = tweenlinear.update();
-                    if(tweenlinear.isCompleted()){
-                        params.isPlaying = false;
-                    }
-                    break;
-            }
-            //cout << "frame: " << frame << endl;
-            
-            
-            
-        } else {
-            //non osc controlled block
-            
-        }// oscControlled
-    }// is Playing
-        
     
-   
+    for(int i=0; i<params.l_copies;i++){
+        if(instances[i].isPlaying){//NEW L1 code
+            if(params.oscControlled){
+                switch (params.tweenType){
+                    case 1:
+                        frame = tweenback.update();
+                        if(tweenback.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 2:
+                        frame = tweenbounce.update();
+                        if(tweenbounce.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 3:
+                        frame = tweencirc.update();
+                        if(tweencirc.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 4:
+                        frame = tweencubic.update();
+                        if(tweencubic.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 5:
+                        frame = tweenelastic.update();
+                        if(tweenelastic.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 6:
+                        frame = tweenexpo.update();
+                        if(tweenexpo.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 7:
+                        frame = tweenquad.update();
+                        if(tweenquad.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 8:
+                        frame = tweenquart.update();
+                        if(tweenquart.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 9:
+                        frame = tweenquint.update();
+                        if(tweenquint.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 10:
+                        frame = tweensine.update();
+                        if(tweensine.isCompleted()){
+                            params.isPlaying = false;
+                        }
+                        break;
+                    case 11:
+                        frame = tweenlinear.update();
+
+                        instances[i].frame = linearTweens[i].update();
+                        
+                        if(linearTweens[i].isCompleted()){
+                            instances[i].isPlaying = false;
+                            params.isPlaying = false;
+                        }
+                        
+                        break;
+                }
+                //cout << "frame: " << frame << endl;
+                
+                
+                
+            } else {
+                //non osc controlled block
+                
+            }// oscControlled
+            
+            
+            
+            
+        }
+    }
+    
     
     
     if(params.randomized){
@@ -422,16 +459,28 @@ void vboMeshObj::update(){
 }
 
 //--------------------------------------------------------------
-void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _segmentLength, int _tweenType){
+void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _tweenType, int _instanceId){
     
+    //remember the last one so the random does it's thing.
+    params.lastInstancePlayed = params.instancePlayingId;
     
+    if(_instanceId >= 0){
+        
+        params.instancePlayingId = bwUtil::getUniqueRandomInt(0, params.l_copies, params.lastInstancePlayed);
     
+    } else {
+        params.instancePlayingId = -1;
+    }
     params.tweenType = _tweenType;
     
     //ofxTween -- Figure out where you are going.
     unsigned delay = 0;
     unsigned duration = _durration;
-    unsigned start = _destinationFrame - _segmentLength;
+    //unsigned start = _destinationFrame - _segmentLength;
+    //unsigned start = _destinationFrame - jsonTrackData["objSeq-segLen"].asInt();
+    unsigned start = _destinationFrame - params.segmentLengths[params.currentSegment];
+
+
     unsigned end = _destinationFrame;
     
     //TWEEN
@@ -468,34 +517,65 @@ void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _segmentLe
             break;
         case 11:
             tweenlinear.setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+
+            if(params.instancePlayingId >= 0){
+                linearTweens[params.instancePlayingId].setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+            } else {
+                for(int i=0;i<12;i++){
+                    linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+                }
+            }
+            
             break;
         default:
             tweenlinear.setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+
+            if(params.instancePlayingId >= 0){
+                linearTweens[params.instancePlayingId].setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+            } else {
+                for(int i=0;i<12;i++){
+                    linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+                }
+            }
+
             break;
     }
     
 
     cout << "============================" << endl;
     cout << "OSCMessage>frame:" << frame <<
-    ", _segmentLength:" << _segmentLength <<
+    ", _segmentLength:" << jsonTrackData["objSeq-segLen"] <<
     ", start:" << start <<
     ", end:" << end <<
     ", durration:" << _durration <<
     ", delay:" << delay <<
     ", segmentEnd:" << _destinationFrame <<
     ", params.tweenType:" << params.tweenType <<
+    ", _instanceId:" << _instanceId <<
     endl;
 
-    //start the animation
+    //start the animation.  Redefined question.  Is animation playing???
     params.isPlaying = true;
+    
+    
+    if(params.instancePlayingId >= 0){
+        instances[params.instancePlayingId].isPlaying = true;
+    } else {
+        
+        for(int i=0;i<params.l_copies;i++){
+            instances[i].isPlaying = true;
+        }
+    }
+
+    //instances[0].isPlaying = true;
     
 }
 
 //--------------------------------------------------------------
-void vboMeshObj::KeyboardLaunch(int _key, int _durration, int _segmentLength, int _tweenType){
+void vboMeshObj::KeyboardLaunch(int _tweenType, int _instanceId){
     
     //play the segment
-    OSCLaunch(params.cuePoints[params.currentSegment], params.durrationPoints[params.currentSegment], _segmentLength, _tweenType);
+    OSCLaunch(params.cuePoints[params.currentSegment], params.durrationPoints[params.currentSegment], _tweenType, _instanceId);
     
     if(params.currentSegment < params.cuePoints.size()-1){
         params.currentSegment++;
@@ -753,8 +833,15 @@ void vboMeshObj::randLocalPosition(float _start, float _end, int _durration, int
 //--------------------------------------------------------------
 void vboMeshObj::clear(){
     //set the frame to 0
-    frame = 0;
+    frame = 0;//not needed
     params.isPlaying = false;
+
+    
+    for(int i=0; i<params.l_copies;i++){
+        instances[i].frame = 0;
+        instances[i].isPlaying = false;
+    }
+
     
 }
 

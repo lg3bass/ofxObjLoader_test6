@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "bwUtil.h"
+#include "ofxJSON.h"
 
 class objFileLoader {
     
@@ -9,6 +10,9 @@ class objFileLoader {
 
     //meshes and objects
     struct extObjFile {
+        ofxJSONElement jsonData;
+        bool jsonParsed;
+        string jsonFile;
         string name;
         string path;
         int numFiles;

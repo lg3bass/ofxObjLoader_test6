@@ -29,4 +29,15 @@ namespace bwUtil
         return returnedMidiNote;
     }
     
+    int getUniqueRandomInt(int low, int high, int prev){
+        int randTest = (int)ofRandom(low,high);
+        
+        do {
+            randTest = (int)ofRandom(low,high);
+        } while (randTest == prev);
+        
+        return randTest;
+        
+    }
+    
 }

@@ -13,7 +13,7 @@
 #include "bwUtil.h"
 
 
-#define HOW_MANY 2
+#define NUM_TRACKS 20
 #define PORT 7000
 
 class ofApp : public ofBaseApp{
@@ -61,33 +61,12 @@ class ofApp : public ofBaseApp{
         bool modkey;
         bool ctrlKey;
 
-
         //1. get paths to the obj files.
         objFileLoader appFileLoader;
         
         //2. load obj files to separate vbomeshes. FOR NOW :)
-    
-        vboMeshObj track1;
-        vboMeshObj track2;
-        vboMeshObj track3;
-        vboMeshObj track4;
-        vboMeshObj track5;
-        vboMeshObj track6;
-        vboMeshObj track7;
-        vboMeshObj track8;
-        vboMeshObj track9;
-        vboMeshObj track10;
-        vboMeshObj track11;
-        vboMeshObj track12;
-        vboMeshObj track13;
-        vboMeshObj track14;
-        vboMeshObj track15;
-        vboMeshObj track16;
-        vboMeshObj track17;
-        vboMeshObj track18;
-        vboMeshObj track19;
-    
-        //vboMeshObj track20;
+        vector<vboMeshObj> tracks;
+        int selectedTrack;
     
         //MASTER LIGHT
         ofLight light0;
@@ -105,10 +84,8 @@ class ofApp : public ofBaseApp{
         //ofxOSC
         ofxOscReceiver receiver;
     
-    
         //myBass
         float amplitude;
-
     
         void setup();
 		void update();
@@ -126,8 +103,10 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
         void drawLights();
         void guiTabEvent(ofxUIEventArgs &e);
+        int currentSelectedTrack(string _name);
     
-        void getTrackJSON(int _track, string _param);
-
+        //OSC
+        void OSChandler();
+    
     
 };

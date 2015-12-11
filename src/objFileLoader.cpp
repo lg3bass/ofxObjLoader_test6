@@ -10,7 +10,10 @@ objFileLoader::objFileLoader(){
 //--------------------------------------------------------------
 void objFileLoader::setup(){
     
+    //GET ALL THE PATHS TO THE OBJ FILES
     loadObjFiles("obj");
+    
+    
     loadMatCapFiles("matCap");
     
 }
@@ -37,6 +40,7 @@ void objFileLoader::loadObjFiles(string _path){
         ofDirectory objDirectory(dir.getPath(j));
         objDirectory.allowExt("obj");
         objDirectory.allowExt("mtl");
+        objDirectory.allowExt("json");
         objDirectory.listDir();
         
         //create a vector of files
@@ -50,7 +54,10 @@ void objFileLoader::loadObjFiles(string _path){
             if(objDirectoryFiles[k].getExtension() == "mtl"){
                 externalObjFiles[j].mtls.push_back(ofFile(objDirectoryFiles[k]));
             }
-            
+            if(objDirectoryFiles[k].getExtension() == "json"){
+                string fn = objDirectoryFiles[k].getFileName();
+                externalObjFiles[j].jsonFile = fn;
+            }
         }
         
         ofSort(externalObjFiles[j].objs);
@@ -59,14 +66,28 @@ void objFileLoader::loadObjFiles(string _path){
         //struct: How many files.
         externalObjFiles[j].numFiles = fileCounter;
         
+        //load the JSON
+        //========================================
+        externalObjFiles[j].jsonParsed = externalObjFiles[j].jsonData.open(externalObjFiles[j].path + externalObjFiles[j].jsonFile);
+        
+        
+        //REPORTING
         //list obj directories and number of files
         cout << externalObjFiles[j].name << ":" << objDirectory.size() << endl;
         //list files in obj directory
         cout << externalObjFiles[j].name << "-obj:" << externalObjFiles[j].objs.size() << endl;
         //cout << externalObjFiles[j].name << "-mtl:" << externalObjFiles[j].mtls.size() << endl;
         //display externalObjFiles[].numFiles
-        cout << "externalObjFiles[<var>].numFiles " << externalObjFiles[j].numFiles << endl;
-    }
+        cout << "externalObjFiles[<var>].numFiles: " << externalObjFiles[j].numFiles << endl;
+        //display the json data
+        cout << "objFileLoader > JSON DATA =======================" << endl;
+        cout << "externalObjFiles[<var>].jsonParsed:" << externalObjFiles[j].jsonParsed << endl;
+        cout << "externalObjFiles[<var>].jsonFile:" << externalObjFiles[j].path << externalObjFiles[j].jsonFile << endl;
+        //report the json data
+        ofLogNotice("jsonData")<< index << ": " << externalObjFiles[j].jsonData.getRawString();
+        
+        
+    }//end loop through directory
     
 }
 

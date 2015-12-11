@@ -18,18 +18,35 @@ class vboMeshObj {
     
     
     vector<ofVboMesh> vboMesh1;
+    int index;//keep track of what instance you are
+    int frame;//current frame
+
+    //intances
+    struct instance {
+        bool isPlaying;
+        int frame;
+        int direction; //forward=1, reverse=2;
+    };
+    vector<instance> instances;
+    
+    
     ofImage matCap;
     ofShader shader;
     
-    int index;//keep track of what instance you are
-    int frame;//current frame
+
     
     vector<string> matcaps;
     
+
+    
+    
     //drawing params
     struct guiParams {
+        bool isSelected;
         bool isLoaded;
         bool isPlaying;
+        int instancePlayingId;
+        int lastInstancePlayed;
         bool still;
         bool oscControlled;
         bool randomized;
@@ -40,6 +57,8 @@ class vboMeshObj {
         int currentSegment;
         vector<int> cuePoints;
         vector<int> durrationPoints;
+        vector<int> midpointCues;
+        vector<int> segmentLengths;
         int stillFrame;
         int totalFrames;
         
@@ -124,7 +143,12 @@ class vboMeshObj {
     ofxTween tweenquart;
     ofxTween tweenquint;
     ofxTween tweensine;
-    ofxTween tweenlinear;
+    
+    
+    ofxTween tweenlinear,tweenlinear2,tweenlinear3,tweenlinear4,tweenlinear5,tweenlinear6,tweenlinear7,tweenlinear8;
+    vector <ofxTween> linearTweens;
+    
+    
     
     ofxTween multitween;
     
@@ -152,7 +176,7 @@ class vboMeshObj {
     
     ofxUICanvas* gui;
     
-    void setup(const objFileLoader::extObjFile &_input, ofxJSONElement _trackData);
+    void setup(const objFileLoader::extObjFile &_input);
     vector<int> parseJSON(string _param);
     void reportParams(int _index);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
@@ -161,8 +185,8 @@ class vboMeshObj {
     void setShader(string _shader);
     void draw();
     void update();
-    void OSCLaunch(int _destinationFrame, int _durration, int _segmentLength, int _tweenType);
-    void KeyboardLaunch(int _key, int _durration, int _segmentLength, int _tweenType);
+    void OSCLaunch(int _destinationFrame, int _durration, int _tweenType, int _instanceId);
+    void KeyboardLaunch(int _tweenType, int _instanceId);
     void setupGui(int _index);
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();
