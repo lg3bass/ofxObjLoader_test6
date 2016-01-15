@@ -3,9 +3,6 @@
 
 //--------------------------------------------------------------
 vboMeshObj::vboMeshObj() {
-    
-    
-
 
     //current frame;
     frame = 0;
@@ -23,7 +20,7 @@ vboMeshObj::vboMeshObj() {
     params.tweenType = 11;
     
     params.mirror_distance = 10.0;
-    params.currentSegment = 0;
+    //params.currentSegment = 0;//moved to instances
     params.stillFrame = 0;
     params.totalFrames = 0;
     
@@ -79,8 +76,6 @@ vboMeshObj::vboMeshObj() {
     params.o_rotate = ofVec3f(0.0,0.0,0.0);
     params.oRotateMod = ofVec3f(0.0,0.0,0.0);
     params.oRotateModVal = ofVec3f(0.0,0.0,0.0);
-
-    
     
 }
 
@@ -91,9 +86,16 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     for(int t=0; t<50;t++){
         instance copy;
         instances.push_back(copy);
+        instances[t].playAll = false;
         instances[t].isPlaying = false;
+        instances[t].currentSegment = -1;//or 0
+        instances[t].noteID = 0;
+        instances[t].note = 0;
+        instances[t].vel = 0;
+        instances[t].delta = 0;
         instances[t].frame = 0;
         instances[t].direction = 1;
+        instances[t].clockedDurration = 700;
     }
     
     linearTweens.reserve(12);
@@ -421,7 +423,16 @@ void vboMeshObj::update(){
                         
                         if(linearTweens[i].isCompleted()){
                             instances[i].isPlaying = false;
-                            params.isPlaying = false;
+                            instances[i].noteID = 0;
+                            instances[i].note = 0;
+                            instances[i].vel = 0;
+                            instances[i].delta = 0;
+                            //instances[i].frame = 0;
+                            instances[i].direction = 1;
+                            instances[i].clockedDurration = 700;
+
+                            
+                            params.isPlaying = false;//not needed
                         }
                         
                         break;
@@ -461,26 +472,13 @@ void vboMeshObj::update(){
 //--------------------------------------------------------------
 void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _tweenType, int _instanceId){
     
-    //remember the last one so the random does it's thing.
-    params.lastInstancePlayed = params.instancePlayingId;
-    
-    if(_instanceId >= 0){
-        
-        params.instancePlayingId = bwUtil::getUniqueRandomInt(0, params.l_copies, params.lastInstancePlayed);
-    
-    } else {
-        params.instancePlayingId = -1;
-    }
+    params.instancePlayingId = _instanceId;//keep track but not needed. Instances are logged in intances[].currentPlaying
     params.tweenType = _tweenType;
     
     //ofxTween -- Figure out where you are going.
     unsigned delay = 0;
     unsigned duration = _durration;
-    //unsigned start = _destinationFrame - _segmentLength;
-    //unsigned start = _destinationFrame - jsonTrackData["objSeq-segLen"].asInt();
-    unsigned start = _destinationFrame - params.segmentLengths[params.currentSegment];
-
-
+    unsigned start = _destinationFrame - params.segmentLengths[instances[_instanceId].currentSegment];
     unsigned end = _destinationFrame;
     
     //TWEEN
@@ -516,16 +514,23 @@ void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _tweenType
             tweensine.setParameters(10,easingsine, ofxTween::easeOut,start,end,duration,delay);
             break;
         case 11:
-            tweenlinear.setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+            tweenlinear.setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);//not needed
 
-            if(params.instancePlayingId >= 0){
-                linearTweens[params.instancePlayingId].setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
-            } else {
-                for(int i=0;i<12;i++){
+            //TURN ON THE ANIMATION
+            for(int i=0;i<params.l_copies;i++){
+                
+                if(instances[i].playAll){
+                    //setup the
                     linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+                    instances[i].isPlaying = true;//play all instances at once.
+                } else {
+                    if(instances[i].noteID > 0){
+                        linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,start,end,duration,delay);
+                        instances[i].isPlaying = true; //only play the ones that have a noteID set.
+                    }
                 }
+                
             }
-            
             break;
         default:
             tweenlinear.setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
@@ -555,19 +560,22 @@ void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _tweenType
     endl;
 
     //start the animation.  Redefined question.  Is animation playing???
-    params.isPlaying = true;
     
+    params.isPlaying = true;// NOT USED ANYMORE.  MOVE TO STRUCT INSTANCE
     
-    if(params.instancePlayingId >= 0){
-        instances[params.instancePlayingId].isPlaying = true;
-    } else {
+    //TURN ON THE ANIMATION
+    for(int i=0;i<params.l_copies;i++){
         
-        for(int i=0;i<params.l_copies;i++){
-            instances[i].isPlaying = true;
+        if(instances[i].playAll){
+            instances[i].isPlaying = true;//play all instances at once.
+        } else {
+            if(instances[i].noteID > 0){
+                instances[i].isPlaying = true; //only play the ones that have a noteID set.
+            }
         }
+    
     }
 
-    //instances[0].isPlaying = true;
     
 }
 
@@ -575,13 +583,11 @@ void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _tweenType
 void vboMeshObj::KeyboardLaunch(int _tweenType, int _instanceId){
     
     //play the segment
-    OSCLaunch(params.cuePoints[params.currentSegment], params.durrationPoints[params.currentSegment], _tweenType, _instanceId);
+    OSCLaunch(params.cuePoints[instances[_instanceId].currentSegment], params.durrationPoints[instances[_instanceId].currentSegment], _tweenType, _instanceId);
     
-    if(params.currentSegment < params.cuePoints.size()-1){
-        params.currentSegment++;
-    } else {
-        params.currentSegment = 0;
-    }
+    //increments the buffer instance to play clockwise.
+    advanceSegment(_instanceId);
+    
     
 }
 
@@ -838,10 +844,20 @@ void vboMeshObj::clear(){
 
     
     for(int i=0; i<params.l_copies;i++){
-        instances[i].frame = 0;
-        instances[i].isPlaying = false;
-    }
 
+        instances[i].playAll = false;
+        instances[i].isPlaying = false;
+        instances[i].currentSegment = -1;
+        instances[i].noteID = 0;
+        instances[i].note = 0;
+        instances[i].vel = 0;
+        instances[i].delta = 0;
+        instances[i].frame = 0;
+        instances[i].direction = 1;
+
+    }
+    
+    params.instancePlayingId = 0;
     
 }
 
@@ -946,6 +962,17 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
 //--------------------------------------------------------------
 void vboMeshObj::keyPressed(int key)
 {
+    
+    
+    
+    if(params.instancePlayingId < params.l_copies-1){
+        params.instancePlayingId++;
+    } else {
+        params.instancePlayingId = 0;
+    }
+    
+    
+    
     if(!params.oscControlled){
         //cout << "vboMeshObj::keyPressed" << ofToString(index) << "-KEY:" << ofToString(key) << endl;
         if(!params.isPlaying){
@@ -967,9 +994,152 @@ void vboMeshObj::keyReleased(int key)
 
     }
 
-    
-
 }
+
+//--------------------------------------------------------------
+void vboMeshObj::advanceInstance(){
+    if(params.instancePlayingId < params.l_copies-1){
+        params.instancePlayingId++;
+    } else {
+        params.instancePlayingId = 0;
+    }
+    
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::advanceSegment(int _buffer){
+    if(instances[_buffer].currentSegment < params.cuePoints.size()-1){
+        instances[_buffer].currentSegment++;
+    } else {
+        instances[_buffer].currentSegment = 0;
+    }
+}
+
+
+//--------------------------------------------------------------
+void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta){
+
+    
+    //increment the buffers clockwise.
+    advanceSegment(_buffer);
+    
+    
+    //noteId comes from Max and is a unique identifier per instance.
+    if(instances[_buffer].noteID == 0){
+        cout << "noteOn-buffer:" << _buffer << endl;
+        //check if the specified buffer is empty
+        //set the instance params.
+        instances[_buffer].noteID = _noteId;
+        instances[_buffer].note = _note;
+        instances[_buffer].vel = _velocity;
+        instances[_buffer].delta = _delta;
+    
+    } else {
+        //search for a random buffer to place a note
+        int randBuffer = bwUtil::getUniqueRandomInt(1, params.l_copies, _buffer);
+        cout << "noteOn-randBuffer:" << randBuffer << endl;
+        instances[randBuffer].noteID = _noteId;
+        instances[randBuffer].note = _note;
+        instances[randBuffer].vel = _velocity;
+        instances[randBuffer].delta = _delta;
+
+        
+    }
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::play(int _buffer, int _playSegment, int _duration, int _tweenType){
+    params.tweenType = _tweenType;
+    
+    //ofxTween -- Figure out where you are going.
+    unsigned delay = 0;
+    unsigned duration = _duration;
+
+    //end at Cue
+    unsigned start = params.cuePoints[instances[_buffer].currentSegment] - params.segmentLengths[instances[_buffer].currentSegment];
+    unsigned end = params.cuePoints[instances[_buffer].currentSegment];
+    
+    cout << "PLAYING: " << ofToString(_buffer) << ":[" << ofToString(start) << "-" << ofToString(end) << "]" << endl;
+    
+    //setup the Tween
+    tweenPlayInstance(params.tweenType, start, end, duration, delay);
+    
+    //TURN ON THE ANIMATION
+    for(int i=0;i<params.l_copies;i++){
+        
+        if(instances[i].playAll){
+            instances[i].isPlaying = true;//play all instances at once.
+        } else {
+            if(instances[i].noteID > 0){
+                instances[i].isPlaying = true; //only play the ones that have a noteID set.
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::noteOff(int _noteId, int _durration){
+    cout << "vboMeshObj::noteOff -- REPORT:" << endl;
+    
+    for(int t=0; t<50;t++){
+        //search through all the buffers and find the right id
+        if(instances[t].noteID == _noteId){
+            instances[t].clockedDurration = _durration;
+            
+            cout << "[" <<
+            "instance:" << t <<
+            ",isPlaying: " << instances[t].isPlaying <<
+            ",noteID: " << instances[t].noteID <<
+            ",note: " << instances[t].note <<
+            ",vel: " << instances[t].vel <<
+            ",delta: " << instances[t].delta <<
+            ",frame: " << instances[t].frame <<
+            ",direction: " << instances[t].direction <<
+            ",clockedDurration: " << instances[t].clockedDurration << "]" <<
+            endl;
+            
+            
+            
+        } else {
+            cout << instances[t].noteID << ",";
+        }
+    }
+    cout << endl;
+    
+}
+
+
+//--------------------------------------------------------------
+void vboMeshObj::tweenPlayInstance(int _tweenType, int _start, int _end, int _duration, int _delay){
+    switch(_tweenType){
+        case 11:
+            
+            //TURN ON THE ANIMATION
+            for(int i=0;i<params.l_copies;i++){
+                
+                if(instances[i].playAll){
+                    //PLAY ALL INTANCES
+                    linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,_start,_end,_duration,_delay);
+                    instances[i].isPlaying = true;//play all instances at once.
+                } else {
+                    if(instances[i].noteID > 0){
+                        if(instances[i].isPlaying == false){
+                            //PLAY JUST THE SELECTED INSTANCE
+                            linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,_start,_end,_duration,_delay);
+                            instances[i].isPlaying = true; //only play the ones that have a noteID set.
+                        }
+                    }
+                }
+                
+            }
+            break;
+        default:
+            break;
+    }
+    
+}
+
+
 
 //--------------------------------------------------------------
 void vboMeshObj::exit()

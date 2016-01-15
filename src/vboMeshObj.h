@@ -21,11 +21,23 @@ class vboMeshObj {
     int index;//keep track of what instance you are
     int frame;//current frame
 
+    
+    
+    
     //intances
     struct instance {
+        bool playAll;
         bool isPlaying;
+        int currentSegment;
+        int noteID;
+        int note;
+        int vel;
+        int delta;
         int frame;
         int direction; //forward=1, reverse=2;
+        int clockedDurration;
+        
+        
     };
     vector<instance> instances;
     
@@ -54,7 +66,7 @@ class vboMeshObj {
         int tweenType;
                 
         float mirror_distance;
-        int currentSegment;
+        //int currentSegment;
         vector<int> cuePoints;
         vector<int> durrationPoints;
         vector<int> midpointCues;
@@ -198,6 +210,16 @@ class vboMeshObj {
     
     void keyPressed(int key);
     void keyReleased(int key);
+    
+    //PLAY
+    void advanceInstance();
+    void advanceSegment(int _buffer);
+    void noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta);
+    void play(int _buffer, int _playSegment, int _duration, int _tweenType);
+    void noteOff(int _noteId, int _durration);
+    void tweenPlayInstance(int _tweenType, int _start, int _end, int _duration, int _delay);
+    
+    
     
     void exit();
     

@@ -171,7 +171,7 @@ void ofApp::keyPressed(int key){
     } else {
         
         int keyIndex = 0;
-        
+        //formatted like this so I don have to write over and over again.
         if(key == '1'){keyIndex = 1;}
         if(key == '2'){keyIndex = 2;}
         if(key == '3'){keyIndex = 3;}
@@ -185,21 +185,26 @@ void ofApp::keyPressed(int key){
         
         
         if(keyIndex > 0){
+            //PLAY A SECTION OF THE ANIMATION WHEN A NUMBER KEY IS PRESSED [0-9]
+            cout << "KeyboardLaunch: " << "track:" << ofToString(keyIndex) << endl;
             
-            cout << "KeyboardLaunch(11): " << "track:" << ofToString(keyIndex) << endl;
             
-            tracks[keyIndex].keyPressed(key);
-            //vboMeshObj.KeyboardLaunch(tweenType);
-            tracks[keyIndex].KeyboardLaunch(11, 1);
+            tracks[keyIndex].keyPressed(key);//pass the key pressed value
+            
+            
+            tracks[keyIndex].noteOn(tracks[keyIndex].params.instancePlayingId, keyIndex, 60, 127, 500);
+            tracks[keyIndex].KeyboardLaunch(11, tracks[keyIndex].params.instancePlayingId);
+            
+            
             if(modkey){
                 //randLocalPosition(<lowRand>,<highRand>,<durration>,<delay>);
                 tracks[keyIndex].randLocalPosition(-15,15,600,400);
             }
             if(ctrlKey){
-                //tracks[keyIndex].clear();
-                tracks[keyIndex].KeyboardLaunch(11, -1);
+                tracks[keyIndex].clear();
+                //tracks[keyIndex].KeyboardLaunch(11, -1);
             }
-        }
+        }//end if keyIndex
 
 
     }
@@ -225,12 +230,6 @@ void ofApp::keyPressed(int key){
         //cam.setPosition(myObjSeq.vboMeshSequence1[14].getCentroid());
         
     }
-    
-    
-
-    
-    
-    
     
     if(key=='s'){
 //        settings.serialize(parameters);
@@ -258,7 +257,7 @@ void ofApp::keyPressed(int key){
         
     }
     
-    
+
     
     
 }
@@ -287,35 +286,32 @@ void ofApp::keyReleased(int key){
             }
         }
     } else {
-        switch (key)
-        {
-            case '7':
-            {
-                //track7.keyReleased(key);
-            }
-                break;
-            case '8':
-            {
-                //track8.keyReleased(key);
-            }
-                break;
-            case '9':
-            {
-                //track9.keyReleased(key);
-            }
-                break;
-            case '0':
-            {
-                //track10.keyReleased(key);
-            }
-                break;
-            default:
-                break;
-        }
+
+        
+        int keyIndex = 0;
+        //formatted like this so I don have to write over and over again.
+        if(key == '1'){keyIndex = 1;}
+        if(key == '2'){keyIndex = 2;}
+        if(key == '3'){keyIndex = 3;}
+        if(key == '4'){keyIndex = 4;}
+        if(key == '5'){keyIndex = 5;}
+        if(key == '6'){keyIndex = 6;}
+        if(key == '7'){keyIndex = 7;}
+        if(key == '8'){keyIndex = 8;}
+        if(key == '9'){keyIndex = 9;}
+        if(key == '0'){keyIndex = 10;}
         
         
+        if(keyIndex > 0){
+            tracks[keyIndex].keyReleased(key);//pass the key pressed value
+            tracks[keyIndex].noteOff(keyIndex, 1000);
+        }//end if keyIndex
         
-    }
+        
+    }//end if
+    
+    
+
 }
 
 //--------------------------------------------------------------
@@ -429,25 +425,40 @@ void ofApp::OSChandler()
         ofxOscMessage m;
         receiver.getNextMessage(&m);
         
+        //what channel/track
+        int idx = m.getArgAsInt32(0);
+        
+        
         if(m.getAddress() == "/play"){
-            
-            cout << m.getAddress() << endl << "track:" << m.getArgAsInt32(0) <<
-            ", note:" << m.getArgAsInt32(1) <<
-            ", durration:" << m.getArgAsInt32(2) <<
-            ", velocity:" << m.getArgAsInt32(3) <<
-            ", isMuted:" << m.getArgAsInt32(4) <<
-            ", targetSegment:" << m.getArgAsInt32(5) <<
-            ", totalSegments:" << m.getArgAsInt32(6) <<
-            ", easing:" << m.getArgAsInt32(7) <<
-            ", notesHeld:" << m.getArgAsInt32(8) <<
-            endl;
-            
-            int idx = m.getArgAsInt32(0);
-
+        
             //LAUNCHES THE ANIMATION CLIP
-            //int _destinationFrame, int _durration, int _tweenType, int _instanceId
-            tracks[idx].OSCLaunch(m.getArgAsInt32(5), m.getArgAsInt32(2), m.getArgAsInt32(7),m.getArgAsInt32(8));
+            cout << m.getAddress() <<
+            
+            " [track:" << m.getArgAsInt32(0) <<
+            ", buffer:" << m.getArgAsInt32(1) <<
+            ", string:" << m.getArgAsInt32(2) <<
+            ", noteId:" << m.getArgAsInt32(3) <<
+            ", midiNote:" << m.getArgAsInt32(4) <<
+            ", cue:" << m.getArgAsInt32(5) <<
+            ", duration:" << m.getArgAsInt32(6) <<
+            ", tween:" << m.getArgAsInt32(7) <<
+            "]" << endl;
+            
+            
+            //play(int _buffer, int _playSegment(cue), int _duration, int _tweenType)
+            tracks[idx].play(m.getArgAsInt32(1), m.getArgAsInt32(5), m.getArgAsInt32(6), m.getArgAsInt32(7));
 
+            
+            
+            
+            
+            
+            //OLD
+            //int _destinationFrame, int _durration, int _tweenType, int _instanceId(buffer)
+            //tracks[idx].OSCLaunch(m.getArgAsInt32(2), m.getArgAsInt32(3), m.getArgAsInt32(4),m.getArgAsInt32(1));
+            
+            
+            
         } else if (m.getAddress() == "/randomTrans"){
 
             cout << m.getAddress() << endl << "track:" << m.getArgAsInt32(0) <<
@@ -457,7 +468,7 @@ void ofApp::OSChandler()
             ", delay:" << m.getArgAsInt32(4) <<
             endl;
             
-            int idx = m.getArgAsInt32(0);
+            //int idx = m.getArgAsInt32(0);
             //float _start(low), float _end(high), int _durration, int _delay
             tracks[idx].randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
             
@@ -465,7 +476,7 @@ void ofApp::OSChandler()
             
             cout << m.getAddress() << endl << "track:" << m.getArgAsInt32(0) << endl;
             
-            int idx = m.getArgAsInt32(0);
+            //int idx = m.getArgAsInt32(0);
             tracks[idx].clear();
             
         } else if (m.getAddress() == "/bass"){
@@ -500,6 +511,52 @@ void ofApp::OSChandler()
                 if(tracks[t].params.isLoaded){tracks[t].bassControl(amplitude, noteLength);}
             }
     
-        }//end if
+        } else if (m.getAddress() == "/noteOn"){
+            
+//            cout << m.getAddress() << endl << "track:" << m.getArgAsInt32(0) <<
+//            ", index:" << m.getArgAsInt32(1) <<
+//            ", note:" << m.getArgAsInt32(2) <<
+//            ", velocity:" << m.getArgAsInt32(3) <<
+//            ", delta:" << m.getArgAsInt32(4) <<
+//            endl;
+            
+            cout << m.getAddress() <<
+            " [track:" << m.getArgAsInt32(0) <<
+            ", buffer:" << m.getArgAsInt32(1) <<
+            ", string:" << m.getArgAsInt32(2) <<
+            ", noteId:" << m.getArgAsInt32(3) <<
+            ", midiNote:" << m.getArgAsInt32(4) <<
+            ", velocity:" << m.getArgAsInt32(5) <<
+            ", durration(last):" << m.getArgAsInt32(6) <<
+            ", delta:" << m.getArgAsInt32(7) <<
+            ", noteOn|Off:" << m.getArgAsInt32(8) <<
+            "]" << endl;
+            
+            
+            //tracks[idx].advanceInstance();
+            
+            //int _buffer, _noteId, _midiNote, _velocity, _delta
+            tracks[idx].noteOn(m.getArgAsInt32(1),m.getArgAsInt32(3),m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7));
+            
+            
+            
+        } else if (m.getAddress() == "/noteOff"){
+
+            cout << m.getAddress() <<
+            " [track:" << m.getArgAsInt32(0) <<
+            ", string:" << m.getArgAsInt32(1) <<
+            ", noteId:" << m.getArgAsInt32(2) <<
+            ", midiNote:" << m.getArgAsInt32(3) <<
+            ", velocity:" << m.getArgAsInt32(4) <<
+            ", real-duration:" << m.getArgAsInt32(5) <<
+            ", delta:" << m.getArgAsInt32(6) <<
+            ", note On|Off:" << m.getArgAsInt32(7) <<
+            "]" << endl;
+            
+            //noteOff(int _noteId, int _durration){
+            tracks[idx].noteOff(m.getArgAsInt32(2), m.getArgAsInt32(5));
+            
+            
+        }
     }//end while
 }

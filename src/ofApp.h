@@ -109,4 +109,8 @@ class ofApp : public ofBaseApp{
         void OSChandler();
     
     
+        //TEMP VARIABLE FOR TESTING
+        int playedNotes = 0;
+    
+    
 };
