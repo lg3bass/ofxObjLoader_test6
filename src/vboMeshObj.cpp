@@ -113,6 +113,10 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     
     index = jsonTrackData["index"].asInt();
     
+    
+    parameters.setName("TRACK "+ofToString(index));
+    parameters.add(gui_test.set("TEST",1,1,10));
+    
     /*
     parameters.setName("testName");
     parameters.add(gui_gInstances.set("G instances",1,1,10));
@@ -173,16 +177,18 @@ vector<int> vboMeshObj::parseJSON(string _param){
 
 //--------------------------------------------------------------
 void vboMeshObj::reportParams(int _i){
-    cout << "reported params-" << ofToString(_i) << endl;
-    cout << "g_copies-" << params.g_copies << endl;
-    cout << "g_scale-" << params.g_scale << endl;
-    cout << "g_rotate-" << params.g_rotate << endl;
-    cout << "g_trans-" << params.g_trans << endl;
-    cout << "l_copies-" << params.l_copies << endl;
-    cout << "l_scale-" << params.l_scale << endl;
-    cout << "l_rotate-" << params.l_rotate << endl;
-    cout << "l_trans-" << params.l_trans << endl;
-    cout << "totalFrames-" << params.totalFrames << endl;
+    
+    ofLogVerbose("ofxUI") << "track " << _i <<
+    "g_copies(" << params.g_copies << ")," <<
+    "g_scale(" << params.g_scale  << ")," <<
+    "g_rotate(" << params.g_rotate << ")," <<
+    "g_trans(" << params.g_trans << ")," <<
+    "l_copies(" << params.l_copies << ")," <<
+    "l_scale(" << params.l_scale << ")," <<
+    "l_rotate(" << params.l_rotate << ")," <<
+    "l_trans(" << params.l_trans << ")," <<
+    "totalFrames(" << params.totalFrames << ")";
+    
 }
 
 
@@ -200,7 +206,7 @@ vector<ofVboMesh> vboMeshObj::passObjTwoVboMesh(vector<ofFile> _files){
         ofMesh temp = original;
         tempVboMeshSequence.push_back(temp);
         //load all the obj files to the vboMeshBuffer. This is the reason why it takes so long to load.
-        cout << (*it).getFileName() << endl;
+        ofLogVerbose("objloader") << (*it).getFileName();
         
         //here is where I can set a progress bar
         
@@ -217,6 +223,8 @@ void vboMeshObj::loadVboMesh(const objFileLoader::extObjFile &_input){
     vboMesh1.clear();
     vboMesh1 = passObjTwoVboMesh(_input.objs);
     
+    //TODO -- add timer event, add progress bar
+    ofLogNotice("objloader") << "track " << index << " loaded!";
 }
 
 
@@ -353,7 +361,7 @@ void vboMeshObj::update(){
     
     
     for(int i=0; i<params.l_copies;i++){
-        if(instances[i].isPlaying){//NEW L1 code
+        if(instances[i].isPlaying){
             if(params.oscControlled){
                 switch (params.tweenType){
                     case 1:
@@ -437,7 +445,7 @@ void vboMeshObj::update(){
                         
                         break;
                 }
-                //cout << "frame: " << frame << endl;
+                
                 
                 
                 
@@ -445,12 +453,8 @@ void vboMeshObj::update(){
                 //non osc controlled block
                 
             }// oscControlled
-            
-            
-            
-            
-        }
-    }
+        }//instances[i].isPlaying
+    }//params.l_copies
     
     
     
@@ -461,7 +465,6 @@ void vboMeshObj::update(){
         if(positiontweenbounce_x.isCompleted()){
             params.randomized = false;
         }
-
     }//end params.randomized
     
     
@@ -602,6 +605,10 @@ void vboMeshObj::setupGui(int _index){
     gui = new ofxUICanvas();
     
     gui->setWidth(150);
+    
+    //set the background color and text(syphon)
+    gui->setColorFill(ofColor::darkGrey);
+    gui->setColorBack(ofColor(128,100));
     
     gui->setWidgetSpacing(2);
     
@@ -907,20 +914,9 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
     int kind = e.widget->getKind();
     string canvasParent = e.widget->getCanvasParent()->getName();
     
-    //int sliderVal = e.widget->
-    //cout << "vboMeshObj::" << canvasParent << "-" << kind << "-" << name << "-" << "END" << endl;
-    
-//    if (name == "(G)ROTATE-Z") {
-//        ofxUISlider *slider = (ofxUISlider *) e.widget;
-//        //cout << "Global Rotate Z" << endl;
-//        slider->setIncrement(10.0);//increment is for key commands
-//        slider->setStickyValue(10.0);
-//        cout << slider->getIncrement() << endl;
-//    }
-    
     if (name == "LOADED") {
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-        cout << "LOADED:" << ofToString(toggle->getValue()) << endl;
+        ofLogNotice("objloader") << "LOADING TRACK:" << index << " - button pressed:" << toggle->getValue();
         
         if(params.isLoaded){
             //load all the vboMeshes
@@ -945,12 +941,12 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         
         
         if(!dd->getSelectedIndeces().empty()){
-            cout << "setting the matcap" << endl;
+            ofLogNotice("matcap") << "setting the matcap";
             setMatCap(dd->getSelectedIndeces()[0]);
         }
         
         
-        cout << ofToString(dd->getSelectedIndeces()) << endl;
+        ofLogNotice("matcap") << ofToString(dd->getSelectedIndeces());
 
         
     }
@@ -974,7 +970,7 @@ void vboMeshObj::keyPressed(int key)
     
     
     if(!params.oscControlled){
-        //cout << "vboMeshObj::keyPressed" << ofToString(index) << "-KEY:" << ofToString(key) << endl;
+        
         if(!params.isPlaying){
             ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::red);
             params.isPlaying = true;
@@ -989,9 +985,7 @@ void vboMeshObj::keyPressed(int key)
 void vboMeshObj::keyReleased(int key)
 {
     if(!params.oscControlled){
-        //cout << ofToString(index) << " released from withing vboMeshObj" << endl;
         ((ofApp*)ofGetAppPtr())->guiTabBar->getWidget("TRACK"+ofToString(index))->setColorBack(ofColor::black);
-
     }
 
 }
@@ -1026,7 +1020,7 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
     
     //noteId comes from Max and is a unique identifier per instance.
     if(instances[_buffer].noteID == 0){
-        cout << "noteOn-buffer:" << _buffer << endl;
+        ofLogNotice("OSC") << "noteOn-buffer:" << _buffer;
         //check if the specified buffer is empty
         //set the instance params.
         instances[_buffer].noteID = _noteId;
@@ -1037,7 +1031,7 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
     } else {
         //search for a random buffer to place a note
         int randBuffer = bwUtil::getUniqueRandomInt(1, params.l_copies, _buffer);
-        cout << "noteOn-randBuffer:" << randBuffer << endl;
+        ofLogNotice("OSC") << "noteOn-randBuffer:" << randBuffer;
         instances[randBuffer].noteID = _noteId;
         instances[randBuffer].note = _note;
         instances[randBuffer].vel = _velocity;
@@ -1059,7 +1053,7 @@ void vboMeshObj::play(int _buffer, int _playSegment, int _duration, int _tweenTy
     unsigned start = params.cuePoints[instances[_buffer].currentSegment] - params.segmentLengths[instances[_buffer].currentSegment];
     unsigned end = params.cuePoints[instances[_buffer].currentSegment];
     
-    cout << "PLAYING: " << ofToString(_buffer) << ":[" << ofToString(start) << "-" << ofToString(end) << "]" << endl;
+    ofLogNotice("OSC") << "PLAYING: " << ofToString(_buffer) << ":[" << ofToString(start) << "-" << ofToString(end) << "]";
     
     //setup the Tween
     tweenPlayInstance(params.tweenType, start, end, duration, delay);
@@ -1079,7 +1073,7 @@ void vboMeshObj::play(int _buffer, int _playSegment, int _duration, int _tweenTy
 
 //--------------------------------------------------------------
 void vboMeshObj::noteOff(int _noteId, int _durration){
-    cout << "vboMeshObj::noteOff -- REPORT:" << endl;
+    ofLogNotice("OSC") << "vboMeshObj::noteOff -- REPORT:";
     
     for(int t=0; t<50;t++){
         //search through all the buffers and find the right id

@@ -72,19 +72,15 @@ void objFileLoader::loadObjFiles(string _path){
         
         
         //REPORTING
-        //list obj directories and number of files
-        cout << externalObjFiles[j].name << ":" << objDirectory.size() << endl;
-        //list files in obj directory
-        cout << externalObjFiles[j].name << "-obj:" << externalObjFiles[j].objs.size() << endl;
-        //cout << externalObjFiles[j].name << "-mtl:" << externalObjFiles[j].mtls.size() << endl;
-        //display externalObjFiles[].numFiles
-        cout << "externalObjFiles[<var>].numFiles: " << externalObjFiles[j].numFiles << endl;
-        //display the json data
-        cout << "objFileLoader > JSON DATA =======================" << endl;
-        cout << "externalObjFiles[<var>].jsonParsed:" << externalObjFiles[j].jsonParsed << endl;
-        cout << "externalObjFiles[<var>].jsonFile:" << externalObjFiles[j].path << externalObjFiles[j].jsonFile << endl;
+        ofLogNotice("jsonData")<< "==================================";
+        ofLogNotice("jsonData")<< "TRACK: " << j;
+        ofLogNotice("jsonData")<< "directory/size=" << externalObjFiles[j].name << ":" << objDirectory.size();
+        ofLogNotice("jsonData")<< "Number of obj files=" << externalObjFiles[j].objs.size();
+        ofLogNotice("jsonData")<< "Directory parsed=" << externalObjFiles[j].jsonParsed;
+        ofLogNotice("jsonData")<< "JSON file=" << externalObjFiles[j].path << externalObjFiles[j].jsonFile;
+        
         //report the json data
-        ofLogNotice("jsonData")<< index << ": " << externalObjFiles[j].jsonData.getRawString();
+        ofLogVerbose("jsonData")<< index << ": " << externalObjFiles[j].jsonData.getRawString();
         
         
     }//end loop through directory
@@ -103,11 +99,10 @@ void objFileLoader::loadMatCapFiles(string _path) {
     
     int fileCounter = 0;
 
-    cout << "MATCAPS:" << endl;
+    ofLogVerbose("matcap") << "MATCAPS:";
     
     //create a vector of files
     vector<ofFile> matCapDirectoryFiles = dir.getFiles();
-
     
     //run through the dir to collect all the files.
     for(int j=0;j<matCapDirectoryFiles.size();j++){
@@ -121,14 +116,9 @@ void objFileLoader::loadMatCapFiles(string _path) {
             fileCounter++;
         }
         
-        
         ofSort(externalMatCapFiles);
         
-    
-        cout << externalMatCapFiles[j] << endl;
-        
+        ofLogVerbose("matcap") << externalMatCapFiles[j];
     }
-
-    
     
 }

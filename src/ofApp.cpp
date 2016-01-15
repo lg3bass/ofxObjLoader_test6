@@ -2,14 +2,19 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
     
-    //setup my Tracks.  Not ready to do this yet.
-    //source: http://arturocastro.net/blog/2011/10/28/stl::vector/
+    //LOGGING
+    //http://openframeworks.cc/documentation/utils/ofLog.html
+    ofSetLogLevel("jsonData", OF_LOG_ERROR);
+    ofSetLogLevel("OSC",OF_LOG_VERBOSE);
+    ofSetLogLevel("matcap",OF_LOG_ERROR);
+    ofSetLogLevel("ofxUI",OF_LOG_SILENT);
+    ofSetLogLevel("objloader", OF_LOG_NOTICE);
+    
     
     //SYPHON
     //----------------------------------------------------------
-    ofSetWindowTitle("VMM 8");
+    ofSetWindowTitle("VMM 10");
     mainOutputSyphonServer.setName("Screen Output");
     mClient.setup();
     
@@ -18,15 +23,18 @@ void ofApp::setup(){
     //----------------------------------------------------------
     //END SYPHON
     
-    
+    //OSC
+    //----------------------------------------------------------
     // listen on the given port
-	cout << "listening for osc messages on port " << PORT << "\n";
+    ofLogNotice("OSC") << "listening for osc messages on port " << PORT;
 	receiver.setup(PORT);
     
     ofSetVerticalSync(true);
     ofDisableArbTex();
     
     guiTabBar = new ofxUITabBar();
+    guiTabBar->setColorBack(ofColor(128,100));
+    
     ofAddListener(guiTabBar->newGUIEvent,this,&ofApp::guiTabEvent);
     
     //1. Find out how many obj sequences there are in the data/obj folder
@@ -38,26 +46,23 @@ void ofApp::setup(){
         tracks.push_back(vboMeshObj());
     }
     
-    
-    
     //3. setup the tracks
     for(int t=1; t<NUM_TRACKS;t++){
         tracks[t].setup(appFileLoader.externalObjFiles[t]);
     }
 
-//Setup ofGui
-//    parameters.setName("settings");
-//    parameters.add(track8.parameters);
-//    parameters.add(track9.parameters);
-//    parameters.add(track10.parameters);
-//    gui.setup(parameters);
-//    gui.loadFromFile("settings.xml");
-//    
-//    gui.setPosition(1000,50);
-//
-//    minimized = true;
-//    
-//    gui.minimizeAll();
+    //Setup GLOBAL ofGui
+    parameters.setName("settings");
+    parameters.add(tracks[1].parameters);
+    parameters.add(tracks[2].parameters);
+    gui.setup(parameters);
+    //gui.loadFromFile("settings.xml");
+    
+    gui.setPosition(1000,50);
+
+    minimized = true;
+    
+    gui.minimizeAll();
 }
 
 //--------------------------------------------------------------
@@ -85,13 +90,14 @@ void ofApp::draw(){
     ofSetWindowTitle("fps: "+ofToString(ofGetFrameRate())+" - "+ofToString(ofGetWidth())+","+ofToString(ofGetHeight())+"easyCam:"+ofToString(modkey));
 
     
-//    //SYPHON
-//    // Clear with alpha, so we can capture via syphon and composite elsewhere should we want.
-//    glClearColor(0.0, 0.0, 0.0, 0.0);
-//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//    //=================================================
+    //SYPHON
+    // Clear with alpha, so we can capture via syphon and composite elsewhere should we want.
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //=================================================
     
-    ofBackgroundGradient(ofColor::white, ofColor::gray);
+    //NO SYPHON (turned off to test Syphon)
+    //ofBackgroundGradient(ofColor::white, ofColor::gray);
     ofEnableDepthTest();
     
     cam.begin();
@@ -105,10 +111,10 @@ void ofApp::draw(){
     cam.end();
 
     
-//    //SYPHON
-//    mClient.draw(50, 50);
-//    mainOutputSyphonServer.publishScreen();
-//    //=======================================
+    //SYPHON
+    mClient.draw(50, 50);
+    mainOutputSyphonServer.publishScreen();
+    //=======================================
     
 
     
@@ -117,10 +123,10 @@ void ofApp::draw(){
     //Need this.
     ofDisableDepthTest();
     
-    //draw all GUI's after this
+    //draw the native ofGui (floating menu)
     //----------------------------------------
+    gui.draw();
     
-    //gui.draw();
     
 }
 
@@ -150,7 +156,7 @@ void ofApp::keyPressed(int key){
     
     if(key & OF_KEY_MODIFIER){
         if(key >= OF_KEY_F1 && key <= OF_KEY_F12){
-            //cout << "F KEY:" << key << endl;
+            
         }else{
             
             switch(key){
@@ -267,7 +273,7 @@ void ofApp::keyReleased(int key){
 
     if(key & OF_KEY_MODIFIER){
         if(key >= OF_KEY_F1 && key <= OF_KEY_F12){
-            //cout << "F KEY:" << key << endl;
+            
         }else{
             
             switch(key){
@@ -381,8 +387,7 @@ void ofApp::guiTabEvent(ofxUIEventArgs &e)
     e.widget->setColorFill(ofColor::yellow);
     
     selectedTrack = currentSelectedTrack(name);
-    
-    //cout << "ofApp::Selected Track:" << name << endl;
+
 }
 
 
@@ -403,14 +408,6 @@ int ofApp::currentSelectedTrack(string _name){
         tracks[j].params.isSelected = false;
     }
     
-    /*
-    cout << "selected track: [";
-    //report out all the tracks
-    for(int p=1; p<NUM_TRACKS; p++){
-        cout << tracks[p].params.isSelected << ",";
-    }
-    cout << endl;
-    */
     
     return trackNumber;
 }
@@ -428,12 +425,10 @@ void ofApp::OSChandler()
         //what channel/track
         int idx = m.getArgAsInt32(0);
         
-        
         if(m.getAddress() == "/play"){
-        
-            //LAUNCHES THE ANIMATION CLIP
-            cout << m.getAddress() <<
-            
+            //This message launches the animation clip and adds
+            //the segment to play(coming soon), durration, and tweentype.
+            ofLogVerbose("OSC") << m.getAddress() <<
             " [track:" << m.getArgAsInt32(0) <<
             ", buffer:" << m.getArgAsInt32(1) <<
             ", string:" << m.getArgAsInt32(2) <<
@@ -442,31 +437,20 @@ void ofApp::OSChandler()
             ", cue:" << m.getArgAsInt32(5) <<
             ", duration:" << m.getArgAsInt32(6) <<
             ", tween:" << m.getArgAsInt32(7) <<
-            "]" << endl;
-            
+            "]";
             
             //play(int _buffer, int _playSegment(cue), int _duration, int _tweenType)
             tracks[idx].play(m.getArgAsInt32(1), m.getArgAsInt32(5), m.getArgAsInt32(6), m.getArgAsInt32(7));
-
-            
-            
-            
-            
-            
-            //OLD
-            //int _destinationFrame, int _durration, int _tweenType, int _instanceId(buffer)
-            //tracks[idx].OSCLaunch(m.getArgAsInt32(2), m.getArgAsInt32(3), m.getArgAsInt32(4),m.getArgAsInt32(1));
-            
-            
             
         } else if (m.getAddress() == "/randomTrans"){
 
-            cout << m.getAddress() << endl << "track:" << m.getArgAsInt32(0) <<
+            ofLogVerbose("OSC") << m.getAddress() <<
+            "track:" << m.getArgAsInt32(0) <<
             ", low:" << m.getArgAsInt32(1) <<
             ", high:" << m.getArgAsInt32(2) <<
             ", durration:" << m.getArgAsInt32(3) <<
-            ", delay:" << m.getArgAsInt32(4) <<
-            endl;
+            ", delay:" << m.getArgAsInt32(4);
+            
             
             //int idx = m.getArgAsInt32(0);
             //float _start(low), float _end(high), int _durration, int _delay
@@ -474,12 +458,14 @@ void ofApp::OSChandler()
             
         } else if (m.getAddress() == "/clear"){
             
-            cout << m.getAddress() << endl << "track:" << m.getArgAsInt32(0) << endl;
+            ofLogVerbose("OSC") << m.getAddress() << endl << "track:" << m.getArgAsInt32(0);
             
             //int idx = m.getArgAsInt32(0);
             tracks[idx].clear();
             
         } else if (m.getAddress() == "/bass"){
+            //this mesage streams in a amplitude
+            //data from an envelop filter in MAX/LIVE
             
             //m.getArgAsInt32(0) = value from REF filter.
             //m.getArgAsString(1) = note length.
@@ -512,15 +498,9 @@ void ofApp::OSChandler()
             }
     
         } else if (m.getAddress() == "/noteOn"){
+            //the message sets the buffer, and general data on the notes.
             
-//            cout << m.getAddress() << endl << "track:" << m.getArgAsInt32(0) <<
-//            ", index:" << m.getArgAsInt32(1) <<
-//            ", note:" << m.getArgAsInt32(2) <<
-//            ", velocity:" << m.getArgAsInt32(3) <<
-//            ", delta:" << m.getArgAsInt32(4) <<
-//            endl;
-            
-            cout << m.getAddress() <<
+            ofLogVerbose("OSC") << m.getAddress() <<
             " [track:" << m.getArgAsInt32(0) <<
             ", buffer:" << m.getArgAsInt32(1) <<
             ", string:" << m.getArgAsInt32(2) <<
@@ -530,19 +510,14 @@ void ofApp::OSChandler()
             ", durration(last):" << m.getArgAsInt32(6) <<
             ", delta:" << m.getArgAsInt32(7) <<
             ", noteOn|Off:" << m.getArgAsInt32(8) <<
-            "]" << endl;
-            
-            
-            //tracks[idx].advanceInstance();
+            "]";
             
             //int _buffer, _noteId, _midiNote, _velocity, _delta
             tracks[idx].noteOn(m.getArgAsInt32(1),m.getArgAsInt32(3),m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7));
             
-            
-            
         } else if (m.getAddress() == "/noteOff"){
 
-            cout << m.getAddress() <<
+            ofLogVerbose("OSC") << m.getAddress() <<
             " [track:" << m.getArgAsInt32(0) <<
             ", string:" << m.getArgAsInt32(1) <<
             ", noteId:" << m.getArgAsInt32(2) <<
@@ -551,7 +526,7 @@ void ofApp::OSChandler()
             ", real-duration:" << m.getArgAsInt32(5) <<
             ", delta:" << m.getArgAsInt32(6) <<
             ", note On|Off:" << m.getArgAsInt32(7) <<
-            "]" << endl;
+            "]";
             
             //noteOff(int _noteId, int _durration){
             tracks[idx].noteOff(m.getArgAsInt32(2), m.getArgAsInt32(5));
