@@ -176,6 +176,8 @@ void ofApp::keyPressed(int key){
         }
     } else {
         
+        //keyboard launch to test
+        
         int keyIndex = 0;
         //formatted like this so I don have to write over and over again.
         if(key == '1'){keyIndex = 1;}
@@ -192,13 +194,11 @@ void ofApp::keyPressed(int key){
         
         if(keyIndex > 0){
             //PLAY A SECTION OF THE ANIMATION WHEN A NUMBER KEY IS PRESSED [0-9]
-            cout << "KeyboardLaunch: " << "track:" << ofToString(keyIndex) << endl;
+            ofLogNotice("OSC") << "KeyboardLaunch: " << "track:" << ofToString(keyIndex);
             
             
             tracks[keyIndex].keyPressed(key);//pass the key pressed value
-            
-            
-            tracks[keyIndex].noteOn(tracks[keyIndex].params.instancePlayingId, keyIndex, 60, 127, 500);
+            tracks[keyIndex].noteOn(tracks[keyIndex].params.instancePlayingId, keyIndex, 60, 127, 500,true);
             tracks[keyIndex].KeyboardLaunch(11, tracks[keyIndex].params.instancePlayingId);
             
             
@@ -513,7 +513,7 @@ void ofApp::OSChandler()
             "]";
             
             //int _buffer, _noteId, _midiNote, _velocity, _delta
-            tracks[idx].noteOn(m.getArgAsInt32(1),m.getArgAsInt32(3),m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7));
+            tracks[idx].noteOn(m.getArgAsInt32(1),m.getArgAsInt32(3),m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7),true);
             
         } else if (m.getAddress() == "/noteOff"){
 

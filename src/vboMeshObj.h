@@ -19,14 +19,13 @@ class vboMeshObj {
     
     vector<ofVboMesh> vboMesh1;
     int index;//keep track of what instance you are
-    int frame;//current frame
+    //int frame;//current frame//not needed
 
-    
-    
     
     //intances
     struct instance {
         bool playAll;
+        bool playNoteOff;
         bool isPlaying;
         int currentSegment;
         int noteID;
@@ -34,6 +33,9 @@ class vboMeshObj {
         int vel;
         int delta;
         int frame;
+        int startFrame;
+        int midFrame;
+        int endFrame;
         int direction; //forward=1, reverse=2;
         int clockedDurration;
         
@@ -201,7 +203,7 @@ class vboMeshObj {
     void setShader(string _shader);
     void draw();
     void update();
-    void OSCLaunch(int _destinationFrame, int _durration, int _tweenType, int _instanceId);
+    //void OSCLaunch(int _destinationFrame, int _durration, int _tweenType, int _instanceId);
     void KeyboardLaunch(int _tweenType, int _instanceId);
     void setupGui(int _index);
     void setGuiSnapUnits(string _name,float _unit);
@@ -218,7 +220,7 @@ class vboMeshObj {
     //PLAY
     void advanceInstance();
     void advanceSegment(int _buffer);
-    void noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta);
+    void noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta, bool _playNoteOff);
     void play(int _buffer, int _playSegment, int _duration, int _tweenType);
     void noteOff(int _noteId, int _durration);
     void tweenPlayInstance(int _tweenType, int _start, int _end, int _duration, int _delay);
