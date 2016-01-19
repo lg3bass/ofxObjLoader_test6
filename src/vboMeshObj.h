@@ -24,9 +24,10 @@ class vboMeshObj {
     
     //intances
     struct instance {
+        bool isPlaying;
         bool playAll;
         bool playNoteOff;
-        bool isPlaying;
+        int midiState; // 1=noteOn, 0=noteOff
         int currentSegment;
         int noteID;
         int note;
@@ -37,6 +38,7 @@ class vboMeshObj {
         int midFrame;
         int endFrame;
         int direction; //forward=1, reverse=2;
+        int duration;
         int clockedDurration;
         
         
@@ -221,7 +223,7 @@ class vboMeshObj {
     void advanceInstance();
     void advanceSegment(int _buffer);
     void noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta, bool _playNoteOff);
-    void play(int _buffer, int _playSegment, int _duration, int _tweenType);
+    void play(int _buffer, int _duration, int _tweenType);
     void noteOff(int _noteId, int _durration);
     void tweenPlayInstance(int _tweenType, int _start, int _end, int _duration, int _delay);
     

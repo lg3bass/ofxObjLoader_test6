@@ -439,8 +439,8 @@ void ofApp::OSChandler()
             ", tween:" << m.getArgAsInt32(7) <<
             "]";
             
-            //play(int _buffer, int _playSegment(cue), int _duration, int _tweenType)
-            tracks[idx].play(m.getArgAsInt32(1), m.getArgAsInt32(5), m.getArgAsInt32(6), m.getArgAsInt32(7));
+            //play(int _buffer, int _duration, int _tweenType)
+            tracks[idx].play(m.getArgAsInt32(1), m.getArgAsInt32(6), m.getArgAsInt32(7));
             
         } else if (m.getAddress() == "/randomTrans"){
 
