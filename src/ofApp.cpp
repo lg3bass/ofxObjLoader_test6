@@ -500,6 +500,10 @@ void ofApp::OSChandler()
         } else if (m.getAddress() == "/noteOn"){
             //the message sets the buffer, and general data on the notes.
             
+            int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(2)) + ofToString(m.getArgAsInt32(4)));
+            ofLogNotice("OSC") << "VMMnoteID(ON)------------------------------: " << VMMnoteID;
+            
+            
             ofLogVerbose("OSC") << m.getAddress() <<
             " [track:" << m.getArgAsInt32(0) <<
             ", buffer:" << m.getArgAsInt32(1) <<
@@ -512,8 +516,8 @@ void ofApp::OSChandler()
             ", noteOn|Off:" << m.getArgAsInt32(8) <<
             "]";
             
-            //int _buffer, _noteId, _midiNote, _velocity, _delta
-            tracks[idx].noteOn(m.getArgAsInt32(1),m.getArgAsInt32(3),m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7),true);
+            //int _buffer, _VMMnoteId(string+midiNote), _midiNote, _velocity, _delta
+            tracks[idx].noteOn(m.getArgAsInt32(1),VMMnoteID,m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7),true);
             
         } else if (m.getAddress() == "/noteOff"){
 
@@ -527,9 +531,12 @@ void ofApp::OSChandler()
             ", delta:" << m.getArgAsInt32(6) <<
             ", note On|Off:" << m.getArgAsInt32(7) <<
             "]";
+
+            int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(1)) + ofToString(m.getArgAsInt32(3)));
+            ofLogNotice("OSC") << "------------------------------VMMnoteID(OFF): " << VMMnoteID;
             
-            //noteOff(int _noteId, int _durration){
-            tracks[idx].noteOff(m.getArgAsInt32(2), m.getArgAsInt32(5));
+            //noteOff(int _VMMnoteId, int _durration){
+            tracks[idx].noteOff(VMMnoteID, m.getArgAsInt32(5));
             
             
         }

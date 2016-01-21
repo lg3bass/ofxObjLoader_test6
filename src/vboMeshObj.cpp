@@ -950,6 +950,7 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
     
     
     //noteId comes from Max and is a unique identifier per instance.
+    //only play if nothing is on the buffer
     if(instances[_buffer].noteID == 0){
         ofLogNotice("OSC") << "noteOn-buffer:" << _buffer;
         //check if the specified buffer is empty
@@ -1048,7 +1049,7 @@ void vboMeshObj::noteOff(int _noteId, int _durration){
             if(instances[t].playNoteOff){
                 
                 //play only the note off.
-                play(t,instances[t].duration+200,params.tweenType);
+                play(t,instances[t].duration,params.tweenType);
                 
                 //reset my instance data
                 instances[t].noteID = 0;
