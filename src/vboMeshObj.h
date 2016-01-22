@@ -205,7 +205,6 @@ class vboMeshObj {
     void setShader(string _shader);
     void draw();
     void update();
-    //void OSCLaunch(int _destinationFrame, int _durration, int _tweenType, int _instanceId);
     void KeyboardLaunch(int _tweenType, int _instanceId);
     void setupGui(int _index);
     void setGuiSnapUnits(string _name,float _unit);
@@ -225,7 +224,7 @@ class vboMeshObj {
     void noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta, bool _playNoteOff);
     void play(int _buffer, int _duration, int _tweenType);
     void noteOff(int _noteId, int _durration);
-    void tweenPlayInstance(int _tweenType, int _start, int _end, int _duration, int _delay);
+    void tweenPlayInstance(int _buffer, int _tweenType, int _start, int _end, int _duration, int _delay);
     
     
     

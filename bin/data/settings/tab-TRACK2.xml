@@ -46,7 +46,7 @@
 <Widget>
     <Kind>17</Kind>
     <Name>droplet_01.png</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>17</Kind>
@@ -221,7 +221,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>LOADED</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -246,7 +246,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>MIRROR</Name>
-    <Value>-22.933332443</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -256,7 +256,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)SCALE</Name>
-    <Value>12.106666565</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -301,12 +301,12 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)ROTATE-Z</Name>
-    <Value>14.400007248</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
     <Name>g-rot-z</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -346,7 +346,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)TRANS-Z</Name>
-    <Value>-5.666673183</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -361,12 +361,12 @@
 <Widget>
     <Kind>42</Kind>
     <Name>(L)COPIES 2</Name>
-    <Value>9</Value>
+    <Value>4</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>(L)SCALE</Name>
-    <Value>0.321999997</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -411,7 +411,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)ROTATE-Z</Name>
-    <Value>-39.999965668</Value>
+    <Value>-90.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -441,7 +441,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)TRANS-Y</Name>
-    <Value>70.666648865</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -451,27 +451,27 @@
 <Widget>
     <Kind>4</Kind>
     <Name>lTransYMod</Name>
-    <Value>0.200000003</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>(L)TRANS-Z</Name>
-    <Value>6.666672230</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
     <Name>l-trans-z</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>lTransZMod</Name>
-    <Value>0.030769231</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-X</Name>
-    <Value>5.000002384</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -481,12 +481,12 @@
 <Widget>
     <Kind>4</Kind>
     <Name>oRotXMod</Name>
-    <Value>0.153846160</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-Y</Name>
-    <Value>4.999938011</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -511,7 +511,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>oRotZMod</Name>
-    <Value>0.076923080</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>17</Kind>

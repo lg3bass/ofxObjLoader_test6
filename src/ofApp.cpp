@@ -6,7 +6,7 @@ void ofApp::setup(){
     //LOGGING
     //http://openframeworks.cc/documentation/utils/ofLog.html
     ofSetLogLevel("jsonData", OF_LOG_ERROR);
-    ofSetLogLevel("OSC",OF_LOG_VERBOSE);
+    ofSetLogLevel("OSC",OF_LOG_NOTICE);
     ofSetLogLevel("matcap",OF_LOG_ERROR);
     ofSetLogLevel("ofxUI",OF_LOG_SILENT);
     ofSetLogLevel("objloader", OF_LOG_NOTICE);
@@ -501,7 +501,7 @@ void ofApp::OSChandler()
             //the message sets the buffer, and general data on the notes.
             
             int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(2)) + ofToString(m.getArgAsInt32(4)));
-            ofLogNotice("OSC") << "VMMnoteID(ON)------------------------------: " << VMMnoteID;
+            //ofLogNotice("OSC") << "VMMnoteID(ON)------------------------------: " << VMMnoteID;
             
             
             ofLogVerbose("OSC") << m.getAddress() <<
@@ -533,7 +533,7 @@ void ofApp::OSChandler()
             "]";
 
             int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(1)) + ofToString(m.getArgAsInt32(3)));
-            ofLogNotice("OSC") << "------------------------------VMMnoteID(OFF): " << VMMnoteID;
+            //ofLogNotice("OSC") << "------------------------------VMMnoteID(OFF): " << VMMnoteID;
             
             //noteOff(int _VMMnoteId, int _durration){
             tracks[idx].noteOff(VMMnoteID, m.getArgAsInt32(5));

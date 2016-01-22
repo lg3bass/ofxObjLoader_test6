@@ -13,7 +13,7 @@ vboMeshObj::vboMeshObj() {
     params.still = false;
     params.oscControlled = true;
     params.randomized = false;
-    params.mirrored = true;
+    params.mirrored = false;
     params.tweenType = 11;
     
     params.mirror_distance = 10.0;
@@ -370,8 +370,12 @@ void vboMeshObj::update(){
                         if(linearTweens[i].isCompleted()){
                             instances[i].isPlaying = false;
                             
+                            
                             //if no noteOff message is expected.
-                            if(!instances[i].playNoteOff){
+                            if(instances[i].playNoteOff){
+                                ofLogNotice("OSC") << "NOTEOFF:" << i << "[" << instances[i].frame << "] - STOP";
+                            
+                            } else {
                                 //resets everthing. Move to noteOff???
                                 instances[i].noteID = 0;
                                 instances[i].note = 0;
@@ -379,9 +383,7 @@ void vboMeshObj::update(){
                                 instances[i].delta = 0;
                                 instances[i].direction = 1;
                             }
-                            //instances[i].clockedDurration = 0;
-                            
-                            //params.isPlaying = false;//not needed
+
                         }
                         break;
                 }
@@ -408,114 +410,6 @@ void vboMeshObj::update(){
     //sets the button a color when a osc message is recieved.
     setIndicator();
 }
-
-////--------------------------------------------------------------
-//void vboMeshObj::OSCLaunch(int _destinationFrame, int _durration, int _tweenType, int _instanceId){
-//    
-//    params.instancePlayingId = _instanceId;//keep track but not needed. Instances are logged in intances[].currentPlaying
-//    params.tweenType = _tweenType;
-//    
-//    //ofxTween -- Figure out where you are going.
-//    unsigned delay = 0;
-//    unsigned duration = _durration;
-//    unsigned start = _destinationFrame - params.segmentLengths[instances[_instanceId].currentSegment];
-//    unsigned end = _destinationFrame;
-//    
-//    //TWEEN
-//    switch(params.tweenType){
-//        case 1:
-//            tweenback.setParameters(1,easingback, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 2:
-//            tweenbounce.setParameters(2,easingbounce, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 3:
-//            tweencirc.setParameters(3,easingcirc, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 4:
-//            tweencubic.setParameters(4,easingcubic, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 5:
-//            tweenelastic.setParameters(5,easingelastic, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 6:
-//            tweenexpo.setParameters(6,easingexpo, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 7:
-//            tweenquad.setParameters(7,easingquad, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 8:
-//            tweenquart.setParameters(8,easingquart, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 9:
-//            tweenquint.setParameters(9,easingquint, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 10:
-//            tweensine.setParameters(10,easingsine, ofxTween::easeOut,start,end,duration,delay);
-//            break;
-//        case 11:
-//            tweenlinear.setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);//not needed
-//
-//            //TURN ON THE ANIMATION
-//            for(int i=0;i<params.l_copies;i++){
-//                
-//                if(instances[i].playAll){
-//                    //setup the
-//                    linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,start,end,duration,delay);
-//                    instances[i].isPlaying = true;//play all instances at once.
-//                } else {
-//                    if(instances[i].noteID > 0){
-//                        linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,start,end,duration,delay);
-//                        instances[i].isPlaying = true; //only play the ones that have a noteID set.
-//                    }
-//                }
-//                
-//            }
-//            break;
-//        default:
-//            tweenlinear.setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
-//
-//            if(params.instancePlayingId >= 0){
-//                linearTweens[params.instancePlayingId].setParameters(11,easinglinear, ofxTween::easeOut,start,end,duration,delay);
-//            } else {
-//                for(int i=0;i<12;i++){
-//                    linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,start,end,duration,delay);
-//                }
-//            }
-//
-//            break;
-//    }
-//    
-//
-//    cout << "============================" << endl;
-//    cout << "OSCMessage>frame:" << frame <<
-//    ", _segmentLength:" << jsonTrackData["objSeq-segLen"] <<
-//    ", start:" << start <<
-//    ", end:" << end <<
-//    ", durration:" << _durration <<
-//    ", delay:" << delay <<
-//    ", segmentEnd:" << _destinationFrame <<
-//    ", params.tweenType:" << params.tweenType <<
-//    ", _instanceId:" << _instanceId <<
-//    endl;
-//    
-//    params.isPlaying = true;// NOT USED ANYMORE.  MOVE TO STRUCT INSTANCE
-//    
-//    //TURN ON THE ANIMATION
-//    for(int i=0;i<params.l_copies;i++){
-//        
-//        if(instances[i].playAll){
-//            instances[i].isPlaying = true;//play all instances at once.
-//        } else {
-//            if(instances[i].noteID > 0){
-//                instances[i].isPlaying = true; //only play the ones that have a noteID set.
-//            }
-//        }
-//    
-//    }
-//
-//    
-//}
 
 //--------------------------------------------------------------
 void vboMeshObj::KeyboardLaunch(int _tweenType, int _instanceId){
@@ -566,6 +460,7 @@ void vboMeshObj::setupGui(int _index){
     
     gui->addToggle("OSC", &params.oscControlled);
     gui->addToggle("MIRROR", &params.mirrored);
+ 
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
@@ -952,8 +847,6 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
     //noteId comes from Max and is a unique identifier per instance.
     //only play if nothing is on the buffer
     if(instances[_buffer].noteID == 0){
-        ofLogNotice("OSC") << "noteOn-buffer:" << _buffer;
-        //check if the specified buffer is empty
         //set the instance params.
         instances[_buffer].playNoteOff = _playNoteOff;
         instances[_buffer].midiState = 1;
@@ -978,20 +871,15 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
 
         
     }
+    
+    ofLogNotice("OSC") << "NOTE_ON:" << _buffer << "-" << instances[_buffer].noteID;
+    
 }
 
 //--------------------------------------------------------------
 void vboMeshObj::play(int _buffer, int _duration, int _tweenType){
+    //set the tween type
     params.tweenType = _tweenType;
-    
-    //ofxTween -- Figure out where you are going.
-    unsigned delay = 0;
-    unsigned duration = _duration;
-
-    //RIGHT NOW instances[].currentSegment is how we track what cue we are on.
-    //FUTURE Which cue is managged by MAX app.  Perhaps have a switch.
-    //OLD -  unsigned start = params.cuePoints[instances[_buffer].currentSegment] - params.segmentLengths[instances[_buffer].currentSegment];
-    //OLD -  unsigned end = params.cuePoints[instances[_buffer].currentSegment];
     
     //set the markers per instance(start,mid,end)
     unsigned start = 0;
@@ -1012,30 +900,22 @@ void vboMeshObj::play(int _buffer, int _duration, int _tweenType){
         end = instances[_buffer].endFrame;
     }
     
+    unsigned duration = _duration;
+    unsigned delay = 0;
+    
     //remember the duration
     instances[_buffer].duration = _duration;
     
-    ofLogNotice("OSC") << "PLAYING: " << ofToString(_buffer) << ":[" << ofToString(start) << "-" << ofToString(end) << "]";
+    ofLogNotice("OSC") << "PLAYING:" << ofToString(_buffer) << "[" << ofToString(start) << "-" << ofToString(end) << "]";
     
     //setup the Tween
-    tweenPlayInstance(params.tweenType, start, end, duration, delay);
+    tweenPlayInstance(_buffer, params.tweenType, start, end, duration, delay);
     
-    //TURN ON THE ANIMATION  //==== I THINK I CAN TAKE THIS OUT.  SAME THING IN tweenPlayInstance()
-//    for(int i=0;i<params.l_copies;i++){
-//        
-//        if(instances[i].playAll){
-//            instances[i].isPlaying = true;//play all instances at once.
-//        } else {
-//            if(instances[i].noteID > 0){
-//                instances[i].isPlaying = true; //only play the ones that have a noteID set.
-//            }
-//        }
-//    }
+    
 }
 
 //--------------------------------------------------------------
 void vboMeshObj::noteOff(int _noteId, int _durration){
-    ofLogNotice("OSC") << "vboMeshObj::noteOff -- REPORT:";
     
     for(int t=0; t<50;t++){
         //search through all the buffers and find the right id
@@ -1044,12 +924,11 @@ void vboMeshObj::noteOff(int _noteId, int _durration){
             instances[t].isPlaying = false;
             instances[t].clockedDurration = _durration;
             
-            
             instances[t].midiState = 0;//midiState = buffer is in noteOn or Off.
             if(instances[t].playNoteOff){
                 
                 //play only the note off.
-                play(t,instances[t].duration,params.tweenType);
+                play(t,500,params.tweenType);
                 
                 //reset my instance data
                 instances[t].noteID = 0;
@@ -1057,57 +936,38 @@ void vboMeshObj::noteOff(int _noteId, int _durration){
                 instances[t].vel = 0;
                 instances[t].delta = 0;
                 instances[t].direction = 1;
-                
             }
-            
-            
-            cout << "[" <<
-            "instance:" << t <<
-            ",isPlaying: " << instances[t].isPlaying <<
-            ",noteID: " << instances[t].noteID <<
-            ",note: " << instances[t].note <<
-            ",vel: " << instances[t].vel <<
-            ",delta: " << instances[t].delta <<
-            ",frame: " << instances[t].frame <<
-            ",direction: " << instances[t].direction <<
-            ",clockedDurration: " << instances[t].clockedDurration << "]" <<
-            endl;
-            
-            
-            
-        } else {
-            cout << instances[t].noteID << ",";
-        }
+            //ofLogNotice("OSC") << "------------------------------[noteOFF:" << t << "-" << instances[t].noteID << "]";
+        }// end if
     }
     cout << endl;
-    
 }
 
 
+
 //--------------------------------------------------------------
-void vboMeshObj::tweenPlayInstance(int _tweenType, int _start, int _end, int _duration, int _delay){
+void vboMeshObj::tweenPlayInstance(int _buffer, int _tweenType, int _start, int _end, int _duration, int _delay){
     //RIGHT NOW ONLY WORKS ON LINEAR TWEEN MODE.
     switch(_tweenType){
         case 11:
-            
             //TURN ON THE ANIMATION
-            for(int i=0;i<params.l_copies;i++){
-                
-                if(instances[i].playAll){
-                    //PLAY ALL INTANCES
-                    linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,_start,_end,_duration,_delay);
-                    instances[i].isPlaying = true;//play all instances at once.
-                } else {
-                    if(instances[i].noteID > 0){
-                        if(instances[i].isPlaying == false){
-                            //PLAY JUST THE SELECTED INSTANCE
-                            linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,_start,_end,_duration,_delay);
-                            instances[i].isPlaying = true; //only play the ones that have a noteID set.
-                        }
-                    }
-                }
-                
+            if(instances[_buffer].isPlaying == false){
+                //PLAY JUST THE SELECTED INSTANCE
+                linearTweens[_buffer].setParameters(11+_buffer,easinglinear, ofxTween::easeOut,_start,_end,_duration,_delay);
+                instances[_buffer].isPlaying = true; //only play the ones that have a noteID set.
             }
+//              OLD CODE HOW TO DO A PLAY ALL.
+//                if(instances[i].playAll){
+//                    for(int i=0;i<params.l_copies;i++){
+//                        //PLAY ALL INTANCES
+//                        linearTweens[i].setParameters(11+i,easinglinear, ofxTween::easeOut,_start,_end,_duration,_delay);
+//                        instances[i].isPlaying = true;//play all instances at once.
+//                    }
+//                
+//                } else {
+//
+//                }
+            
             break;
         default:
             break;
