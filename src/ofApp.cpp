@@ -6,7 +6,7 @@ void ofApp::setup(){
     //LOGGING
     //http://openframeworks.cc/documentation/utils/ofLog.html
     ofSetLogLevel("jsonData", OF_LOG_ERROR);
-    ofSetLogLevel("OSC",OF_LOG_NOTICE);
+    ofSetLogLevel("OSC",OF_LOG_VERBOSE);
     ofSetLogLevel("matcap",OF_LOG_ERROR);
     ofSetLogLevel("ofxUI",OF_LOG_SILENT);
     ofSetLogLevel("objloader", OF_LOG_NOTICE);
@@ -198,7 +198,7 @@ void ofApp::keyPressed(int key){
             
             
             tracks[keyIndex].keyPressed(key);//pass the key pressed value
-            tracks[keyIndex].noteOn(tracks[keyIndex].params.instancePlayingId, keyIndex, 60, 127, 500,true);
+            tracks[keyIndex].noteOn(tracks[keyIndex].params.instancePlayingId, keyIndex, 60, 127, 500);
             tracks[keyIndex].KeyboardLaunch(11, tracks[keyIndex].params.instancePlayingId);
             
             
@@ -426,9 +426,14 @@ void ofApp::OSChandler()
         int idx = m.getArgAsInt32(0);
         
         if(m.getAddress() == "/play"){
+            
+            
+            int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(2)) + ofToString(m.getArgAsInt32(4)));
+            
+            
             //This message launches the animation clip and adds
             //the segment to play(coming soon), durration, and tweentype.
-            ofLogVerbose("OSC") << m.getAddress() <<
+            ofLogVerbose("OSC") << ">>>>---->" << m.getAddress() <<
             " [track:" << m.getArgAsInt32(0) <<
             ", buffer:" << m.getArgAsInt32(1) <<
             ", string:" << m.getArgAsInt32(2) <<
@@ -440,7 +445,7 @@ void ofApp::OSChandler()
             "]";
             
             //play(int _buffer, int _duration, int _tweenType)
-            tracks[idx].play(m.getArgAsInt32(1), m.getArgAsInt32(6), m.getArgAsInt32(7));
+            tracks[idx].play(m.getArgAsInt32(1), VMMnoteID, m.getArgAsInt32(6), m.getArgAsInt32(7));
             
         } else if (m.getAddress() == "/randomTrans"){
 
@@ -504,7 +509,7 @@ void ofApp::OSChandler()
             //ofLogNotice("OSC") << "VMMnoteID(ON)------------------------------: " << VMMnoteID;
             
             
-            ofLogVerbose("OSC") << m.getAddress() <<
+            ofLogVerbose("OSC") << "-------->" << m.getAddress() <<
             " [track:" << m.getArgAsInt32(0) <<
             ", buffer:" << m.getArgAsInt32(1) <<
             ", string:" << m.getArgAsInt32(2) <<
@@ -517,11 +522,11 @@ void ofApp::OSChandler()
             "]";
             
             //int _buffer, _VMMnoteId(string+midiNote), _midiNote, _velocity, _delta
-            tracks[idx].noteOn(m.getArgAsInt32(1),VMMnoteID,m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7),true);
+            tracks[idx].noteOn(m.getArgAsInt32(1),VMMnoteID,m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7));
             
         } else if (m.getAddress() == "/noteOff"){
 
-            ofLogVerbose("OSC") << m.getAddress() <<
+            ofLogVerbose("OSC") << "-------->" << m.getAddress() <<
             " [track:" << m.getArgAsInt32(0) <<
             ", string:" << m.getArgAsInt32(1) <<
             ", noteId:" << m.getArgAsInt32(2) <<

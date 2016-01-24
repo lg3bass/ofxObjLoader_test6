@@ -256,7 +256,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)SCALE</Name>
-    <Value>23.213333130</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -306,7 +306,7 @@
 <Widget>
     <Kind>31</Kind>
     <Name>g-rot-z</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -361,7 +361,7 @@
 <Widget>
     <Kind>42</Kind>
     <Name>(L)COPIES 7</Name>
-    <Value>12</Value>
+    <Value>4</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -411,7 +411,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)ROTATE-Z</Name>
-    <Value>-29.999971390</Value>
+    <Value>-90.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -441,7 +441,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)TRANS-Y</Name>
-    <Value>9.999990463</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -471,7 +471,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-X</Name>
-    <Value>88.800003052</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>

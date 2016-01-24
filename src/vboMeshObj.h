@@ -16,11 +16,8 @@ class vboMeshObj {
     objFileLoader::extObjFile trackData;
     ofxJSONElement jsonTrackData;
     
-    
     vector<ofVboMesh> vboMesh1;
     int index;//keep track of what instance you are
-    //int frame;//current frame//not needed
-
     
     //intances
     struct instance {
@@ -45,15 +42,10 @@ class vboMeshObj {
     };
     vector<instance> instances;
     
-    
+    //matCaps
     ofImage matCap;
     ofShader shader;
-    
-
-    
     vector<string> matcaps;
-    
-
     
     
     //drawing params
@@ -68,6 +60,7 @@ class vboMeshObj {
         bool randomized;
         bool mirrored;
         int tweenType;
+        bool playNoteOff;
                 
         float mirror_distance;
         //int currentSegment;
@@ -132,8 +125,7 @@ class vboMeshObj {
         ofVec3f oRotateMod;
         ofVec3f oRotateModVal;
         
-    };
-    
+    };    
     guiParams params;
     
     
@@ -153,22 +145,29 @@ class vboMeshObj {
     */
 
     //ofxTween
-    ofxTween tweenback;
-    ofxTween tweenbounce;
-    ofxTween tweencirc;
-    ofxTween tweencubic;
-    ofxTween tweenelastic;
-    ofxTween tweenexpo;
-    ofxTween tweenquad;
-    ofxTween tweenquart;
-    ofxTween tweenquint;
-    ofxTween tweensine;
+//    ofxTween tweenback;
+//    ofxTween tweenbounce;
+//    ofxTween tweencirc;
+//    ofxTween tweencubic;
+//    ofxTween tweenelastic;
+//    ofxTween tweenexpo;
+//    ofxTween tweenquad;
+//    ofxTween tweenquart;
+//    ofxTween tweenquint;
+//    ofxTween tweensine;
+//    ofxTween tweenlinear,tweenlinear2,tweenlinear3,tweenlinear4,tweenlinear5,tweenlinear6,tweenlinear7,tweenlinear8;
     
-    
-    ofxTween tweenlinear,tweenlinear2,tweenlinear3,tweenlinear4,tweenlinear5,tweenlinear6,tweenlinear7,tweenlinear8;
+    vector <ofxTween> backTweens;
+    vector <ofxTween> bounceTweens;
+    vector <ofxTween> circTweens;
+    vector <ofxTween> cubicTweens;
+    vector <ofxTween> elasticTweens;
+    vector <ofxTween> expoTweens;
+    vector <ofxTween> quadTweens;
+    vector <ofxTween> quartTweens;
+    vector <ofxTween> quintTweens;
+    vector <ofxTween> sineTweens;
     vector <ofxTween> linearTweens;
-    
-    
     
     ofxTween multitween;
     
@@ -221,12 +220,10 @@ class vboMeshObj {
     //PLAY
     void advanceInstance();
     void advanceSegment(int _buffer);
-    void noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta, bool _playNoteOff);
-    void play(int _buffer, int _duration, int _tweenType);
+    void noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta);
+    void play(int _buffer, int _noteID, int _duration, int _tweenType);
     void noteOff(int _noteId, int _durration);
     void tweenPlayInstance(int _buffer, int _tweenType, int _start, int _end, int _duration, int _delay);
-    
-    
     
     void exit();
     
