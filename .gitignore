@@ -13,8 +13,7 @@ Thumbs.db
 # OF #
 ######################
 /bin/*.app
-/bin/data/obj/00_oddity_domb_OBJ_Seq/*.obj
-/bin/data/obj/00_oddity_domb_OBJ_Seq/*.mtl
+/bin/data/obj/00_oddity_domb_OBJ_Seq/
 /bin/data/obj/01_bandTube01_OBJ_Seq/*.obj
 /bin/data/obj/01_bandTube01_OBJ_Seq/*.mtl
 /bin/data/obj/02_bassStar_OBJ_Seq/*.obj
