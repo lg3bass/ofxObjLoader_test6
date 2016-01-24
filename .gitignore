@@ -15,5 +15,5 @@ Thumbs.db
 /bin/*.app
 /bin/data/obj/
 /bin/data/obj_old/
-/bin/data/03_blenderOutputTest_OBJ_Seq/*.obj
-/bin/data/03_blenderOutputTest_OBJ_Seq/*.mtl
+/bin/data/04_blenderOutputTest_OBJ_Seq/*.obj
+/bin/data/04_blenderOutputTest_OBJ_Seq/*.mtl
