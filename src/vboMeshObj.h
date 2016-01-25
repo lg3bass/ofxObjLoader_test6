@@ -50,6 +50,7 @@ class vboMeshObj {
     
     //drawing params
     struct guiParams {
+        bool playAll;
         bool isSelected;
         bool isLoaded;
         bool isPlaying;

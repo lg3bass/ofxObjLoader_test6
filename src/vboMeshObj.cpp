@@ -5,6 +5,7 @@
 vboMeshObj::vboMeshObj() {
 
     //setup default params
+    params.playAll = false;
     params.isSelected = false;
     params.isLoaded = false;
     params.isPlaying = false;
@@ -465,7 +466,10 @@ void vboMeshObj::setupGui(int _index){
     gui->addToggle("OSC", &params.oscControlled);
     gui->addToggle("MIRROR", &params.mirrored);
     
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addToggle("playNoteOff", &params.playNoteOff);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addToggle("playAll", &params.playAll);
  
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
@@ -841,6 +845,22 @@ void vboMeshObj::advanceSegment(int _buffer){
 //--------------------------------------------------------------
 void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta){
 
+    
+    if(params.playAll){
+        for(int i=0;i<params.l_copies;i++){
+            //loop through all the buffers and setup note ids.
+            
+            
+            
+        }
+    } else {
+        
+        
+        
+        
+    }
+    
+    
     int buffer = 0;
     
     //only play if nothing is on the buffer. Otherwise pick one at random.
@@ -856,6 +876,7 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
     advanceSegment(buffer);
     
     
+    //MOVE TO FUNCTION
     //noteId comes from Max and is a unique identifier per instance.
     //set the instance params.
     //instances[buffer].playNoteOff = _playNoteOff;
@@ -870,6 +891,8 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
     instances[buffer].midFrame = params.midpointCues[instances[buffer].currentSegment];
     instances[buffer].endFrame = params.cuePoints[instances[buffer].currentSegment];
 
+    
+    
     ofLogNotice("OSC") << buffer << " - setNoteId(" << instances[buffer].noteID << ")";
     
 }
