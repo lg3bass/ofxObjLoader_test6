@@ -844,97 +844,180 @@ void vboMeshObj::advanceSegment(int _buffer){
 
 //--------------------------------------------------------------
 void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta){
-
+    
+    int loop_start;
+    int loop_end;
     
     if(params.playAll){
-        for(int i=0;i<params.l_copies;i++){
-            //loop through all the buffers and setup note ids.
-            
-            
-            
+        loop_start = 0;
+        loop_end = params.l_copies;
+    } else {
+        //only play next buffer if noting is assigned already. Otherwise pick one at random.
+        if(instances[_buffer].noteID == 0){
+            loop_start = _buffer;
+        } else {
+            loop_start = bwUtil::getUniqueRandomInt(1, params.l_copies, _buffer);
+            ofLogNotice("OSC") << "noteOn-randBuffer:" << loop_start;
         }
-    } else {
-        
-        
-        
-        
+        loop_end = loop_start+1;
     }
     
+//      int buffer;
     
-    int buffer = 0;
+//    //only play next buffer if noting is assigned already. Otherwise pick one at random.
+//    if(instances[_buffer].noteID == 0){
+//        buffer = _buffer;
+//    } else {
+//        buffer = bwUtil::getUniqueRandomInt(1, params.l_copies, _buffer);
+//        ofLogNotice("OSC") << "noteOn-randBuffer:" << buffer;
+//    }
+   
+//    //increment the cue/segment.
+//    advanceSegment(buffer);
+//    
+//    //MOVE TO FUNCTION
+//    //noteId comes from Max and is a unique identifier per instance.
+//    //set the instance params.
+//    //instances[buffer].playNoteOff = _playNoteOff;
+//    instances[buffer].midiState = 1;
+//    instances[buffer].noteID = _noteId;
+//    instances[buffer].note = _note;
+//    instances[buffer].vel = _velocity;
+//    instances[buffer].delta = _delta;
+//    
+//    //set the cuepoint data based on instances[].currentSegment
+//    instances[buffer].startFrame = params.cuePoints[instances[buffer].currentSegment] - params.segmentLengths[instances[buffer].currentSegment];
+//    instances[buffer].midFrame = params.midpointCues[instances[buffer].currentSegment];
+//    instances[buffer].endFrame = params.cuePoints[instances[buffer].currentSegment];
+//    
+//    ofLogNotice("OSC") << buffer << " - setNoteId(" << instances[buffer].noteID << ")";
     
-    //only play if nothing is on the buffer. Otherwise pick one at random.
-    if(instances[_buffer].noteID == 0){
-        buffer = _buffer;
-    } else {
-        buffer = bwUtil::getUniqueRandomInt(1, params.l_copies, _buffer);
-        ofLogNotice("OSC") << "noteOn-randBuffer:" << buffer;
-    }
     
-    
-    //increment the cue/segment.
-    advanceSegment(buffer);
-    
-    
-    //MOVE TO FUNCTION
-    //noteId comes from Max and is a unique identifier per instance.
-    //set the instance params.
-    //instances[buffer].playNoteOff = _playNoteOff;
-    instances[buffer].midiState = 1;
-    instances[buffer].noteID = _noteId;
-    instances[buffer].note = _note;
-    instances[buffer].vel = _velocity;
-    instances[buffer].delta = _delta;
-    
-    //set the cuepoint data based on instances[].currentSegment
-    instances[buffer].startFrame = params.cuePoints[instances[buffer].currentSegment] - params.segmentLengths[instances[buffer].currentSegment];
-    instances[buffer].midFrame = params.midpointCues[instances[buffer].currentSegment];
-    instances[buffer].endFrame = params.cuePoints[instances[buffer].currentSegment];
+    for(int buffer=loop_start;buffer<loop_end;buffer++){
+        //loop through all the buffers and setup note ids.
 
+        //increment the cue/segment.
+        advanceSegment(buffer);
+        
+        //MOVE TO FUNCTION
+        //noteId comes from Max and is a unique identifier per instance.
+        //set the instance params.
+        //instances[buffer].playNoteOff = _playNoteOff;
+        instances[buffer].midiState = 1;
+        instances[buffer].noteID = _noteId;
+        instances[buffer].note = _note;
+        instances[buffer].vel = _velocity;
+        instances[buffer].delta = _delta;
+        
+        //set the cuepoint data based on instances[].currentSegment
+        instances[buffer].startFrame = params.cuePoints[instances[buffer].currentSegment] - params.segmentLengths[instances[buffer].currentSegment];
+        instances[buffer].midFrame = params.midpointCues[instances[buffer].currentSegment];
+        instances[buffer].endFrame = params.cuePoints[instances[buffer].currentSegment];
+        
+        ofLogNotice("OSC") << buffer << " - setNoteId(" << instances[buffer].noteID << ")";
+    }
     
     
-    ofLogNotice("OSC") << buffer << " - setNoteId(" << instances[buffer].noteID << ")";
     
 }
 
+
+
 //--------------------------------------------------------------
 void vboMeshObj::play(int _buffer, int _noteId, int _duration, int _tweenType){
+    
     //set the tween type
     params.tweenType = _tweenType;
     
     //set the markers per instance(start,mid,end)
     unsigned start = 0;
     unsigned end = 0;
+    unsigned duration = _duration;
+    unsigned delay = 0;
+
     
+//    //loop method
+//    int loop_start;
+//    int loop_end;
+//    
+//    if(params.playAll){
+//        loop_start = 0;
+//        loop_end = params.l_copies;
+//    } else {
+//        //search for the note id in all the buffers
+//        for(int i=0; i<params.l_copies;i++){
+//            if(instances[i].noteID == _noteId){
+//                loop_start = i;
+//            }
+//        }
+//        loop_end = loop_start+1;
+//    }
+//
+//    for(int buffer=loop_start;buffer<loop_end;buffer++){
+//        //setup the tween
+//        if(params.playNoteOff){
+//            //Note On > Note Off
+//            if(instances[buffer].midiState == 1){
+//                //play start-mid then pause
+//                start = instances[buffer].startFrame;
+//                end = instances[buffer].midFrame;
+//                
+//            } else {
+//                //play mid-end then stop
+//                start = instances[buffer].midFrame;
+//                end = instances[buffer].endFrame;
+//                
+//            }
+//        } else {
+//            //Note On
+//            //play start-end and stop
+//            start = instances[buffer].startFrame;
+//            end = instances[buffer].endFrame;
+//            
+//        }
+//        
+//        //remember the duration
+//        instances[buffer].duration = _duration;
+//        
+//        ofLogNotice("OSC") << buffer << " - Play(" << start << "-" << end << ") - " << instances[buffer].duration;
+//        
+//        //setup the Tween
+//        tweenPlayInstance(buffer, params.tweenType, start, end, instances[buffer].duration, delay);
+//    
+//    }
+
+
+    
+//OLD WAY
     int buffer = 0;
     
-    //getBufferByNoteID(_noteId);
-    
+    //search for the note id in all the buffers
     for(int i=0; i<params.l_copies;i++){
         if(instances[i].noteID == _noteId){
             buffer = i;
         }
     }
-    
-    //buffer = _buffer;
-    
+
+    //setup the tween
     if(params.playNoteOff){
+        //Note On > Note Off
         if(instances[buffer].midiState == 1){
+            //play start-mid then pause
             start = instances[buffer].startFrame;
             end = instances[buffer].midFrame;
             
         } else {
+            //play mid-end then stop
             start = instances[buffer].midFrame;
             end = instances[buffer].endFrame;
             
         }
     } else {
+        //Note On
+        //play start-end and stop
         start = instances[buffer].startFrame;
         end = instances[buffer].endFrame;
     }
-    
-    unsigned duration = _duration;
-    unsigned delay = 0;
     
     //remember the duration
     instances[buffer].duration = _duration;
@@ -943,7 +1026,6 @@ void vboMeshObj::play(int _buffer, int _noteId, int _duration, int _tweenType){
     
     //setup the Tween
     tweenPlayInstance(buffer, params.tweenType, start, end, instances[buffer].duration, delay);
-    
     
 }
 

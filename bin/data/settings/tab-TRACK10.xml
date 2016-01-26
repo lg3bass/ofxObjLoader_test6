@@ -239,6 +239,11 @@
     <Value>0</Value>
 </Widget>
 <Widget>
+    <Kind>2</Kind>
+    <Name>playNoteOff</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
     <Kind>42</Kind>
     <Name>FRAME</Name>
     <Value>70</Value>
@@ -306,7 +311,7 @@
 <Widget>
     <Kind>31</Kind>
     <Name>g-rot-z</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

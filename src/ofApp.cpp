@@ -425,11 +425,30 @@ void ofApp::OSChandler()
         //what channel/track
         int idx = m.getArgAsInt32(0);
         
-        if(m.getAddress() == "/play"){
-            
+        if (m.getAddress() == "/noteOn"){
+            //the message sets the buffer, and general data on the notes.
             
             int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(2)) + ofToString(m.getArgAsInt32(4)));
+            //ofLogNotice("OSC") << "VMMnoteID(ON)------------------------------: " << VMMnoteID;
             
+            ofLogVerbose("OSC") << "-------->" << m.getAddress() <<
+            " [track:" << m.getArgAsInt32(0) <<
+            ", buffer:" << m.getArgAsInt32(1) <<
+            ", string:" << m.getArgAsInt32(2) <<
+            ", noteId:" << m.getArgAsInt32(3) <<
+            ", midiNote:" << m.getArgAsInt32(4) <<
+            ", velocity:" << m.getArgAsInt32(5) <<
+            ", durration(last):" << m.getArgAsInt32(6) <<
+            ", delta:" << m.getArgAsInt32(7) <<
+            ", noteOn|Off:" << m.getArgAsInt32(8) <<
+            "]";
+            
+            //int _buffer, _VMMnoteId(string+midiNote), _midiNote, _velocity, _delta
+            tracks[idx].noteOn(m.getArgAsInt32(1),VMMnoteID,m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7));
+            
+        } else if (m.getAddress() == "/play"){
+            
+            int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(2)) + ofToString(m.getArgAsInt32(4)));
             
             //This message launches the animation clip and adds
             //the segment to play(coming soon), durration, and tweentype.
@@ -446,6 +465,25 @@ void ofApp::OSChandler()
             
             //play(int _buffer, int _duration, int _tweenType)
             tracks[idx].play(m.getArgAsInt32(1), VMMnoteID, m.getArgAsInt32(6), m.getArgAsInt32(7));
+            
+        } else if (m.getAddress() == "/noteOff"){
+            
+            ofLogVerbose("OSC") << "-------->" << m.getAddress() <<
+            " [track:" << m.getArgAsInt32(0) <<
+            ", string:" << m.getArgAsInt32(1) <<
+            ", noteId:" << m.getArgAsInt32(2) <<
+            ", midiNote:" << m.getArgAsInt32(3) <<
+            ", velocity:" << m.getArgAsInt32(4) <<
+            ", real-duration:" << m.getArgAsInt32(5) <<
+            ", delta:" << m.getArgAsInt32(6) <<
+            ", note On|Off:" << m.getArgAsInt32(7) <<
+            "]";
+            
+            int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(1)) + ofToString(m.getArgAsInt32(3)));
+            //ofLogNotice("OSC") << "------------------------------VMMnoteID(OFF): " << VMMnoteID;
+            
+            //noteOff(int _VMMnoteId, int _durration){
+            tracks[idx].noteOff(VMMnoteID, m.getArgAsInt32(5));
             
         } else if (m.getAddress() == "/randomTrans"){
 
@@ -502,48 +540,6 @@ void ofApp::OSChandler()
                 if(tracks[t].params.isLoaded){tracks[t].bassControl(amplitude, noteLength);}
             }
     
-        } else if (m.getAddress() == "/noteOn"){
-            //the message sets the buffer, and general data on the notes.
-            
-            int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(2)) + ofToString(m.getArgAsInt32(4)));
-            //ofLogNotice("OSC") << "VMMnoteID(ON)------------------------------: " << VMMnoteID;
-            
-            
-            ofLogVerbose("OSC") << "-------->" << m.getAddress() <<
-            " [track:" << m.getArgAsInt32(0) <<
-            ", buffer:" << m.getArgAsInt32(1) <<
-            ", string:" << m.getArgAsInt32(2) <<
-            ", noteId:" << m.getArgAsInt32(3) <<
-            ", midiNote:" << m.getArgAsInt32(4) <<
-            ", velocity:" << m.getArgAsInt32(5) <<
-            ", durration(last):" << m.getArgAsInt32(6) <<
-            ", delta:" << m.getArgAsInt32(7) <<
-            ", noteOn|Off:" << m.getArgAsInt32(8) <<
-            "]";
-            
-            //int _buffer, _VMMnoteId(string+midiNote), _midiNote, _velocity, _delta
-            tracks[idx].noteOn(m.getArgAsInt32(1),VMMnoteID,m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7));
-            
-        } else if (m.getAddress() == "/noteOff"){
-
-            ofLogVerbose("OSC") << "-------->" << m.getAddress() <<
-            " [track:" << m.getArgAsInt32(0) <<
-            ", string:" << m.getArgAsInt32(1) <<
-            ", noteId:" << m.getArgAsInt32(2) <<
-            ", midiNote:" << m.getArgAsInt32(3) <<
-            ", velocity:" << m.getArgAsInt32(4) <<
-            ", real-duration:" << m.getArgAsInt32(5) <<
-            ", delta:" << m.getArgAsInt32(6) <<
-            ", note On|Off:" << m.getArgAsInt32(7) <<
-            "]";
-
-            int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(1)) + ofToString(m.getArgAsInt32(3)));
-            //ofLogNotice("OSC") << "------------------------------VMMnoteID(OFF): " << VMMnoteID;
-            
-            //noteOff(int _VMMnoteId, int _durration){
-            tracks[idx].noteOff(VMMnoteID, m.getArgAsInt32(5));
-            
-            
         }
     }//end while
 }
