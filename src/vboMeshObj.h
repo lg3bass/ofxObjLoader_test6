@@ -131,7 +131,12 @@ class vboMeshObj {
     
     
     ofParameterGroup parameters;
-    ofParameter<int> gui_test;
+    ofParameter<int> gui_buffers;
+    
+    
+    ofParameter<string> gui_instanceList;
+    ofParameter<string> gui_isPlayingList;
+
     
     //OLD - ofParameter ---- REMOVE
     /*

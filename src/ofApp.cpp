@@ -55,10 +55,13 @@ void ofApp::setup(){
     parameters.setName("settings");
     parameters.add(tracks[1].parameters);
     parameters.add(tracks[2].parameters);
+    
     gui.setup(parameters);
     //gui.loadFromFile("settings.xml");
     
-    gui.setPosition(1000,50);
+    gui.setSize(500, 500);
+    gui.setDefaultWidth(500);
+    gui.setPosition(800,50);
 
     minimized = true;
     
@@ -127,7 +130,7 @@ void ofApp::draw(){
     //----------------------------------------
     gui.draw();
     
-    
+  
 }
 
 //--------------------------------------------------------------
@@ -425,7 +428,12 @@ void ofApp::OSChandler()
         //what channel/track
         int idx = m.getArgAsInt32(0);
         
+        
+        cout << m.getAddress() << endl;
+        
+        
         if (m.getAddress() == "/noteOn"){
+            cout << "----------------------------------------------------------------" << endl;
             //the message sets the buffer, and general data on the notes.
             
             int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(2)) + ofToString(m.getArgAsInt32(4)));

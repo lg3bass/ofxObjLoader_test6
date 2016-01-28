@@ -236,12 +236,17 @@
 <Widget>
     <Kind>2</Kind>
     <Name>MIRROR</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>playNoteOff</Name>
     <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>playAll</Name>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>

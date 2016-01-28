@@ -236,12 +236,17 @@
 <Widget>
     <Kind>2</Kind>
     <Name>MIRROR</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>playNoteOff</Name>
     <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>playAll</Name>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -251,7 +256,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>MIRROR</Name>
-    <Value>0.533332825</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -276,7 +281,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)ROTATE-X</Name>
-    <Value>-0.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -306,7 +311,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)ROTATE-Z</Name>
-    <Value>-0.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -416,7 +421,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)ROTATE-Z</Name>
-    <Value>30.000000000</Value>
+    <Value>29.999992371</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -506,7 +511,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-Z</Name>
-    <Value>-0.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>

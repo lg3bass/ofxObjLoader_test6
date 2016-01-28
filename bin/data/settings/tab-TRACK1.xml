@@ -1,7 +1,7 @@
 <Widget>
     <Kind>22</Kind>
     <Name>MATCAP</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>17</Kind>
@@ -116,7 +116,7 @@
 <Widget>
     <Kind>17</Kind>
     <Name>material2.png</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>17</Kind>
@@ -146,7 +146,7 @@
 <Widget>
     <Kind>17</Kind>
     <Name>normals.jpg</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>17</Kind>
@@ -241,6 +241,11 @@
 <Widget>
     <Kind>2</Kind>
     <Name>playNoteOff</Name>
+    <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>playAll</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
@@ -261,7 +266,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)SCALE</Name>
-    <Value>16.353332520</Value>
+    <Value>15.700000763</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -276,7 +281,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)ROTATE-X</Name>
-    <Value>-0.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -416,7 +421,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)ROTATE-Z</Name>
-    <Value>-30.000000000</Value>
+    <Value>-30.000003815</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -446,7 +451,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)TRANS-Y</Name>
-    <Value>9.333335876</Value>
+    <Value>17.333328247</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -491,7 +496,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-Y</Name>
-    <Value>-0.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
