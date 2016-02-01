@@ -22,7 +22,8 @@ class vboMeshObj {
     //intances
     struct instance {
         bool isPlaying;
-        bool playAll;
+        bool isTweening;
+        bool playToEnd;
         bool playNoteOff;
         int midiState; // 1=noteOn, 0=noteOff
         int currentSegment;
@@ -215,6 +216,7 @@ class vboMeshObj {
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();
     void randLocalPosition(float _start, float _end, int _durration, int _delay);
+    void resetBufferInstance(int _buffer);
     void clear();
     void bassControl(float &_amp, int _noteLength);
     
