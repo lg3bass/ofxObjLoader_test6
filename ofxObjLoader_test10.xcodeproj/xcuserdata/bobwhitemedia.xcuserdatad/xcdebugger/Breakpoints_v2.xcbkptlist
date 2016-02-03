@@ -10,27 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/vboMeshObj.cpp"
-            timestampString = "475943621.642686"
+            timestampString = "476160056.540673"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
-            landmarkName = "vboMeshObj::update()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "src/vboMeshObj.cpp"
-            timestampString = "475943621.642686"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "898"
-            endingLineNumber = "898"
+            startingLineNumber = "912"
+            endingLineNumber = "912"
             landmarkName = "vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta)"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/vboMeshObj.cpp"
-            timestampString = "475942755.596015"
+            timestampString = "476160056.540673"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "385"
-            endingLineNumber = "385"
+            startingLineNumber = "370"
+            endingLineNumber = "370"
             landmarkName = "vboMeshObj::update()"
             landmarkType = "5">
          </BreakpointContent>

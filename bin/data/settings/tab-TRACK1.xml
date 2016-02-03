@@ -116,7 +116,7 @@
 <Widget>
     <Kind>17</Kind>
     <Name>material2.png</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>17</Kind>
@@ -251,7 +251,7 @@
 <Widget>
     <Kind>42</Kind>
     <Name>FRAME</Name>
-    <Value>15</Value>
+    <Value>20</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -266,7 +266,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)SCALE</Name>
-    <Value>15.700000763</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -316,7 +316,7 @@
 <Widget>
     <Kind>31</Kind>
     <Name>g-rot-z</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -376,7 +376,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)SCALE</Name>
-    <Value>0.153999999</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -421,7 +421,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)ROTATE-Z</Name>
-    <Value>-30.000003815</Value>
+    <Value>29.999992371</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -451,7 +451,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)TRANS-Y</Name>
-    <Value>17.333328247</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -481,7 +481,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-X</Name>
-    <Value>50.399993896</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>

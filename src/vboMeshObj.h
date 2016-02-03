@@ -63,6 +63,8 @@ class vboMeshObj {
         bool mirrored;
         int tweenType;
         bool playNoteOff;
+        string type;
+        int numOfSeg;
                 
         float mirror_distance;
         //int currentSegment;
@@ -136,7 +138,9 @@ class vboMeshObj {
     
     
     ofParameter<string> gui_instanceList;
+    ofParameter<string> gui_isTweeningList;
     ofParameter<string> gui_isPlayingList;
+    ofParameter<string> gui_currentSegment;
 
     
     //OLD - ofParameter ---- REMOVE
@@ -216,7 +220,7 @@ class vboMeshObj {
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();
     void randLocalPosition(float _start, float _end, int _durration, int _delay);
-    void resetBufferInstance(int _buffer);
+    void resetBufferInstance(int _buffer, string _mode);
     void clear();
     void bassControl(float &_amp, int _noteLength);
     

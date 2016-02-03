@@ -236,7 +236,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>MIRROR</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -251,7 +251,7 @@
 <Widget>
     <Kind>42</Kind>
     <Name>FRAME</Name>
-    <Value>148</Value>
+    <Value>270</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -266,7 +266,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)SCALE</Name>
-    <Value>32.360000610</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -316,7 +316,7 @@
 <Widget>
     <Kind>31</Kind>
     <Name>g-rot-z</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -481,7 +481,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-X</Name>
-    <Value>69.599998474</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -496,7 +496,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-Y</Name>
-    <Value>40.800003052</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -511,7 +511,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-Z</Name>
-    <Value>45.599998474</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>

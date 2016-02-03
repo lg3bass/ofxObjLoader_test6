@@ -55,6 +55,15 @@ void ofApp::setup(){
     parameters.setName("settings");
     parameters.add(tracks[1].parameters);
     parameters.add(tracks[2].parameters);
+    parameters.add(tracks[3].parameters);
+    parameters.add(tracks[4].parameters);
+    parameters.add(tracks[5].parameters);
+    parameters.add(tracks[6].parameters);
+    parameters.add(tracks[7].parameters);
+    parameters.add(tracks[8].parameters);
+    parameters.add(tracks[9].parameters);
+    parameters.add(tracks[10].parameters);
+    
     
     gui.setup(parameters);
     //gui.loadFromFile("settings.xml");

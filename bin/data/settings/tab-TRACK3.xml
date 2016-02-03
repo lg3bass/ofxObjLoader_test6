@@ -236,7 +236,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>MIRROR</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -316,7 +316,7 @@
 <Widget>
     <Kind>31</Kind>
     <Name>g-rot-z</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -371,7 +371,7 @@
 <Widget>
     <Kind>42</Kind>
     <Name>(L)COPIES 3</Name>
-    <Value>4</Value>
+    <Value>12</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -421,7 +421,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)ROTATE-Z</Name>
-    <Value>-90.000000000</Value>
+    <Value>29.999992371</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>

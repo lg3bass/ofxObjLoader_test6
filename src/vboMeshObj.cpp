@@ -17,6 +17,8 @@ vboMeshObj::vboMeshObj() {
     params.mirrored = false;
     params.tweenType = 11;
     params.playNoteOff = true;  //this is the noteOn/Off switch. On = play only on NoteOn.  Off = play noteOn THEN noteOff.
+    params.type = "";
+    params.numOfSeg = 1;
     
     params.mirror_distance = 10.0;
     //params.currentSegment = 0;//moved to instances
@@ -50,7 +52,7 @@ vboMeshObj::vboMeshObj() {
     params.gRotateModVal = ofVec3f(0.0,0.0,0.0);
     
     //local
-    params.l_copies = 4;
+    params.l_copies = 12;
     params.lScale = false;
     params.l_scale = 1.0;
     params.lScaleMod = 0.0;
@@ -64,7 +66,7 @@ vboMeshObj::vboMeshObj() {
     params.lRotX = false;
     params.lRotY = false;
     params.lRotY = false;
-    params.l_rotate = ofVec3f(0.0,0.0,-90.0);
+    params.l_rotate = ofVec3f(0.0,0.0,30.0);
     params.lRotateMod = ofVec3f(0.0,0.0,0.0);
     params.lRotateModVal = ofVec3f(0.0,0.0,0.0);
     
@@ -119,37 +121,17 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     
     index = jsonTrackData["index"].asInt();
     
-   
-    
-    
-    parameters.setName("TRACK "+ofToString(index));
-    parameters.add(gui_buffers.set("buffers",params.l_copies));
-    parameters.add(gui_instanceList.set("ID","0,0,0,0,0,0,0,0,0,0,0,0"));
-    parameters.add(gui_isPlayingList.set("PL","0,0,0,0,0,0,0,0,0,0,0,0"));
-    
-    /*
-    parameters.setName("testName");
-    parameters.add(gui_gInstances.set("G instances",1,1,10));
-    parameters.add(gui_gScale.set("G scale",10.0,1.0,50.0));
-    parameters.add(gui_gRotAngle.set("G angle",0.0,-180.0,180.0));
-    parameters.add(gui_gTrans.set("G trans",
-                                 ofVec3f(0.0,0.0,0.0),
-                                 ofVec3f(-100.0,-100.0,-100.0),
-                                 ofVec3f(100.0,100.0,100.0)));
-    parameters.add(gui_lInstances.set("L instances",4,1,10));
-    parameters.add(gui_lRotAngle.set("L angle",-90.0,-180.0,180.0));
-    parameters.add(gui_lTrans.set("L trans",
-                                 ofVec3f(0.0,0.0,0.0),
-                                 ofVec3f(-100.0,-100.0,-100.0),
-                                 ofVec3f(100.0,100.0,100.0)));
-    
-    */
-    
-    //frame = 0;//duplicate in constructor
-    
     setShader(jsonTrackData["matCap-shader"].asString());
     
-    //setup more params
+    
+    //DEBUGGING PARAMS
+    parameters.setName("TRACK "+ofToString(index));
+    parameters.add(gui_buffers.set("buffers",params.l_copies));
+    parameters.add(gui_instanceList.set("noteID","0,0,0,0,0,0,0,0,0,0,0,0"));
+    parameters.add(gui_isTweeningList.set("isTweening","0,0,0,0,0,0,0,0,0,0,0,0"));
+    parameters.add(gui_isPlayingList.set("isPlaying","0,0,0,0,0,0,0,0,0,0,0,0"));
+    parameters.add(gui_currentSegment.set("currentSegment","0,0,0,0,0,0,0,0,0,0,0,0"));
+
     params.cuePoints = parseJSON("objSeq-cues");
     params.durrationPoints = parseJSON("objSeq-durations");
     params.midpointCues = parseJSON("objSeq-midpoint-cues");
@@ -157,6 +139,9 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     
     params.stillFrame = jsonTrackData["objSeq-still"].asInt();
     params.totalFrames = jsonTrackData["objSeq-files"].asInt();
+    
+    params.type = jsonTrackData["objSeq-type"].asString();
+    params.numOfSeg = jsonTrackData["objSeq-numOfSeg"].asInt();
     
     if(jsonTrackData["objSeq-noteEvents"].asString() == "noteOff"){
         params.playNoteOff = true;
@@ -386,13 +371,40 @@ void vboMeshObj::update(){
                                     //If playing noteOn AND noteOff continue.
                                     ofLogNotice("OSC") << i << " - PauseAt(" << instances[i].frame << ")";
                                     
-                                    if(instances[i].midiState == 0){
-                                        resetBufferInstance(i);
-                                    }
+                                    //only play if it's the noteOff side of the message.
+                                    if(instances[i].midiState == 0){//<--set in noteOff
+
+                                        //at what level do you want to reset?
+                                        if(params.type == "one-shot"){
+                                            resetBufferInstance(i,"one-shot");
+                                        } else if (params.type == "sequence"){
+                                            if(instances[i].currentSegment == params.numOfSeg-1){
+                                                resetBufferInstance(i,"one-shot");
+                                            } else {
+                                                resetBufferInstance(i,"sequence");
+                                            }
+                                        } else {
+                                            //nothing in here for now
+                                        }
+                                    }//end if .midiState
                                 
                                 } else {
-                                    //If ONLY playing noteOn then stopping.
-                                    resetBufferInstance(i);
+                                    //ONLY noteOn was triggered.
+                                     //at what level do you want to reset?
+                                    if(params.type == "one-shot"){
+                                        resetBufferInstance(i,"one-shot");
+                                    } else if (params.type == "sequence"){
+                                        if(instances[i].currentSegment == params.numOfSeg-1){
+                                            resetBufferInstance(i,"one-shot");
+                                        } else {
+                                            resetBufferInstance(i,"sequence");
+                                        }
+                                    } else {
+                                        //nothing in here for now
+                                    }
+                                    
+                                    
+                                    
                                 }
                                 
                             }
@@ -418,29 +430,36 @@ void vboMeshObj::update(){
         }
     }//end params.randomized
     
-    
     //sets the button a color when a osc message is recieved.
     setIndicator();
-    
-    
     
     //validate what's playing in ofxGUI
     gui_buffers.set("buffers",params.l_copies);
     
     string instanceList = "";
+    string isTweeningList = "";
     string isPlayingList = "";
+    string currentSegmentList = "";
+
+    
     for(int i=0;i<params.l_copies;i++){
         instanceList += ofToString(instances[i].noteID);
+        isTweeningList += ofToString(instances[i].isTweening);
         isPlayingList += ofToString(instances[i].isPlaying);
+        currentSegmentList += ofToString(instances[i].currentSegment);
 
         if(i < params.l_copies-1){
             instanceList += ",";
+            isTweeningList += ",";
             isPlayingList += ",";
+            currentSegmentList += ",";
         }
     }
    
     gui_instanceList.set(instanceList);
+    gui_isTweeningList.set(isTweeningList);
     gui_isPlayingList.set(isPlayingList);
+    gui_currentSegment.set(currentSegmentList);
 }
 
 //--------------------------------------------------------------
@@ -711,25 +730,29 @@ void vboMeshObj::randLocalPosition(float _start, float _end, int _durration, int
 
 
 //--------------------------------------------------------------
-void vboMeshObj::resetBufferInstance(int _buffer){
+void vboMeshObj::resetBufferInstance(int _buffer, string _mode){
     
-    instances[_buffer].isPlaying = false;
-    instances[_buffer].isTweening = false;
-    instances[_buffer].playToEnd = false;//unused
-    instances[_buffer].playNoteOff = false;//unused
-    instances[_buffer].midiState = 0; // currently playing 1(noteOn), 0(noteOff)
-    instances[_buffer].currentSegment = -1;//or 0
-    instances[_buffer].noteID = 0;
-    instances[_buffer].note = 0;
-    instances[_buffer].vel = 0;
-    instances[_buffer].delta = 0;
-    instances[_buffer].frame = 0;
-    instances[_buffer].startFrame = 0;
-    instances[_buffer].midFrame = 0;
-    instances[_buffer].endFrame = 0;
-    instances[_buffer].direction = 1;
-    instances[_buffer].duration = 0;
-    instances[_buffer].clockedDurration = 0;
+        instances[_buffer].isTweening = false;
+        instances[_buffer].playToEnd = false;//unused
+        instances[_buffer].playNoteOff = false;//unused
+        instances[_buffer].midiState = 0; // currently playing 1(noteOn), 0(noteOff)
+        instances[_buffer].noteID = 0;
+        instances[_buffer].note = 0;
+        instances[_buffer].vel = 0;
+        instances[_buffer].delta = 0;
+        
+        instances[_buffer].startFrame = 0;
+        instances[_buffer].midFrame = 0;
+        instances[_buffer].endFrame = 0;
+        instances[_buffer].direction = 1;
+        instances[_buffer].duration = 0;
+        instances[_buffer].clockedDurration = 0;
+        
+    if (_mode == "one-shot"){
+        instances[_buffer].isPlaying = false;
+        instances[_buffer].currentSegment = -1;//or 0
+        instances[_buffer].frame = 0;
+    }
     
     ofLogVerbose("OSC") << "buffer " << _buffer << " has stopped and reset!";
 }
@@ -743,7 +766,7 @@ void vboMeshObj::clear(){
     
     //reset all the buffers.
     for(int t=0; t<params.l_copies;t++){
-        resetBufferInstance(t);
+        resetBufferInstance(t,"one-shot");
     }
     
     
@@ -895,7 +918,7 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
         loop_end = params.l_copies;
     } else {
         //play next buffer if noting is assigned already. Otherwise pick one at random.
-        if(instances[_buffer].isPlaying){
+        if(instances[_buffer].isTweening){
             //pick a random buffer
             loop_start = bwUtil::getUniqueRandomInt(1, params.l_copies, _buffer);
             ofLogNotice("OSC") << "noteOn-randBuffer:" << loop_start;
@@ -1038,8 +1061,7 @@ void vboMeshObj::noteOff(int _noteId, int _durration){
     
     for(int buffer=loop_start;buffer<loop_end;buffer++){
     //search through all the buffers and find the right one
-            
-            //instances[t].isPlaying = false;
+        
             instances[buffer].clockedDurration = _durration;
             
             instances[buffer].midiState = 0;//midiState = buffer is currently playing noteOn or Off.
@@ -1075,7 +1097,6 @@ void vboMeshObj::tweenPlayInstance(int _buffer, int _tweenType, int _start, int 
                     
                     //PLAY JUST THE SELECTED INSTANCE
                     linearTweens[_buffer].setParameters(11+_buffer,easinglinear, ofxTween::easeOut,_start,_end,_duration,_delay);
-                    //instances[_buffer].isPlaying = true;
                     instances[_buffer].isTweening = true;
                 
                 
