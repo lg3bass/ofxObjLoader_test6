@@ -523,6 +523,13 @@ void ofApp::OSChandler()
             //int idx = m.getArgAsInt32(0);
             tracks[idx].clear();
             
+        } else if (m.getAddress() == "/localCopies"){
+            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << m.getArgAsInt32(1);
+
+            tracks[idx].setLocalCopies(m.getArgAsInt32(1));
+        
+        
         } else if (m.getAddress() == "/bass"){
             //this mesage streams in a amplitude
             //data from an envelop filter in MAX/LIVE

@@ -222,6 +222,7 @@ class vboMeshObj {
     void randLocalPosition(float _start, float _end, int _durration, int _delay);
     void resetBufferInstance(int _buffer, string _mode);
     void clear();
+    void setLocalCopies(int _buffers);
     void bassControl(float &_amp, int _noteLength);
     
     void guiEvent(ofxUIEventArgs &e);

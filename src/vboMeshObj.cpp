@@ -769,7 +769,14 @@ void vboMeshObj::clear(){
         resetBufferInstance(t,"one-shot");
     }
     
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setLocalCopies(int _buffers){
     
+    clear();
+    
+    params.l_copies = _buffers;
     
 }
 
@@ -953,9 +960,6 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
         
         ofLogNotice("OSC") << buffer << " - setNoteId(" << instances[buffer].noteID << ")";
     }
-    
-    
-    
 }
 
 
@@ -1075,8 +1079,6 @@ void vboMeshObj::noteOff(int _noteId, int _durration){
                 ofLogNotice("OSC") << buffer << " - End(" << instances[buffer].noteID << ")";
 
             }
-        
-     
     }
     cout << endl;
 }
@@ -1093,7 +1095,6 @@ void vboMeshObj::tweenPlayInstance(int _buffer, int _tweenType, int _start, int 
                 
                 //move this if noteID out to play().
                 if(instances[_buffer].noteID > 0){
-                    
                     
                     //PLAY JUST THE SELECTED INSTANCE
                     linearTweens[_buffer].setParameters(11+_buffer,easinglinear, ofxTween::easeOut,_start,_end,_duration,_delay);
