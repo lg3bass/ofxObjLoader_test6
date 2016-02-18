@@ -208,9 +208,11 @@ void ofApp::keyPressed(int key){
             //PLAY A SECTION OF THE ANIMATION WHEN A NUMBER KEY IS PRESSED [0-9]
             ofLogNotice("OSC") << "KeyboardLaunch: " << "track:" << ofToString(keyIndex);
             
-            
             tracks[keyIndex].keyPressed(key);//pass the key pressed value
-            tracks[keyIndex].noteOn(tracks[keyIndex].params.instancePlayingId, keyIndex, 60, 127, 500);
+            
+            int VMMnoteID = ofToInt(ofToString(1) + ofToString(60));
+            tracks[keyIndex].noteOn(tracks[keyIndex].params.instancePlayingId, VMMnoteID, 60, 127, 500);
+            tracks[keyIndex].play(tracks[keyIndex].params.instancePlayingId, VMMnoteID, tracks[keyIndex].params.testSpeed, 11);
             tracks[keyIndex].KeyboardLaunch(11, tracks[keyIndex].params.instancePlayingId);
             
             
@@ -445,6 +447,7 @@ void ofApp::OSChandler()
             cout << "----------------------------------------------------------------" << endl;
             //the message sets the buffer, and general data on the notes.
             
+            //VMMnoteID = <string>+<midiNote>;
             int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(2)) + ofToString(m.getArgAsInt32(4)));
             //ofLogNotice("OSC") << "VMMnoteID(ON)------------------------------: " << VMMnoteID;
             

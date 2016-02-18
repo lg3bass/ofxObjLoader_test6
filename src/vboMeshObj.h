@@ -74,6 +74,7 @@ class vboMeshObj {
         vector<int> segmentLengths;
         int stillFrame;
         int totalFrames;
+        int testSpeed;//speed
         
         bool spinX;
         bool spinY;

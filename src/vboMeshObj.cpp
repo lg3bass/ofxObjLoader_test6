@@ -273,7 +273,6 @@ void vboMeshObj::draw(){
             //glRotatef(params.g_rotate.z,0,0,1);
             
             for(int i=0;i<params.l_copies;i++){
-                
                 glPushMatrix();
                 glRotatef(i*params.l_rotate.x+params.lRotateModVal.x,1,0,0);
                 glRotatef(i*params.l_rotate.y+params.lRotateModVal.y,0,1,0);
@@ -314,7 +313,7 @@ void vboMeshObj::draw(){
             }
             
             if(params.mirrored){
-                for(int i=params.l_copies;i>0;i--){
+                for(int i=params.l_copies-1;i>-1;i--){
                     glPushMatrix();
                     glRotatef(i*params.l_rotate.x+params.lRotateModVal.x,1,0,0);
                     glRotatef(i*params.l_rotate.y+params.lRotateModVal.y,0,1,0);
@@ -499,6 +498,14 @@ void vboMeshObj::setupGui(int _index){
     
     gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
    
+    //test button
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    //gui->addLabelToggle("spinZ", &params.spinZ,50,12,0,0,false);
+    gui->addLabelButton("TEST", false,50,20,0,0);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addIntSlider("SPEED", 1, 2000, &params.testSpeed, 250,8,0,0);
+    
+    //loaded.
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addToggle("LOADED", &params.isLoaded);
     
@@ -860,6 +867,19 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         
         ofLogNotice("matcap") << ofToString(dd->getSelectedIndeces());
 
+        
+    } else if(name == "TEST"){
+        ofxUIButton *testbut = (ofxUIButton *) e.widget;
+        if(testbut->getValue()){
+            
+            //increments the buffer in a clockwise fashion.
+            advanceInstance();
+            //int VMMnoteID = ofToInt(ofToString(1) + ofToString(60));
+            noteOn(params.instancePlayingId, 160, 60, 127, 500);
+            play(params.instancePlayingId, 160, params.testSpeed, 11);
+            KeyboardLaunch(11, params.instancePlayingId);
+
+        }
         
     }
     
