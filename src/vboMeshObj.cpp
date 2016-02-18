@@ -769,7 +769,7 @@ void vboMeshObj::clear(){
     //set the frame to 0
 
     params.isPlaying = false;
-    params.instancePlayingId = 0;
+    params.instancePlayingId = -1;
     
     //reset all the buffers.
     for(int t=0; t<params.l_copies;t++){
@@ -874,10 +874,9 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
             
             //increments the buffer in a clockwise fashion.
             advanceInstance();
-            //int VMMnoteID = ofToInt(ofToString(1) + ofToString(60));
             noteOn(params.instancePlayingId, 160, 60, 127, 500);
             play(params.instancePlayingId, 160, params.testSpeed, 11);
-            KeyboardLaunch(11, params.instancePlayingId);
+
 
         }
         
