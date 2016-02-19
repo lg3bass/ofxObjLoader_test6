@@ -19,8 +19,11 @@ class vboMeshObj {
     vector<ofVboMesh> vboMesh1;
     int index;//keep track of what instance you are
     
+
+    
     //intances
     struct instance {
+        bool cued2play;
         bool isPlaying;
         bool isTweening;
         bool playToEnd;
@@ -61,6 +64,9 @@ class vboMeshObj {
         bool oscControlled;
         bool randomized;
         bool mirrored;
+        bool mirrorX;
+        bool mirrorY;
+        bool mirrorZ;
         int tweenType;
         bool playNoteOff;
         string type;

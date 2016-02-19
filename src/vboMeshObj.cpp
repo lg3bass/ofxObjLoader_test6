@@ -15,6 +15,9 @@ vboMeshObj::vboMeshObj() {
     params.oscControlled = true;
     params.randomized = false;
     params.mirrored = false;
+    params.mirrorX = false;
+    params.mirrorY = false;
+    params.mirrorZ = false;
     params.tweenType = 11;
     params.playNoteOff = true;  //this is the noteOn/Off switch. On = play only on NoteOn.  Off = play noteOn THEN noteOff.
     params.type = "";
@@ -24,6 +27,7 @@ vboMeshObj::vboMeshObj() {
     //params.currentSegment = 0;//moved to instances
     params.stillFrame = 0;
     params.totalFrames = 0;
+    params.testSpeed = 500;
     
     params.spin = ofVec3f(0.0,0.0,0.0);
     params.spinRange = ofVec3f(0.0,0.0,0.0);
@@ -321,7 +325,11 @@ void vboMeshObj::draw(){
                     
                     glTranslatef(params.l_trans.x+params.lTransModVal.x, params.l_trans.y+params.lTransModVal.y, params.l_trans.z+params.lTransModVal.z+params.mirror_distance);
                     
-                    glScalef(params.l_scale+params.lScaleModVal,params.l_scale+params.lScaleModVal,-(params.l_scale+params.lScaleModVal));
+                    
+                    glScalef(params.mirrorX ? params.l_scale+params.lScaleModVal : -(params.l_scale+params.lScaleModVal),
+                             params.mirrorY ? params.l_scale+params.lScaleModVal : -(params.l_scale+params.lScaleModVal),
+                             params.mirrorZ ? params.l_scale+params.lScaleModVal : -(params.l_scale+params.lScaleModVal)
+                             );
                     
                     shader.begin();
                     shader.setUniformTexture("tMatCap", matCap, 1);
@@ -502,8 +510,11 @@ void vboMeshObj::setupGui(int _index){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     //gui->addLabelToggle("spinZ", &params.spinZ,50,12,0,0,false);
     gui->addLabelButton("TEST", false,50,20,0,0);
+    
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addIntSlider("SPEED", 1, 2000, &params.testSpeed, 250,8,0,0);
+    gui->addLabelButton("CLEAR", false,50,20,0,0);
+    gui->addLabelButton("RANDOM", false,50,20,0,0);
+    gui->addIntSlider("SPEED", 1, 2000, &params.testSpeed, 150,8,0,0);
     
     //loaded.
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
@@ -513,8 +524,18 @@ void vboMeshObj::setupGui(int _index){
     
     gui->addToggle("STILL", &params.still);
     
-    gui->addToggle("OSC", &params.oscControlled);
+    gui->addToggle("OSC", &params.oscControlled);//not sure if this is useful anymore.
     gui->addToggle("MIRROR", &params.mirrored);
+    
+    
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    gui->addLabelToggle("mirror x", &params.mirrorX,75,12,0,0,false);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addLabelToggle("mirror y", &params.mirrorY,75,12,0,0,false);
+    gui->addLabelToggle("mirror z", &params.mirrorZ,75,12,0,0,false);
+    
+
+    
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addToggle("playNoteOff", &params.playNoteOff);
@@ -880,6 +901,17 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
 
         }
         
+    } else if(name == "CLEAR"){
+        ofxUIButton *clearbut = (ofxUIButton *) e.widget;
+        if(clearbut->getValue()){
+            clear();
+            
+        }
+    } else if(name == "RANDOM"){
+        ofxUIButton *randbut = (ofxUIButton *) e.widget;
+        if(randbut->getValue()){
+            randLocalPosition(-15,15,600,400);
+        }
     }
     
 
@@ -939,9 +971,13 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
     int loop_start = 0;
     int loop_end = 0;
     
+    
+    //play based on modes (playAll, playSingle, playBi-polar, playTri-polar)
     if(params.playAll){
+        
         loop_start = 0;
         loop_end = params.l_copies;
+        
     } else {
         //play next buffer if noting is assigned already. Otherwise pick one at random.
         if(instances[_buffer].isTweening){
@@ -952,8 +988,30 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
             //set the intial designated buffer
             loop_start = _buffer;
         }
-        loop_end = loop_start+1;
+        loop_end = loop_start+1;//play on the single buffer
     }
+    
+    
+    
+    
+    int slices = 2;
+    int factor = params.l_copies/slices;
+    
+    cout << "sliced_buffer(0):" << ofToString(_buffer) << "-START" << endl;
+    
+    for(int d=1;d<slices;d++){
+        
+        int raw_calc_buf = (factor*d)+_buffer;
+        int mod_calc_buf;
+        
+        raw_calc_buf > params.l_copies ? mod_calc_buf = raw_calc_buf-params.l_copies : mod_calc_buf = raw_calc_buf;
+        
+        cout << "sliced_buffer(" << ofToString(d) << "):" << ofToString(mod_calc_buf) << endl;
+        
+    }
+    
+    
+    
     
     
     
@@ -993,7 +1051,6 @@ void vboMeshObj::play(int _buffer, int _noteId, int _duration, int _tweenType){
     //set the markers per instance(start,mid,end)
     unsigned startFrame = 0;
     unsigned endFrame = 0;
-    unsigned duration = 0;//not used
     unsigned delay = 0;//not used
 
     
@@ -1027,7 +1084,8 @@ void vboMeshObj::play(int _buffer, int _noteId, int _duration, int _tweenType){
     }
 
     for(int buffer=loop_start;buffer<loop_end;buffer++){
-        //setup the tween
+        
+        //setup the tween by figuring out the start and end points.
         if(params.playNoteOff){
             //Note On > Note Off
             if(instances[buffer].midiState == 1){
@@ -1057,7 +1115,7 @@ void vboMeshObj::play(int _buffer, int _noteId, int _duration, int _tweenType){
         //setup the Tween
         tweenPlayInstance(buffer, params.tweenType, startFrame, endFrame, instances[buffer].duration, delay);
     
-    }
+    }//end for
     
 }
 
