@@ -184,6 +184,19 @@ void ofApp::keyPressed(int key){
                     cout << "Control Pressed" << endl;
                     ctrlKey = true;
                     break;
+                case OF_KEY_RIGHT_ALT:
+                    cout << "Right Alt/Opt Pressed" << endl;
+                    rAltKey = true;
+                    break;
+                case OF_KEY_RIGHT_SHIFT:
+                    cout << "Right Shift Pressed" << endl;
+                    rShiftKey = true;
+                    break;
+                case OF_KEY_LEFT_ALT:
+                    cout << "Left Alt/Opt Pressed" << endl;
+                    lAltKey = true;
+                    break;
+                    
             }
         }
     } else {
@@ -302,6 +315,18 @@ void ofApp::keyReleased(int key){
                 case OF_KEY_CONTROL:
                     cout << "Control Released" << endl;
                     ctrlKey = false;
+                    break;
+                case OF_KEY_RIGHT_ALT:
+                    cout << "Right Alt/Opt Released" << endl;
+                    rAltKey = false;
+                    break;
+                case OF_KEY_LEFT_ALT:
+                    cout << "Left Alt/Opt Released" << endl;
+                    lAltKey = false;
+                    break;
+                case OF_KEY_RIGHT_SHIFT:
+                    cout << "Right Shift Released" << endl;
+                    rShiftKey = false;
                     break;
             }
         }

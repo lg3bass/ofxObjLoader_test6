@@ -60,6 +60,9 @@ class ofApp : public ofBaseApp{
         //modifier keys
         bool modkey;
         bool ctrlKey;
+        bool rAltKey;
+        bool lAltKey;
+        bool rShiftKey;
 
         //1. get paths to the obj files.
         objFileLoader appFileLoader;

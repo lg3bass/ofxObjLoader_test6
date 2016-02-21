@@ -111,6 +111,7 @@ class vboMeshObj {
         
         //local
         int l_copies;
+        int l_slices;
         bool lScale;
         float l_scale;
         float lScaleMod;
