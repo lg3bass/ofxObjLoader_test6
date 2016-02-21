@@ -143,6 +143,7 @@ class vboMeshObj {
     
     ofParameterGroup parameters;
     ofParameter<int> gui_buffers;
+    ofParameter<int> gui_instancePlayingId;
     
     
     ofParameter<string> gui_instanceList;
@@ -223,7 +224,7 @@ class vboMeshObj {
     void setShader(string _shader);
     void draw();
     void update();
-    void KeyboardLaunch(int _tweenType, int _instanceId);
+    void KeyboardLaunch(int _string, int _note, int _tweenType, int _instanceId, bool _noteOff = false);
     void setupGui(int _index);
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();

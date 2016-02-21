@@ -137,6 +137,7 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     parameters.add(gui_isTweeningList.set("isTweening","0,0,0,0,0,0,0,0,0,0,0,0"));
     parameters.add(gui_isPlayingList.set("isPlaying","0,0,0,0,0,0,0,0,0,0,0,0"));
     parameters.add(gui_currentSegment.set("currentSegment","0,0,0,0,0,0,0,0,0,0,0,0"));
+    parameters.add(gui_instancePlayingId.set("instancePlayingId",params.instancePlayingId));
 
     params.cuePoints = parseJSON("objSeq-cues");
     params.durrationPoints = parseJSON("objSeq-durations");
@@ -444,6 +445,7 @@ void vboMeshObj::update(){
     
     //validate what's playing in ofxGUI
     gui_buffers.set("buffers",params.l_copies);
+    gui_instancePlayingId.set("instancePlayingId",params.instancePlayingId);
     
     string instanceList = "";
     string isTweeningList = "";
@@ -472,13 +474,19 @@ void vboMeshObj::update(){
 }
 
 //--------------------------------------------------------------
-void vboMeshObj::KeyboardLaunch(int _tweenType, int _instanceId){
+void vboMeshObj::KeyboardLaunch(int _string, int _note, int _tweenType, int _instanceId, bool _noteOff){
     
-    //temp out
-    //play(_instanceId, params.durrationPoints[instances[_instanceId].currentSegment], _tweenType);
+    int VMMnoteID = ofToInt(ofToString(_string) + ofToString(_note));
     
-    //increments the buffer instance to play clockwise.
-    advanceSegment(_instanceId);
+    
+    advanceInstance();
+    
+    noteOn(params.instancePlayingId, VMMnoteID, _note, 127, 500);
+    play(params.instancePlayingId, VMMnoteID, params.testSpeed, 11);
+    
+    if(_noteOff){
+        cout << "play /noteOff" << endl;
+    }
     
 }
 
@@ -898,10 +906,15 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         ofxUIButton *testbut = (ofxUIButton *) e.widget;
         if(testbut->getValue()){
             
+            //launch a test
+            KeyboardLaunch(1, 60, 11, params.instancePlayingId, true);
+            
+            
+            //DELETE ME
             //increments the buffer in a clockwise fashion.
-            advanceInstance();
-            noteOn(params.instancePlayingId, 160, 60, 127, 500);
-            play(params.instancePlayingId, 160, params.testSpeed, 11);
+            //advanceInstance();
+            //noteOn(params.instancePlayingId, 160, 60, 127, 500);
+            //play(params.instancePlayingId, 160, params.testSpeed, 11);
 
 
         }
@@ -928,7 +941,7 @@ void vboMeshObj::keyPressed(int key)
 {
     
     //increments the buffer in a clockwise fashion.
-    advanceInstance();
+    //advanceInstance();
     
     //revisit how the osc controller button is supposed to work.
     if(!params.oscControlled){

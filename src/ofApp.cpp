@@ -50,7 +50,8 @@ void ofApp::setup(){
     for(int t=1; t<NUM_TRACKS;t++){
         tracks[t].setup(appFileLoader.externalObjFiles[t]);
     }
-
+    
+    
     //Setup GLOBAL ofGui
     parameters.setName("settings");
     parameters.add(tracks[1].parameters);
@@ -68,13 +69,17 @@ void ofApp::setup(){
     gui.setup(parameters);
     //gui.loadFromFile("settings.xml");
     
-    gui.setSize(500, 500);
-    gui.setDefaultWidth(500);
-    gui.setPosition(800,50);
+    gui.setPosition(900,0);
+    gui.minimizeAll();
+    //gui.setWidthElements(400);
+    
+    //gui.setSize(800, 100);
+    //gui.setDefaultWidth(400);
+
 
     minimized = true;
     
-    gui.minimizeAll();
+    
 }
 
 //--------------------------------------------------------------
@@ -94,6 +99,8 @@ void ofApp::update(){
     
     //process ALL incoming OSC
     OSChandler();
+    
+    
 
 }
 
@@ -186,10 +193,14 @@ void ofApp::keyPressed(int key){
                     break;
                 case OF_KEY_RIGHT_ALT:
                     cout << "Right Alt/Opt Pressed" << endl;
+                    cout << "track:" << ofToString(selectedTrack) << endl;
+                    tracks[selectedTrack].KeyboardLaunch(1, 60, 11, tracks[selectedTrack].params.instancePlayingId);
                     rAltKey = true;
                     break;
                 case OF_KEY_RIGHT_SHIFT:
                     cout << "Right Shift Pressed" << endl;
+                    cout << "track:" << ofToString(selectedTrack) << endl;
+                    tracks[selectedTrack].KeyboardLaunch(2, 60, 11, tracks[selectedTrack].params.instancePlayingId);
                     rShiftKey = true;
                     break;
                 case OF_KEY_LEFT_ALT:
@@ -223,10 +234,13 @@ void ofApp::keyPressed(int key){
             
             tracks[keyIndex].keyPressed(key);//pass the key pressed value
             
-            int VMMnoteID = ofToInt(ofToString(1) + ofToString(60));
-            tracks[keyIndex].noteOn(tracks[keyIndex].params.instancePlayingId, VMMnoteID, 60, 127, 500);
-            tracks[keyIndex].play(tracks[keyIndex].params.instancePlayingId, VMMnoteID, tracks[keyIndex].params.testSpeed, 11);
-            tracks[keyIndex].KeyboardLaunch(11, tracks[keyIndex].params.instancePlayingId);
+            tracks[keyIndex].KeyboardLaunch(1, 60, 11, tracks[keyIndex].params.instancePlayingId, false);
+            
+            //OLD-TBD
+            //int VMMnoteID = ofToInt(ofToString(1) + ofToString(60));
+            //tracks[keyIndex].noteOn(tracks[keyIndex].params.instancePlayingId, VMMnoteID, 60, 127, 500);
+            //tracks[keyIndex].play(tracks[keyIndex].params.instancePlayingId, VMMnoteID, tracks[keyIndex].params.testSpeed, 11);
+            //tracks[keyIndex].KeyboardLaunch(11, tracks[keyIndex].params.instancePlayingId);
             
             
             if(modkey){
@@ -235,7 +249,7 @@ void ofApp::keyPressed(int key){
             }
             if(ctrlKey){
                 tracks[keyIndex].clear();
-                //tracks[keyIndex].KeyboardLaunch(11, -1);
+                
             }
         }//end if keyIndex
 
@@ -426,6 +440,8 @@ void ofApp::guiTabEvent(ofxUIEventArgs &e)
     e.widget->setColorFill(ofColor::yellow);
     
     selectedTrack = currentSelectedTrack(name);
+    
+    //cout << "selected track: " << ofToString(selectedTrack) << endl;
 
 }
 
