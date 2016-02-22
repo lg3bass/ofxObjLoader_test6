@@ -108,6 +108,8 @@ void ofApp::update(){
 void ofApp::draw(){
     ofSetWindowTitle("fps: "+ofToString(ofGetFrameRate())+" - "+ofToString(ofGetWidth())+","+ofToString(ofGetHeight())+"easyCam:"+ofToString(modkey));
 
+    ofDrawBitmapString("SELECTED TRACK: "+ofToString(selectedTrack), 1200,10);
+    
     
     //SYPHON
     // Clear with alpha, so we can capture via syphon and composite elsewhere should we want.
@@ -146,7 +148,8 @@ void ofApp::draw(){
     //----------------------------------------
     gui.draw();
     
-  
+    ofSetColor(255,255,255);
+    ofDrawBitmapString("SELECTED: "+ofToString(selectedTrack), 1100,10);
 }
 
 //--------------------------------------------------------------

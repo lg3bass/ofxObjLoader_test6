@@ -74,7 +74,12 @@ class ofApp : public ofBaseApp{
         //MASTER LIGHT
         ofLight light0;
     
-        //GUI
+        //GUI(MATCAP)
+        //ofxPanel matcapGui;
+        //bool matcapGui_minimized;
+    
+    
+        //GUI(DEBUG)
         ofxPanel gui;
         bool minimized;
         ofParameterGroup parameters;

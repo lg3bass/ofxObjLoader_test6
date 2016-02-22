@@ -930,6 +930,17 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         if(randbut->getValue()){
             randLocalPosition(-15,15,600,400);
         }
+    } else if(name == "(L)COPIES " + ofToString(index)){
+        ofxUIIntSlider *lcopies = (ofxUIIntSlider *) e.widget;
+        //set the z angle to correlate to the number of slices
+        
+        float sliceAngle = 360.0/lcopies->getValue();
+        params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);
+        
+        //cout << "(L)COPIES dist angel:" << ofToString(sliceAngle) << endl;
+        
+        
+        
     }
     
 
