@@ -194,14 +194,15 @@ void ofApp::keyPressed(int key){
                 case OF_KEY_RIGHT_ALT:
                     cout << "Right Alt/Opt Pressed" << endl;
                     cout << "track:" << ofToString(selectedTrack) << endl;
-                    tracks[selectedTrack].KeyboardLaunch(1, 60, 11, tracks[selectedTrack].params.instancePlayingId);
                     rAltKey = true;
+                    tracks[selectedTrack].KeyboardLaunch(1, 60, 11, tracks[selectedTrack].params.instancePlayingId, true);
+
                     break;
                 case OF_KEY_RIGHT_SHIFT:
                     cout << "Right Shift Pressed" << endl;
                     cout << "track:" << ofToString(selectedTrack) << endl;
-                    tracks[selectedTrack].KeyboardLaunch(2, 60, 11, tracks[selectedTrack].params.instancePlayingId);
                     rShiftKey = true;
+                    tracks[selectedTrack].KeyboardLaunch(2, 62, 11, tracks[selectedTrack].params.instancePlayingId, true);
                     break;
                 case OF_KEY_LEFT_ALT:
                     cout << "Left Alt/Opt Pressed" << endl;
@@ -333,15 +334,19 @@ void ofApp::keyReleased(int key){
                 case OF_KEY_RIGHT_ALT:
                     cout << "Right Alt/Opt Released" << endl;
                     rAltKey = false;
+                    //tracks[selectedTrack].KeyboardLaunch(1, 60, 11, tracks[selectedTrack].params.instancePlayingId, true);
+                    tracks[selectedTrack].noteOff(160, 500);
+                    break;
+                case OF_KEY_RIGHT_SHIFT:
+                    cout << "Right Shift Released" << endl;
+                    rShiftKey = false;
+                    tracks[selectedTrack].noteOff(262, 500);
                     break;
                 case OF_KEY_LEFT_ALT:
                     cout << "Left Alt/Opt Released" << endl;
                     lAltKey = false;
                     break;
-                case OF_KEY_RIGHT_SHIFT:
-                    cout << "Right Shift Released" << endl;
-                    rShiftKey = false;
-                    break;
+                
             }
         }
     } else {
