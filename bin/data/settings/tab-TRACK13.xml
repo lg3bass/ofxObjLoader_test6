@@ -219,6 +219,11 @@
     <Value>0</Value>
 </Widget>
 <Widget>
+    <Kind>42</Kind>
+    <Name>SPEED</Name>
+    <Value>500</Value>
+</Widget>
+<Widget>
     <Kind>2</Kind>
     <Name>LOADED</Name>
     <Value>0</Value>
@@ -236,6 +241,21 @@
 <Widget>
     <Kind>2</Kind>
     <Name>MIRROR</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>17</Kind>
+    <Name>mirror x</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>17</Kind>
+    <Name>mirror y</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>17</Kind>
+    <Name>mirror z</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
@@ -316,7 +336,7 @@
 <Widget>
     <Kind>31</Kind>
     <Name>g-rot-z</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -372,6 +392,11 @@
     <Kind>42</Kind>
     <Name>(L)COPIES 13</Name>
     <Value>12</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>slices 13</Name>
+    <Value>2</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

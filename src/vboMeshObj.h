@@ -145,7 +145,7 @@ class vboMeshObj {
     ofParameter<int> gui_buffers;
     ofParameter<int> gui_instancePlayingId;
     
-    
+    ofParameter<string> gui_cued2PlayList;
     ofParameter<string> gui_instanceList;
     ofParameter<string> gui_isTweeningList;
     ofParameter<string> gui_isPlayingList;

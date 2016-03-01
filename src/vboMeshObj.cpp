@@ -133,6 +133,7 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     //DEBUGGING PARAMS
     parameters.setName("TRACK "+ofToString(index));
     parameters.add(gui_buffers.set("buffers",params.l_copies));
+    parameters.add(gui_cued2PlayList.set("cue","0,0,0,0,0,0,0,0,0,0,0,0"));
     parameters.add(gui_instanceList.set("noteID","0,0,0,0,0,0,0,0,0,0,0,0"));
     parameters.add(gui_isTweeningList.set("isTweening","0,0,0,0,0,0,0,0,0,0,0,0"));
     parameters.add(gui_isPlayingList.set("isPlaying","0,0,0,0,0,0,0,0,0,0,0,0"));
@@ -447,6 +448,7 @@ void vboMeshObj::update(){
     gui_buffers.set("buffers",params.l_copies);
     gui_instancePlayingId.set("instancePlayingId",params.instancePlayingId);
     
+    string cued2playList = "";
     string instanceList = "";
     string isTweeningList = "";
     string isPlayingList = "";
@@ -454,12 +456,14 @@ void vboMeshObj::update(){
 
     
     for(int i=0;i<params.l_copies;i++){
+        cued2playList += ofToString(instances[i].cued2play);
         instanceList += ofToString(instances[i].noteID);
         isTweeningList += ofToString(instances[i].isTweening);
         isPlayingList += ofToString(instances[i].isPlaying);
         currentSegmentList += ofToString(instances[i].currentSegment);
 
         if(i < params.l_copies-1){
+            cued2playList += ",";
             instanceList += ",";
             isTweeningList += ",";
             isPlayingList += ",";
@@ -467,6 +471,7 @@ void vboMeshObj::update(){
         }
     }
    
+    gui_cued2PlayList.set(cued2playList);
     gui_instanceList.set(instanceList);
     gui_isTweeningList.set(isTweeningList);
     gui_isPlayingList.set(isPlayingList);
@@ -1064,28 +1069,36 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
     for(int buffer=0;buffer<params.l_copies;buffer++){
         
         if(instances[buffer].cued2play){//only if the buffer is marked.
-            if(!instances[buffer].isTweening){
+            if(instances[buffer].isTweening){
             
-            //loop through all the buffers and setup note ids.
-            //increment the cue/segment.
-            advanceSegment(buffer);
-            
-            //noteId comes from Max and is a unique identifier per instance.
-            //set the instance params.
-            //instances[buffer].isPlaying = true;
-            instances[buffer].midiState = 1;
-            instances[buffer].noteID = _noteId;
-            instances[buffer].note = _note;
-            instances[buffer].vel = _velocity;
-            instances[buffer].delta = _delta;
-            
-            //set the cuepoint data based on instances[].currentSegment
-            instances[buffer].startFrame = params.cuePoints[instances[buffer].currentSegment] - params.segmentLengths[instances[buffer].currentSegment];
-            instances[buffer].midFrame = params.midpointCues[instances[buffer].currentSegment];
-            instances[buffer].endFrame = params.cuePoints[instances[buffer].currentSegment];
-            
-            ofLogNotice("OSC") << buffer << " - setNoteId(" << instances[buffer].noteID << ")";
-            }//if !isPlaying
+                
+            } else {
+                
+                if(instances[buffer].noteID == 0){
+                    //loop through all the buffers and setup note ids.
+                    //increment the cue/segment.
+                    advanceSegment(buffer);
+                    
+                    //noteId comes from Max and is a unique identifier per instance.
+                    //set the instance params.
+                    //instances[buffer].isPlaying = true;
+                    instances[buffer].midiState = 1;
+                    instances[buffer].noteID = _noteId;
+                    instances[buffer].note = _note;
+                    instances[buffer].vel = _velocity;
+                    instances[buffer].delta = _delta;
+                    
+                    //set the cuepoint data based on instances[].currentSegment
+                    instances[buffer].startFrame = params.cuePoints[instances[buffer].currentSegment] - params.segmentLengths[instances[buffer].currentSegment];
+                    instances[buffer].midFrame = params.midpointCues[instances[buffer].currentSegment];
+                    instances[buffer].endFrame = params.cuePoints[instances[buffer].currentSegment];
+                    
+                    ofLogNotice("OSC") << buffer << " - setNoteId(" << instances[buffer].noteID << ")";
+                    
+                    
+                }
+
+            }//if !isTweening
         }//if cued2play
     }//for
 }
@@ -1094,7 +1107,7 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
 
 //--------------------------------------------------------------
 void vboMeshObj::play(int _buffer, int _noteId, int _duration, int _tweenType){
-
+    
     
     //set the tween type
     params.tweenType = _tweenType;
@@ -1142,38 +1155,39 @@ void vboMeshObj::play(int _buffer, int _noteId, int _duration, int _tweenType){
        
         if(instances[buffer].cued2play){//only if the buffer is marked.
             if(!instances[buffer].isTweening){
-                //setup the tween by figuring out the start and end points.
-                if(params.playNoteOff){
-                    //Note On > Note Off
-                    if(instances[buffer].midiState == 1){
-                        //START > MID the PAUSE
-                        startFrame = instances[buffer].startFrame;
-                        endFrame = instances[buffer].midFrame;
-                        
+                if(instances[buffer].noteID == _noteId){
+                    //setup the tween by figuring out the start and end points.
+                    if(params.playNoteOff){
+                        //Note On > Note Off
+                        if(instances[buffer].midiState == 1){
+                            //START > MID the PAUSE
+                            startFrame = instances[buffer].startFrame;
+                            endFrame = instances[buffer].midFrame;
+                            
+                        } else {
+                            //MID > END then STOP
+                            startFrame = instances[buffer].midFrame;
+                            endFrame = instances[buffer].endFrame;
+                            
+                        }
                     } else {
-                        //MID > END then STOP
-                        startFrame = instances[buffer].midFrame;
+                        //Note On
+                        //play start-end and stop
+                        startFrame = instances[buffer].startFrame;
                         endFrame = instances[buffer].endFrame;
                         
                     }
-                } else {
-                    //Note On
-                    //play start-end and stop
-                    startFrame = instances[buffer].startFrame;
-                    endFrame = instances[buffer].endFrame;
                     
-                }
+                    //remember the duration
+                    instances[buffer].duration = _duration;
+                    
+                    ofLogNotice("OSC") << buffer << " - Play(" << startFrame << "-" << endFrame << ") - " << instances[buffer].duration;
+                    
+                    //setup the Tween
+                    tweenPlayInstance(buffer, params.tweenType, startFrame, endFrame, instances[buffer].duration, delay);
                 
-                //remember the duration
-                instances[buffer].duration = _duration;
-                
-                ofLogNotice("OSC") << buffer << " - Play(" << startFrame << "-" << endFrame << ") - " << instances[buffer].duration;
-                
-                //setup the Tween
-                tweenPlayInstance(buffer, params.tweenType, startFrame, endFrame, instances[buffer].duration, delay);
-            
-                instances[buffer].isPlaying = true;
-            
+                    instances[buffer].isPlaying = true;
+                }//noteID > 0
             }//!.isPlaying
         }//.cued2play
     
@@ -1213,9 +1227,19 @@ void vboMeshObj::noteOff(int _noteId, int _durration){
                 //play only the note off.
                 //play(buffer,_noteId,500,params.tweenType);
                 
-                tweenPlayInstance(buffer, params.tweenType, instances[buffer].midFrame, instances[buffer].endFrame, instances[buffer].duration, 0);
+                if(instances[buffer].isTweening){
+                    //tweenPlayInstance(buffer, params.tweenType, instances[buffer].frame, instances[buffer].startFrame, instances[buffer].duration, 0);
+                    ofLogNotice("OSC") << buffer << " - Frame(" << instances[buffer].frame << ")";
+                    resetBufferInstance(buffer, "sequence");
+                    instances[buffer].frame = instances[buffer].startFrame;
+                } else {
+                    tweenPlayInstance(buffer, params.tweenType, instances[buffer].midFrame, instances[buffer].endFrame, instances[buffer].duration, 0);
+                    ofLogNotice("OSC") << buffer << " - End(" << instances[buffer].noteID << ")";
+                }
                 
-                ofLogNotice("OSC") << buffer << " - End(" << instances[buffer].noteID << ")";
+                
+                
+                //ofLogNotice("OSC") << buffer << " - End(" << instances[buffer].noteID << ")";
 
                 
             }
@@ -1245,6 +1269,8 @@ void vboMeshObj::tweenPlayInstance(int _buffer, int _tweenType, int _start, int 
                 } else {
                     cout << "noteID not set!" << endl;
                 }
+                
+            } else {
                 
             }
             break;

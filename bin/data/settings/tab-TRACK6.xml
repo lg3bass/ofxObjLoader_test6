@@ -146,7 +146,7 @@
 <Widget>
     <Kind>17</Kind>
     <Name>normals.jpg</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>17</Kind>
@@ -219,9 +219,14 @@
     <Value>0</Value>
 </Widget>
 <Widget>
+    <Kind>42</Kind>
+    <Name>SPEED</Name>
+    <Value>500</Value>
+</Widget>
+<Widget>
     <Kind>2</Kind>
     <Name>LOADED</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -236,12 +241,27 @@
 <Widget>
     <Kind>2</Kind>
     <Name>MIRROR</Name>
+    <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>17</Kind>
+    <Name>mirror x</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>17</Kind>
+    <Name>mirror y</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>17</Kind>
+    <Name>mirror z</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>playNoteOff</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -251,12 +271,12 @@
 <Widget>
     <Kind>42</Kind>
     <Name>FRAME</Name>
-    <Value>30</Value>
+    <Value>131</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>MIRROR</Name>
-    <Value>10.000000000</Value>
+    <Value>-40.000000000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -266,7 +286,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)SCALE</Name>
-    <Value>10.000000000</Value>
+    <Value>1.326666713</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -316,7 +336,7 @@
 <Widget>
     <Kind>31</Kind>
     <Name>g-rot-z</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -374,9 +394,14 @@
     <Value>12</Value>
 </Widget>
 <Widget>
+    <Kind>42</Kind>
+    <Name>slices 6</Name>
+    <Value>2</Value>
+</Widget>
+<Widget>
     <Kind>4</Kind>
     <Name>(L)SCALE</Name>
-    <Value>1.000000000</Value>
+    <Value>0.670000017</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -466,7 +491,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)TRANS-Z</Name>
-    <Value>0.000000000</Value>
+    <Value>100.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -496,7 +521,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-Y</Name>
-    <Value>0.000000000</Value>
+    <Value>141.599990845</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
