@@ -13,7 +13,7 @@
 #include "bwUtil.h"
 
 
-#define NUM_TRACKS 20
+#define NUM_TRACKS 21
 #define PORT 7000
 
 class ofApp : public ofBaseApp{
@@ -39,7 +39,8 @@ class ofApp : public ofBaseApp{
             EXTRUDETRI = 16,
             EXTRUDESTAR = 17,
             EXTRUDEBALL = 18,
-            DIAMONDLAYERS = 19
+            DIAMONDLAYERS = 19,
+            RIPTIDETEST = 20
         };
     
         //JSON
