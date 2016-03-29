@@ -1029,7 +1029,7 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
     //new setup - mark the items to play.
     //int factor = params.l_copies/params.l_slices;
     
-    cout << "instances[buffer].cued2play: " << ofToString(_buffer) << "-START" << endl;
+    ofLogNotice("OSC") << "instances[buffer].cued2play: " << ofToString(_buffer) << "-START";
     
     //int mod_noteId = _noteId;
     
@@ -1037,13 +1037,13 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
         
         for(int g=0;g<params.l_copies;g++){
             instances[g].cued2play = true;
-            cout << "instances[" << ofToString(g) << "].cued2play" << endl;
+            ofLogNotice("OSC") << "instances[" << ofToString(g) << "].cued2play";
         }
         
     } else {
         
         instances[_buffer].cued2play = true;
-        cout << "instances[" << ofToString(_buffer) << "].cued2play" << "-START" << endl;
+        ofLogNotice("OSC") << "instances[" << ofToString(_buffer) << "].cued2play" << "-START";
         
         for(int d=1;d<params.l_slices;d++){
             
@@ -1056,7 +1056,7 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
                 mod_calc_buf=0;
             }
             instances[mod_calc_buf].cued2play = true;
-            cout << "instances[" << ofToString(mod_calc_buf) << "].cued2play(" << ofToString(raw_calc_buf) << ")" << endl;
+            ofLogNotice("OSC") << "instances[" << ofToString(mod_calc_buf) << "].cued2play(" << ofToString(raw_calc_buf) << ")";
             
             //mod_noteId = ofToInt(ofToString(_noteId)+ofToString(d));
             
@@ -1269,7 +1269,7 @@ void vboMeshObj::tweenPlayInstance(int _buffer, int _tweenType, int _start, int 
                 
                 
                 } else {
-                    cout << "noteID not set!" << endl;
+                    ofLogNotice("OSC") << "noteID not set!";
                 }
                 
             } else {
