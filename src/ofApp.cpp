@@ -527,13 +527,13 @@ void ofApp::OSChandler()
             ", string:" << m.getArgAsInt32(2) <<
             ", noteId:" << m.getArgAsInt32(3) <<
             ", midiNote:" << m.getArgAsInt32(4) <<
-            ", cue:" << m.getArgAsInt32(5) <<
-            ", duration:" << m.getArgAsInt32(6) <<
+            ", duration:" << m.getArgAsInt32(5) <<
+            ", cue:" << m.getArgAsInt32(6) <<
             ", tween:" << m.getArgAsInt32(7) <<
             "]";
             
             //play(int _buffer, int _duration, int _tweenType)
-            tracks[idx].play(m.getArgAsInt32(1), VMMnoteID, m.getArgAsInt32(6), m.getArgAsInt32(7));
+            tracks[idx].play(m.getArgAsInt32(1), VMMnoteID, m.getArgAsInt32(5), m.getArgAsInt32(7));
             
         } else if (m.getAddress() == "/noteOff"){
             
