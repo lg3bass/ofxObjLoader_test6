@@ -232,6 +232,7 @@ class vboMeshObj {
     void resetBufferInstance(int _buffer, string _mode);
     void clear();
     void setLocalCopies(int _buffers);
+    void setObjectRotate(float _rotX, float _rotY, float _rotZ);
     void bassControl(float &_amp, int _noteLength);
     
     void guiEvent(ofxUIEventArgs &e);

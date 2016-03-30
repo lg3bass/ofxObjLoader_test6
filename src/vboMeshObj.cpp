@@ -827,6 +827,14 @@ void vboMeshObj::setLocalCopies(int _buffers){
 }
 
 //--------------------------------------------------------------
+void vboMeshObj::setObjectRotate(float _rotX, float _rotY, float _rotZ){
+    
+    params.o_rotate = ofVec3f(_rotX,_rotY,_rotZ);
+    
+    
+}
+
+//--------------------------------------------------------------
 void vboMeshObj::bassControl(float &_amp, int _noteLength){
     
     

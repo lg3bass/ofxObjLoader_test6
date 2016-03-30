@@ -616,6 +616,10 @@ void ofApp::OSChandler()
                 if(tracks[t].params.isLoaded){tracks[t].bassControl(amplitude, noteLength);}
             }
     
+        } else if (m.getAddress() == "/oRotate") {
+            
+            tracks[idx].setObjectRotate(m.getArgAsFloat(1), m.getArgAsFloat(2), m.getArgAsFloat(3));
+            
         }
     }//end while
 }
