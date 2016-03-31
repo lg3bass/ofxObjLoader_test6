@@ -576,12 +576,29 @@ void ofApp::OSChandler()
             tracks[idx].clear();
             
         } else if (m.getAddress() == "/localCopies"){
-            
-            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << m.getArgAsInt32(1);
-
+            //ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << m.getArgAsInt32(1);
             tracks[idx].setLocalCopies(m.getArgAsInt32(1));
         
-        
+        } else if (m.getAddress() == "/localSlices"){
+            
+            tracks[idx].setLocalSlices(m.getArgAsInt32(1));
+            
+        } else if (m.getAddress() == "/localScale"){
+            
+            tracks[idx].setLocalScale(m.getArgAsInt32(1));
+            
+        } else if (m.getAddress() == "/localRotate"){
+            
+            tracks[idx].setLocalRotate(m.getArgAsFloat(1), m.getArgAsFloat(2), m.getArgAsFloat(3));
+            
+        } else if (m.getAddress() == "/localTrans"){
+            
+            tracks[idx].setLocalTranslate(m.getArgAsFloat(1), m.getArgAsFloat(2), m.getArgAsFloat(3));
+            
+        } else if (m.getAddress() == "/objectRotate") {
+            
+            tracks[idx].setObjectRotate(m.getArgAsFloat(1), m.getArgAsFloat(2), m.getArgAsFloat(3));
+            
         } else if (m.getAddress() == "/bass"){
             //this mesage streams in a amplitude
             //data from an envelop filter in MAX/LIVE
@@ -616,10 +633,6 @@ void ofApp::OSChandler()
                 if(tracks[t].params.isLoaded){tracks[t].bassControl(amplitude, noteLength);}
             }
     
-        } else if (m.getAddress() == "/oRotate") {
-            
-            tracks[idx].setObjectRotate(m.getArgAsFloat(1), m.getArgAsFloat(2), m.getArgAsFloat(3));
-            
         }
     }//end while
 }

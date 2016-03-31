@@ -231,8 +231,17 @@ class vboMeshObj {
     void randLocalPosition(float _start, float _end, int _durration, int _delay);
     void resetBufferInstance(int _buffer, string _mode);
     void clear();
+    
+    //OSC
     void setLocalCopies(int _buffers);
+    void setLocalSlices(int _slices);
+    void setLocalScale(float _scale);
+    void setLocalRotate(float _rotX, float _rotY, float _rotZ);
+    void setLocalTranslate(float _transX, float _transY, float _transZ);
+    
     void setObjectRotate(float _rotX, float _rotY, float _rotZ);
+    void setLocalTrans(int _copies, int _slices, float _scale, ofVec3f _lRot, ofVec3f _lTrans);
+    
     void bassControl(float &_amp, int _noteLength);
     
     void guiEvent(ofxUIEventArgs &e);

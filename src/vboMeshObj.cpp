@@ -819,11 +819,28 @@ void vboMeshObj::clear(){
 
 //--------------------------------------------------------------
 void vboMeshObj::setLocalCopies(int _buffers){
-    
     clear();
-    
     params.l_copies = _buffers;
-    
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setLocalSlices(int _slices){
+    params.l_slices = _slices;
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setLocalScale(float _scale){
+    params.l_scale = _scale;
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setLocalRotate(float _rotX, float _rotY, float _rotZ){
+    params.l_rotate = ofVec3f(_rotX, _rotY, _rotZ);
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setLocalTranslate(float _transX, float _transY, float _transZ){
+    params.l_trans = ofVec3f(_transX, _transY, _transZ);
 }
 
 //--------------------------------------------------------------
@@ -833,6 +850,9 @@ void vboMeshObj::setObjectRotate(float _rotX, float _rotY, float _rotZ){
     
     
 }
+
+
+
 
 //--------------------------------------------------------------
 void vboMeshObj::bassControl(float &_amp, int _noteLength){
