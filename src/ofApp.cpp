@@ -585,7 +585,8 @@ void ofApp::OSChandler()
             
         } else if (m.getAddress() == "/localScale"){
             
-            tracks[idx].setLocalScale(m.getArgAsInt32(1));
+            cout << "/localScale " << m.getArgAsFloat(1) << endl;
+            tracks[idx].setLocalScale(m.getArgAsFloat(1));
             
         } else if (m.getAddress() == "/localRotate"){
             
