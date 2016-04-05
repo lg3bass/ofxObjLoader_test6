@@ -434,11 +434,19 @@ void vboMeshObj::update(){
     
     if(params.randomized){
         //randomized positions.
-        params.l_trans = ofVec3f(positiontweenbounce_x.update(),positiontweenbounce_y.update(),params.l_trans.z);
+        //params.l_trans = ofVec3f(positiontweenbounce_x.update(),positiontweenbounce_y.update(),params.l_trans.z);
 
         if(positiontweenbounce_x.isCompleted()){
+            //params.randomized = false;
+        }
+        
+        
+        params.o_rotate = ofVec3f(posRandomObjRotX.update(),params.o_rotate.y,params.o_rotate.z);
+        
+        if(posRandomObjRotX.isCompleted()){
             params.randomized = false;
         }
+        
     }//end params.randomized
     
     //sets the button a color when a osc message is recieved.
@@ -852,7 +860,26 @@ void vboMeshObj::setObjectRotate(float _rotX, float _rotY, float _rotZ){
 }
 
 
+void vboMeshObj::randObjRotX(int _rotX){
+    
+}
 
+void vboMeshObj::tweenObjRotX(float _rotX){
+    
+    //store the last position
+    lastObjRot = params.o_rotate;
+
+    
+    posRandomObjRotX.setParameters(12,easingback, ofxTween::easeOut,lastObjRot.x,_rotX, 1000,0);
+    
+    //start the animation
+    params.randomized = true;
+    
+}
+
+void vboMeshObj::setObjRotX(float _rotX){
+    params.o_rotate.x = _rotX;
+}
 
 //--------------------------------------------------------------
 void vboMeshObj::bassControl(float &_amp, int _noteLength){

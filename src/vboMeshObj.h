@@ -207,8 +207,13 @@ class vboMeshObj {
     ofxTween positiontweenbounce_x;
     ofxTween positiontweenbounce_y;
     
+    ofxTween posRandomObjRotX;
+    
+    
     //last position
     ofVec3f lastPosition = ofVec3f(0.0,0.0,0.0);
+    
+    ofVec3f lastObjRot= ofVec3f(0.0,0.0,0.0);
     
     //constructor
     vboMeshObj();
@@ -238,9 +243,13 @@ class vboMeshObj {
     void setLocalScale(float _scale);
     void setLocalRotate(float _rotX, float _rotY, float _rotZ);
     void setLocalTranslate(float _transX, float _transY, float _transZ);
-    
+
     void setObjectRotate(float _rotX, float _rotY, float _rotZ);
     void setLocalTrans(int _copies, int _slices, float _scale, ofVec3f _lRot, ofVec3f _lTrans);
+
+    void randObjRotX(int _rotX);
+    void tweenObjRotX(float _rotX);
+    void setObjRotX(float _rotX);
     
     void bassControl(float &_amp, int _noteLength);
     

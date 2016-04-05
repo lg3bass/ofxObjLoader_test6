@@ -6,7 +6,7 @@ void ofApp::setup(){
     //LOGGING
     //http://openframeworks.cc/documentation/utils/ofLog.html
     ofSetLogLevel("jsonData", OF_LOG_SILENT);//DEFAULT: OF_LOG_ERROR
-    ofSetLogLevel("OSC",OF_LOG_SILENT);//DEFAULT: OF_LOG_VERBOSE
+    ofSetLogLevel("OSC",OF_LOG_VERBOSE);//DEFAULT: OF_LOG_VERBOSE
     ofSetLogLevel("matcap",OF_LOG_SILENT);//DEFAULT: OF_LOG_ERROR
     ofSetLogLevel("ofxUI",OF_LOG_SILENT);//DEFAULT: OF_LOG_SILENT
     ofSetLogLevel("objloader", OF_LOG_SILENT);//DEFAULT: OF_LOG_NOTICE
@@ -600,7 +600,19 @@ void ofApp::OSChandler()
             
             tracks[idx].setObjectRotate(m.getArgAsFloat(1), m.getArgAsFloat(2), m.getArgAsFloat(3));
             
-        } else if (m.getAddress() == "/bass"){
+        } else if (m.getAddress() == "/randObjRotX") {
+            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenObjRotX(float(m.getArgAsInt32(1)));
+            
+        } else if (m.getAddress() == "/tweenObjRotX") {
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenObjRotX(float(m.getArgAsInt32(1)));
+            
+        } else if (m.getAddress() == "/setObjRotX") {
+            tracks[idx].setObjRotX(float(m.getArgAsInt32(1)));
+            
+        }  else if (m.getAddress() == "/bass"){
             //this mesage streams in a amplitude
             //data from an envelop filter in MAX/LIVE
             
