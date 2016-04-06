@@ -23,6 +23,8 @@ vboMeshObj::vboMeshObj() {
     params.type = "";
     params.numOfSeg = 1;
     
+    
+    
     params.mirror_distance = 10.0;
     //params.currentSegment = 0;//moved to instances
     params.stillFrame = 0;
@@ -365,6 +367,9 @@ void vboMeshObj::draw(){
 
 //--------------------------------------------------------------
 void vboMeshObj::update(){
+    
+    //GEOMETRY
+    //==================================
     for(int i=0; i<params.l_copies;i++){
         //if(instances[i].isPlaying){
             if(instances[i].isTweening){
@@ -430,6 +435,55 @@ void vboMeshObj::update(){
         //}//instances[i].isPlaying
     }//params.l_copies
     
+    //ANIMATION TWEENS
+    //====================================================
+
+
+    
+    //RUNNING OBJECT ROTATION TWEENS??
+    if(params.randObjRotBoolX){
+        params.o_rotate = ofVec3f(posRandomObjRotX.update(),params.o_rotate.y,params.o_rotate.z);
+        posRandomObjRotX.isCompleted() ? params.randObjRotBoolX = false : params.randObjRotBoolX = true;
+    }
+    if(params.randObjRotBoolY){
+        params.o_rotate = ofVec3f(params.o_rotate.x,posRandomObjRotY.update(),params.o_rotate.z);
+        posRandomObjRotY.isCompleted() ? params.randObjRotBoolY = false : params.randObjRotBoolY = true;
+    }
+    if(params.randObjRotBoolZ){
+        params.o_rotate = ofVec3f(params.o_rotate.x,params.o_rotate.y,posRandomObjRotZ.update());
+        posRandomObjRotZ.isCompleted() ? params.randObjRotBoolZ = false : params.randObjRotBoolZ = true;
+    }
+    
+    //RUNNING LOCAL ROTATION TWEENS??
+    if(params.randLocalRotBoolX){
+        params.l_rotate = ofVec3f(posRandomLocalRotX.update(),params.l_rotate.y,params.l_rotate.z);
+        posRandomLocalRotX.isCompleted() ? params.randLocalRotBoolX = false : params.randLocalRotBoolX = true;
+    }
+    if(params.randLocalRotBoolY){
+        params.l_rotate = ofVec3f(params.l_rotate.x,posRandomLocalRotY.update(),params.l_rotate.z);
+        posRandomLocalRotY.isCompleted() ? params.randLocalRotBoolY = false : params.randLocalRotBoolY = true;
+    }
+    if(params.randLocalRotBoolZ){
+        params.l_rotate = ofVec3f(params.l_rotate.x,params.l_rotate.y,posRandomLocalRotZ.update());
+        posRandomLocalRotZ.isCompleted() ? params.randLocalRotBoolZ = false : params.randLocalRotBoolZ = true;
+    }
+    
+    //RUNNING LOCAL TRANSLATE TWEENS??
+    if(params.randLocalPosBoolX){
+        params.l_trans = ofVec3f(posRandomLocalX.update(),params.l_trans.y,params.l_trans.z);
+        posRandomLocalX.isCompleted() ? params.randLocalPosBoolX = false : params.randLocalPosBoolX = true;
+    }
+    if(params.randLocalPosBoolY){
+        params.l_trans = ofVec3f(params.l_trans.x,posRandomLocalY.update(),params.l_trans.z);
+        posRandomLocalY.isCompleted() ? params.randLocalPosBoolY = false : params.randLocalPosBoolY = true;
+    }
+    if(params.randLocalPosBoolZ){
+        params.l_trans = ofVec3f(params.l_trans.x,params.l_trans.y,posRandomLocalZ.update());
+        posRandomLocalZ.isCompleted() ? params.randLocalPosBoolZ = false : params.randLocalPosBoolZ = true;
+    }
+    
+    
+    
     
     
     if(params.randomized){
@@ -440,7 +494,6 @@ void vboMeshObj::update(){
             //params.randomized = false;
         }
         
-        
         params.o_rotate = ofVec3f(posRandomObjRotX.update(),params.o_rotate.y,params.o_rotate.z);
         
         if(posRandomObjRotX.isCompleted()){
@@ -449,9 +502,12 @@ void vboMeshObj::update(){
         
     }//end params.randomized
     
-    //sets the button a color when a osc message is recieved.
-    setIndicator();
     
+    
+    
+    
+    //FLOATING DEBUG MENU ON RIGHT
+    //=======================================================================
     //validate what's playing in ofxGUI
     gui_buffers.set("buffers",params.l_copies);
     gui_instancePlayingId.set("instancePlayingId",params.instancePlayingId);
@@ -484,6 +540,14 @@ void vboMeshObj::update(){
     gui_isTweeningList.set(isTweeningList);
     gui_isPlayingList.set(isPlayingList);
     gui_currentSegment.set(currentSegmentList);
+    //=======================================================================
+    //END - FLOATING DEBUG MENU ON RIGHT.
+
+
+    //sets the button a color when a osc message is recieved.
+    setIndicator();
+
+
 }
 
 //--------------------------------------------------------------
@@ -841,45 +905,127 @@ void vboMeshObj::setLocalScale(float _scale){
     params.l_scale = _scale;
 }
 
+
+//bool randLocalRotBoolX;
+//ofxTween posRandomLocalRotX;
+//ofVec3f lastLocRot
 //--------------------------------------------------------------
-void vboMeshObj::setLocalRotate(float _rotX, float _rotY, float _rotZ){
-    params.l_rotate = ofVec3f(_rotX, _rotY, _rotZ);
+void vboMeshObj::tweenLocRotX(float _rotX, float _duration){
+    lastLocRot = params.l_rotate;    //store the last position
+    
+    posRandomLocalRotX.setParameters(easingback, ofxTween::easeOut,lastLocRot.x,_rotX, _duration,0);
+    
+    params.randLocalRotBoolX = true; //start the animation
 }
+
+void vboMeshObj::setLocRotX(float _rotX){
+    params.l_rotate.x = _rotX;
+}
+
+void vboMeshObj::tweenLocRotY(float _rotY, float _duration){
+    lastLocRot = params.l_rotate;    //store the last position
+    
+    posRandomLocalRotY.setParameters(easingback, ofxTween::easeOut,lastLocRot.y,_rotY, _duration,0);
+    
+    params.randLocalRotBoolY = true; //start the animation
+}
+
+void vboMeshObj::setLocRotY(float _rotY){
+    params.l_rotate.y = _rotY;
+}
+
+void vboMeshObj::tweenLocRotZ(float _rotZ, float _duration){
+    lastLocRot = params.l_rotate;    //store the last position
+    
+    posRandomLocalRotZ.setParameters(easingback, ofxTween::easeOut,lastLocRot.z,_rotZ, _duration,0);
+    
+    params.randLocalRotBoolZ = true; //start the animation
+}
+
+void vboMeshObj::setLocRotZ(float _rotZ){
+    params.l_rotate.z = _rotZ;
+}
+
 
 //--------------------------------------------------------------
-void vboMeshObj::setLocalTranslate(float _transX, float _transY, float _transZ){
-    params.l_trans = ofVec3f(_transX, _transY, _transZ);
+void vboMeshObj::tweenLocTransX(float _rotX, float _duration){
+    lastLocTrans = params.l_trans;    //store the last position
+    
+    posRandomLocalX.setParameters(easingback, ofxTween::easeOut,lastLocTrans.x,_rotX, _duration,0);
+    
+    params.randLocalPosBoolX = true; //start the animation
 }
+
+void vboMeshObj::setLocTransX(float _rotX){
+    params.l_trans.x = _rotX;
+}
+
+void vboMeshObj::tweenLocTransY(float _rotY, float _duration){
+    lastLocTrans = params.l_trans;    //store the last position
+    
+    posRandomLocalY.setParameters(easingback, ofxTween::easeOut,lastLocTrans.y,_rotY, _duration,0);
+    
+    params.randLocalPosBoolY = true; //start the animation
+}
+
+void vboMeshObj::setLocTransY(float _rotY){
+    params.l_trans.y = _rotY;
+}
+
+void vboMeshObj::tweenLocTransZ(float _rotZ, float _duration){
+    lastLocTrans = params.l_trans;    //store the last position
+    
+    posRandomLocalZ.setParameters(easingback, ofxTween::easeOut,lastLocTrans.z,_rotZ, _duration,0);
+    
+    params.randLocalPosBoolZ = true; //start the animation
+}
+
+void vboMeshObj::setLocTransZ(float _rotZ){
+    params.l_trans.z = _rotZ;
+}
+
+
+
 
 //--------------------------------------------------------------
-void vboMeshObj::setObjectRotate(float _rotX, float _rotY, float _rotZ){
+void vboMeshObj::tweenObjRotX(float _rotX, float _duration){
+    lastObjRot = params.o_rotate;    //store the last position
     
-    params.o_rotate = ofVec3f(_rotX,_rotY,_rotZ);
+    posRandomObjRotX.setParameters(easingback, ofxTween::easeOut,lastObjRot.x,_rotX, _duration,0);
     
-    
-}
-
-
-void vboMeshObj::randObjRotX(int _rotX){
-    
-}
-
-void vboMeshObj::tweenObjRotX(float _rotX){
-    
-    //store the last position
-    lastObjRot = params.o_rotate;
-
-    
-    posRandomObjRotX.setParameters(12,easingback, ofxTween::easeOut,lastObjRot.x,_rotX, 1000,0);
-    
-    //start the animation
-    params.randomized = true;
-    
+    params.randObjRotBoolX = true; //start the animation
 }
 
 void vboMeshObj::setObjRotX(float _rotX){
     params.o_rotate.x = _rotX;
 }
+
+void vboMeshObj::tweenObjRotY(float _rotY, float _duration){
+    lastObjRot = params.o_rotate;    //store the last position
+    
+    posRandomObjRotY.setParameters(easingback, ofxTween::easeOut,lastObjRot.y,_rotY, _duration,0);
+    
+    params.randObjRotBoolY = true; //start the animation
+}
+
+void vboMeshObj::setObjRotY(float _rotY){
+    params.o_rotate.y = _rotY;
+}
+
+void vboMeshObj::tweenObjRotZ(float _rotZ, float _duration){
+    lastObjRot = params.o_rotate;    //store the last position
+    
+    posRandomObjRotZ.setParameters(easingback, ofxTween::easeOut,lastObjRot.z,_rotZ, _duration,0);
+    
+    params.randObjRotBoolZ = true; //start the animation
+}
+
+void vboMeshObj::setObjRotZ(float _rotZ){
+    params.o_rotate.z = _rotZ;
+}
+
+
+
 
 //--------------------------------------------------------------
 void vboMeshObj::bassControl(float &_amp, int _noteLength){

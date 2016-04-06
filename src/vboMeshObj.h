@@ -71,6 +71,17 @@ class vboMeshObj {
         bool playNoteOff;
         string type;
         int numOfSeg;
+        
+        //tweens
+        bool randLocalPosBoolX;
+        bool randLocalPosBoolY;
+        bool randLocalPosBoolZ;
+        bool randLocalRotBoolX;
+        bool randLocalRotBoolY;
+        bool randLocalRotBoolZ;
+        bool randObjRotBoolX;
+        bool randObjRotBoolY;
+        bool randObjRotBoolZ;
                 
         float mirror_distance;
         //int currentSegment;
@@ -203,17 +214,34 @@ class vboMeshObj {
     ofxEasingSine       easingsine;
     ofxEasingLinear 	easinglinear;
     
+    
+    //INITIAL RANDOMIZED EXPERIMENT - TBD
     //tween randLocalPosition
     ofxTween positiontweenbounce_x;
     ofxTween positiontweenbounce_y;
+
+    //last positions
+    ofVec3f lastPosition = ofVec3f(0.0,0.0,0.0);// not used
+    //------------------------------------
     
-    ofxTween posRandomObjRotX;
     
+    //local tweens
+    ofxTween posRandomLocalRotX;
+    ofxTween posRandomLocalRotY;
+    ofxTween posRandomLocalRotZ;
     
-    //last position
-    ofVec3f lastPosition = ofVec3f(0.0,0.0,0.0);
+    ofxTween posRandomLocalX;
+    ofxTween posRandomLocalY;
+    ofxTween posRandomLocalZ;
     
-    ofVec3f lastObjRot= ofVec3f(0.0,0.0,0.0);
+    //object tweens
+    ofxTween posRandomObjRotX;//object rotation X
+    ofxTween posRandomObjRotY;//object rotation Y
+    ofxTween posRandomObjRotZ;//object rotation Z
+    
+    ofVec3f lastLocRot = ofVec3f(0.0,0.0,0.0);
+    ofVec3f lastLocTrans = ofVec3f(0.0,0.0,0.0);
+    ofVec3f lastObjRot = ofVec3f(0.0,0.0,0.0);
     
     //constructor
     vboMeshObj();
@@ -241,15 +269,32 @@ class vboMeshObj {
     void setLocalCopies(int _buffers);
     void setLocalSlices(int _slices);
     void setLocalScale(float _scale);
-    void setLocalRotate(float _rotX, float _rotY, float _rotZ);
-    void setLocalTranslate(float _transX, float _transY, float _transZ);
+ 
+    //-- tween local Rotate
+    void tweenLocRotX(float _rotX, float _duration);
+    void setLocRotX(float _rotX);
+    void tweenLocRotY(float _rotY, float _duration);
+    void setLocRotY(float _rotY);
+    void tweenLocRotZ(float _rotZ, float _duration);
+    void setLocRotZ(float _rotZ);
 
-    void setObjectRotate(float _rotX, float _rotY, float _rotZ);
-    void setLocalTrans(int _copies, int _slices, float _scale, ofVec3f _lRot, ofVec3f _lTrans);
-
-    void randObjRotX(int _rotX);
-    void tweenObjRotX(float _rotX);
+    //-- tween local Translate
+    void tweenLocTransX(float _rotX, float _duration);
+    void setLocTransX(float _rotX);
+    void tweenLocTransY(float _rotY, float _duration);
+    void setLocTransY(float _rotY);
+    void tweenLocTransZ(float _rotZ, float _duration);
+    void setLocTransZ(float _rotZ);
+    
+    //-- tween obj rotate
+    void tweenObjRotX(float _rotX, float _duration);
     void setObjRotX(float _rotX);
+    void tweenObjRotY(float _rotY, float _duration);
+    void setObjRotY(float _rotY);
+    void tweenObjRotZ(float _rotZ, float _duration);
+    void setObjRotZ(float _rotZ);
+    
+    
     
     void bassControl(float &_amp, int _noteLength);
     
