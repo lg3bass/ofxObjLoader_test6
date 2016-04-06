@@ -594,57 +594,76 @@ void ofApp::OSChandler()
             
         } else if (m.getAddress() == "/randlocalRotX"){
             // LOCAL ROTATE --------------------------------------
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocRotX(float(m.getArgAsInt32(1)),1000.0);
         } else if (m.getAddress() == "/tweenlocalRotX"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocRotX(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/setlocalRotX"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].setLocRotX(float(m.getArgAsInt32(1)));
             
         } else if (m.getAddress() == "/randlocalRotY"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocRotY(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/tweenlocalRotY"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocRotY(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/setlocalRotY"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].setLocRotY(float(m.getArgAsInt32(1)));
             
         } else if (m.getAddress() == "/randlocalRotZ"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocRotZ(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/tweenlocalRotZ"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocRotZ(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/setlocalRotZ"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].setLocRotZ(float(m.getArgAsInt32(1)));
             
         } else if (m.getAddress() == "/randLocalTransX"){
             // LOCAL TRANSLATE --------------------------------------
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocTransX(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/tweenLocalTransX"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocTransX(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/setLocalTransX"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].setLocTransX(float(m.getArgAsInt32(1)));
             
         } else if (m.getAddress() == "/randLocalTransY"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocTransY(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/tweenLocalTransY"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocTransY(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/setLocalTransY"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].setLocTransY(float(m.getArgAsInt32(1)));
             
         } else if (m.getAddress() == "/randLocalTransZ"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocTransZ(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/tweenLocalTransZ"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].tweenLocTransZ(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/setLocalTransZ"){
-            
+            ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+            tracks[idx].setLocTransZ(float(m.getArgAsInt32(1)));
             
         } else if (m.getAddress() == "/randObjRotX") {
             // OBJECT ROTATE --------------------------------------
@@ -682,7 +701,7 @@ void ofApp::OSChandler()
             tracks[idx].tweenObjRotZ(float(m.getArgAsInt32(1)),1000.0);
             
         } else if (m.getAddress() == "/setObjRotZ") {
-            tracks[idx].setObjRotX(float(m.getArgAsInt32(1)));
+            tracks[idx].setObjRotZ(float(m.getArgAsInt32(1)));
             
         }  else if (m.getAddress() == "/bass"){
             //this mesage streams in a amplitude
