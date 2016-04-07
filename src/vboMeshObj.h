@@ -266,6 +266,8 @@ class vboMeshObj {
     void clear();
     
     //OSC
+    
+    void setPlayAll(bool _playAll);
     void setLocalCopies(int _buffers);
     void setLocalSlices(int _slices);
     void setLocalScale(float _scale);

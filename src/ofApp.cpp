@@ -575,6 +575,10 @@ void ofApp::OSChandler()
             //int idx = m.getArgAsInt32(0);
             tracks[idx].clear();
             
+        } else if (m.getAddress() == "/playAll"){
+            
+            tracks[idx].setPlayAll(m.getArgAsInt32(1));
+            
         } else if (m.getAddress() == "/localCopies"){
             //ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << m.getArgAsInt32(1);
             tracks[idx].setLocalCopies(m.getArgAsInt32(1));
