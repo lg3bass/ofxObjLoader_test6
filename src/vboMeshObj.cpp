@@ -898,7 +898,7 @@ void vboMeshObj::setPlayAll(bool _playAll){
 
 //--------------------------------------------------------------
 void vboMeshObj::setLocalCopies(int _buffers){
-    clear();
+    //clear();
     params.l_copies = _buffers;
 }
 
