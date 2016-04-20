@@ -633,7 +633,7 @@ void vboMeshObj::setupGui(int _index){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
     gui->addIntSlider("FRAME", 1, params.totalFrames, &params.stillFrame, 300,8,0,0);
-    gui->addSlider("MIRROR",-40.0,40.0, &params.mirror_distance,150,8,0,0);
+    gui->addSlider("MIRROR",-100.0,100.0, &params.mirror_distance,150,8,0,0);
     
     gui->addSpacer(320, 1);
     
@@ -701,7 +701,7 @@ void vboMeshObj::setupGui(int _index){
     gui->addIntSlider("slices " + index, 1, 4, &params.l_slices,150,8,150,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
-    gui->addSlider("(L)SCALE", 0.1, 1.0, &params.l_scale,150,8,150,0);
+    gui->addSlider("(L)SCALE", 0.1, 10.0, &params.l_scale,150,8,150,0);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addMultiImageToggle("l-scale-bs", "GUI/toggle.png", &params.lScale, 20, 20,0,0,OFX_UI_FONT_SMALL);
     gui->addSlider("lScaleMod",0.0, 2.0, &params.lScaleMod,130,8,0,0);
@@ -890,6 +890,36 @@ void vboMeshObj::clear(){
 }
 
 //--------------------------------------------------------------
+void vboMeshObj::setMirror(bool _mirror){
+    params.mirrored = _mirror;
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setMirrorX(bool _mirrorX){
+    params.mirrorX = _mirrorX;
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setMirrorY(bool _mirrorY){
+    params.mirrorY = _mirrorY;
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setMirrorZ(bool _mirrorZ){
+    params.mirrorZ = _mirrorZ;
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setMirrorDistance(float _mirDist){
+    params.mirror_distance = _mirDist;
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setPlayNoteOff(bool _playNoteOff){
+    params.playNoteOff = _playNoteOff;
+}
+
+//--------------------------------------------------------------
 void vboMeshObj::setPlayAll(bool _playAll){
     //params.playAll = true|false;
     params.playAll = _playAll;
@@ -900,11 +930,18 @@ void vboMeshObj::setPlayAll(bool _playAll){
 void vboMeshObj::setLocalCopies(int _buffers){
     //clear();
     params.l_copies = _buffers;
+    setSliceAngle(_buffers);
 }
 
 //--------------------------------------------------------------
 void vboMeshObj::setLocalSlices(int _slices){
     params.l_slices = _slices;
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setSliceAngle(int _copies){
+    float sliceAngle = 360.0/_copies;
+    params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);
 }
 
 //--------------------------------------------------------------
@@ -1147,10 +1184,7 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         ofxUIIntSlider *lcopies = (ofxUIIntSlider *) e.widget;
         //set the z angle to correlate to the number of slices
         
-        float sliceAngle = 360.0/lcopies->getValue();
-        params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);
-        
-        //cout << "(L)COPIES dist angel:" << ofToString(sliceAngle) << endl;
+        setSliceAngle(lcopies->getValue());
         
         
         

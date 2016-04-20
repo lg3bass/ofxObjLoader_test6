@@ -575,9 +575,35 @@ void ofApp::OSChandler()
             //int idx = m.getArgAsInt32(0);
             tracks[idx].clear();
             
+        } else if (m.getAddress() == "/playNoteOff"){
+            
+            tracks[idx].setPlayNoteOff(m.getArgAsInt32(1));
+            
         } else if (m.getAddress() == "/playAll"){
             
             tracks[idx].setPlayAll(m.getArgAsInt32(1));
+            
+        } else if (m.getAddress() == "/mirror"){
+            
+            tracks[idx].setMirror(m.getArgAsInt32(1));
+            
+        } else if (m.getAddress() == "/mirrorX"){
+            
+            tracks[idx].setMirrorX(m.getArgAsInt32(1));
+            
+        } else if (m.getAddress() == "/mirrorY"){
+            
+            tracks[idx].setMirrorY(m.getArgAsInt32(1));
+            
+        } else if (m.getAddress() == "/mirrorZ"){
+            
+            tracks[idx].setMirrorZ(m.getArgAsInt32(1));
+            
+        } else if (m.getAddress() == "/mirrorDistance"){
+            
+            tracks[idx].setMirrorDistance(float(m.getArgAsInt32(1)));
+            
+            //tracks[idx].setPlayAll(m.getArgAsInt32(1));
             
         } else if (m.getAddress() == "/localCopies"){
             //ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << m.getArgAsInt32(1);
@@ -591,10 +617,6 @@ void ofApp::OSChandler()
             
             cout << "/localScale " << m.getArgAsFloat(1) << endl;
             tracks[idx].setLocalScale(m.getArgAsFloat(1));
-            
-        } else if (m.getAddress() == "/localRotate"){
-            
-            //tracks[idx].setLocalRotate(m.getArgAsFloat(1), m.getArgAsFloat(2), m.getArgAsFloat(3));
             
         } else if (m.getAddress() == "/randlocalRotX"){
             // LOCAL ROTATE --------------------------------------

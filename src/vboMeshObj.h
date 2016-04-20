@@ -266,10 +266,17 @@ class vboMeshObj {
     void clear();
     
     //OSC
+    void setMirror(bool _mirror);
+    void setMirrorX(bool _mirrorX);
+    void setMirrorY(bool _mirrorY);
+    void setMirrorZ(bool _mirrorZ);
+    void setMirrorDistance(float _mirDist);
     
     void setPlayAll(bool _playAll);
+    void setPlayNoteOff(bool _playNoteOff);
     void setLocalCopies(int _buffers);
     void setLocalSlices(int _slices);
+    void setSliceAngle(int _copies);
     void setLocalScale(float _scale);
  
     //-- tween local Rotate
