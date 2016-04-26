@@ -54,7 +54,8 @@ class vboMeshObj {
     
     //drawing params
     struct guiParams {
-        bool playAll;
+        bool playAll;                   //play all the buffers to the next segment
+        bool playAllFinalize;           //play all the buffers to the end of object sequence
         bool isSelected;
         bool isLoaded;
         bool isPlaying;

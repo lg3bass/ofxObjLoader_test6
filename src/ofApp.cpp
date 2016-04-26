@@ -66,20 +66,12 @@ void ofApp::setup(){
     parameters.add(tracks[10].parameters);
     
     
+    
+    
     gui.setup(parameters);
-    //gui.loadFromFile("settings.xml");
-    
-    gui.setPosition(900,0);
     gui.minimizeAll();
-    //gui.setWidthElements(400);
-    
-    //gui.setSize(800, 100);
-    //gui.setDefaultWidth(400);
-
-
     minimized = true;
-    
-    
+    gui.setPosition(900.0, 100.0);
 }
 
 //--------------------------------------------------------------
@@ -109,6 +101,8 @@ void ofApp::draw(){
     ofSetWindowTitle("fps: "+ofToString(ofGetFrameRate())+" - "+ofToString(ofGetWidth())+","+ofToString(ofGetHeight())+"easyCam:"+ofToString(modkey));
 
     ofDrawBitmapString("SELECTED TRACK: "+ofToString(selectedTrack), 1200,10);
+    
+    
     
     
     //SYPHON
@@ -307,6 +301,8 @@ void ofApp::keyPressed(int key){
         }
         
     }
+    
+
     
 
     
@@ -512,7 +508,7 @@ void ofApp::OSChandler()
             ", noteOn|Off:" << m.getArgAsInt32(8) <<
             "]";
             
-            //int _buffer, _VMMnoteId(string+midiNote), _midiNote, _velocity, _delta
+            //----------noteOn(_buffer           |VMMnoteID|_midiNote         |_velocity         |_delta )
             tracks[idx].noteOn(m.getArgAsInt32(1),VMMnoteID,m.getArgAsInt32(4),m.getArgAsInt32(5),m.getArgAsInt32(7));
             
         } else if (m.getAddress() == "/play"){
@@ -532,7 +528,7 @@ void ofApp::OSChandler()
             ", tween:" << m.getArgAsInt32(7) <<
             "]";
             
-            //play(int _buffer, int _duration, int _tweenType)
+            //----------play(_buffer           | VMMnoteID| _duration         | _tweenType)
             tracks[idx].play(m.getArgAsInt32(1), VMMnoteID, m.getArgAsInt32(5), m.getArgAsInt32(7));
             
         } else if (m.getAddress() == "/noteOff"){
@@ -551,7 +547,7 @@ void ofApp::OSChandler()
             int VMMnoteID = ofToInt(ofToString(m.getArgAsInt32(1)) + ofToString(m.getArgAsInt32(3)));
             //ofLogNotice("OSC") << "------------------------------VMMnoteID(OFF): " << VMMnoteID;
             
-            //noteOff(int _VMMnoteId, int _durration){
+            //----------noteOff(VMMnoteId| _durration)
             tracks[idx].noteOff(VMMnoteID, m.getArgAsInt32(5));
             
         } else if (m.getAddress() == "/randomTrans"){
@@ -563,8 +559,6 @@ void ofApp::OSChandler()
             ", durration:" << m.getArgAsInt32(3) <<
             ", delay:" << m.getArgAsInt32(4);
             
-            
-            //int idx = m.getArgAsInt32(0);
             //float _start(low), float _end(high), int _durration, int _delay
             tracks[idx].randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
             
