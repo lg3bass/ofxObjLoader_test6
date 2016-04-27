@@ -6,7 +6,7 @@ void ofApp::setup(){
     //LOGGING
     //http://openframeworks.cc/documentation/utils/ofLog.html
     ofSetLogLevel("jsonData", OF_LOG_SILENT);//DEFAULT: OF_LOG_ERROR
-    ofSetLogLevel("OSC",OF_LOG_VERBOSE);//DEFAULT: OF_LOG_VERBOSE
+    ofSetLogLevel("OSC",OF_LOG_SILENT);//DEFAULT: OF_LOG_VERBOSE
     ofSetLogLevel("matcap",OF_LOG_SILENT);//DEFAULT: OF_LOG_ERROR
     ofSetLogLevel("ofxUI",OF_LOG_SILENT);//DEFAULT: OF_LOG_SILENT
     ofSetLogLevel("objloader", OF_LOG_SILENT);//DEFAULT: OF_LOG_NOTICE
@@ -72,6 +72,7 @@ void ofApp::setup(){
     gui.minimizeAll();
     minimized = true;
     gui.setPosition(900.0, 100.0);
+    
 }
 
 //--------------------------------------------------------------
@@ -140,7 +141,7 @@ void ofApp::draw(){
     
     //draw the native ofGui (floating menu)
     //----------------------------------------
-    gui.draw();
+    //gui.draw();
     
     ofSetColor(255,255,255);
     ofDrawBitmapString("SELECTED: "+ofToString(selectedTrack), 1100,10);
@@ -576,6 +577,10 @@ void ofApp::OSChandler()
         } else if (m.getAddress() == "/playAll"){
             
             tracks[idx].setPlayAll(m.getArgAsInt32(1));
+            
+        } else if (m.getAddress() == "/finalize"){
+            
+            tracks[idx].setFinalize(m.getArgAsInt32(1));
             
         } else if (m.getAddress() == "/mirror"){
             

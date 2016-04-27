@@ -933,6 +933,12 @@ void vboMeshObj::setPlayAll(bool _playAll){
 }
 
 //--------------------------------------------------------------
+void vboMeshObj::setFinalize(int _finalize){
+    ofLogVerbose("OSC") << "trigger finalize";
+    params.playAllFinalize = true;
+}
+
+//--------------------------------------------------------------
 void vboMeshObj::setLocalCopies(int _buffers){
     //clear();
     params.l_copies = _buffers;

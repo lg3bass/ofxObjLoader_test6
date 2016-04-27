@@ -274,6 +274,7 @@ class vboMeshObj {
     void setMirrorDistance(float _mirDist);
     
     void setPlayAll(bool _playAll);
+    void setFinalize(int _finalize);
     void setPlayNoteOff(bool _playNoteOff);
     void setLocalCopies(int _buffers);
     void setLocalSlices(int _slices);
