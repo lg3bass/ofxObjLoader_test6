@@ -8,6 +8,7 @@
 #include "vboMeshObj.h"
 #include "ofxUI.h"
 #include "ofxOsc.h"
+#include "oscRouter.h"
 #include "ofxTween.h"
 #include "ofxJSON.h"
 #include "bwUtil.h"
@@ -117,7 +118,10 @@ class ofApp : public ofBaseApp{
         //OSC
         void OSChandler();
     
+        oscRouter router;
     
+    
+        
         //TEMP VARIABLE FOR TESTING
         int playedNotes = 0;
     

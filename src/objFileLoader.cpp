@@ -12,8 +12,6 @@ void objFileLoader::setup(){
     
     //GET ALL THE PATHS TO THE OBJ FILES
     loadObjFiles("obj");
-    
-    
     loadMatCapFiles("matCap");
     
 }

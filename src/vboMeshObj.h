@@ -153,6 +153,7 @@ class vboMeshObj {
     guiParams params;
     
     
+    /* Debug parameters ofxgui */
     ofParameterGroup parameters;
     ofParameter<int> gui_buffers;
     ofParameter<int> gui_instancePlayingId;
@@ -164,30 +165,6 @@ class vboMeshObj {
     ofParameter<string> gui_currentSegment;
 
     
-    //OLD - ofParameter ---- REMOVE
-    /*
-    ofParameterGroup parameters;
-    ofParameter<int> gui_gInstances;
-    ofParameter<float> gui_gScale;
-    ofParameter<float> gui_gRotAngle;
-    ofParameter<ofVec3f> gui_gTrans;
-    ofParameter<int> gui_lInstances;
-    ofParameter<float> gui_lRotAngle;
-    ofParameter<ofVec3f> gui_lTrans;
-    */
-
-    //ofxTween
-//    ofxTween tweenback;
-//    ofxTween tweenbounce;
-//    ofxTween tweencirc;
-//    ofxTween tweencubic;
-//    ofxTween tweenelastic;
-//    ofxTween tweenexpo;
-//    ofxTween tweenquad;
-//    ofxTween tweenquart;
-//    ofxTween tweenquint;
-//    ofxTween tweensine;
-//    ofxTween tweenlinear,tweenlinear2,tweenlinear3,tweenlinear4,tweenlinear5,tweenlinear6,tweenlinear7,tweenlinear8;
     
     vector <ofxTween> backTweens;
     vector <ofxTween> bounceTweens;
