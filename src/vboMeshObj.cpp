@@ -1311,11 +1311,18 @@ void vboMeshObj::noteOn(int _buffer, int _noteId, int _note, int _velocity, int 
                     
                     //either play to the next segment or play to the end (finalize).
                     if(params.playAllFinalize){
-                        instances[buffer].endFrame = params.totalFrames;
-                        instances[buffer].currentSegment = params.numOfSeg-1;
+                        if(params.type == "sequence"){
+                            instances[buffer].endFrame = params.totalFrames;
+                            instances[buffer].currentSegment = params.numOfSeg-1;
+                        } else {
+                            instances[buffer].endFrame = params.cuePoints[instances[buffer].currentSegment];
+                        }
                     } else {
                         instances[buffer].endFrame = params.cuePoints[instances[buffer].currentSegment];
                     }
+                        
+
+
                     
                 }
 
