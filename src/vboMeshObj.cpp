@@ -4,92 +4,98 @@
 //--------------------------------------------------------------
 vboMeshObj::vboMeshObj() {
 
-    //setup default params
-    params.playAll = false;
-    params.playAllFinalize = false;
-    params.isSelected = false;
-    params.isLoaded = false;
-    params.isPlaying = false;
-    params.instancePlayingId = -1;// -1 = all
-    params.lastInstancePlayed = -1;
-    params.still = false;
-    params.oscControlled = true;
-    params.randomized = false;
-    params.mirrored = false;
-    params.mirrorX = false;
-    params.mirrorY = false;
-    params.mirrorZ = false;
-    params.tweenType = 11;
-    params.playNoteOff = true;  //this is the noteOn/Off switch. On = play only on NoteOn.  Off = play noteOn THEN noteOff.
-    params.type = "";
-    params.numOfSeg = 1;
     
-    
-    
-    params.mirror_distance = 10.0;
-    //params.currentSegment = 0;//moved to instances
-    params.stillFrame = 0;
-    params.totalFrames = 0;
-    params.testSpeed = 500;
-    
-    params.spin = ofVec3f(0.0,0.0,0.0);
-    params.spinRange = ofVec3f(0.0,0.0,0.0);
-    params.spinX = false;
-    params.spinY = false;
-    params.spinZ = false;
-    params.ltransMod = 0;
-
-    //global
-    params.g_copies = 1;
-    params.gScale = false;
-    params.g_scale = 10.0;
-    params.gScaleMod = 0.0;
-    params.gScaleModVal = 0.0;
-    params.gTransX = false;
-    params.gTransY = false;
-    params.gTransZ = false;
-    params.g_trans = ofVec3f(0.0,0.0,0.0);
-    params.gTransMod = ofVec3f(0.0,0.0,0.0);
-    params.gTransModVal = ofVec3f(0.0,0.0,0.0);
-    params.gRotX = false;
-    params.gRotY = false;
-    params.gRotY = false;
-    params.g_rotate = ofVec3f(0.0,0.0,0.0);
-    params.gRotateMod = ofVec3f(0.0,0.0,0.0);
-    params.gRotateModVal = ofVec3f(0.0,0.0,0.0);
-    
-    //local
-    params.l_copies = 12;
-    params.l_slices = 2;
-    params.lScale = false;
-    params.l_scale = 1.0;
-    params.lScaleMod = 0.0;
-    params.lScaleModVal = 0.0;
-    params.lTransX = false;
-    params.lTransY = false;
-    params.lTransZ = false;
-    params.l_trans = ofVec3f(0.0,0.0,0.0);
-    params.lTransMod = ofVec3f(0.0,0.0,0.0);
-    params.lTransModVal = ofVec3f(0.0,0.0,0.0);
-    params.lRotX = false;
-    params.lRotY = false;
-    params.lRotY = false;
-    params.l_rotate = ofVec3f(0.0,0.0,30.0);
-    params.lRotateMod = ofVec3f(0.0,0.0,0.0);
-    params.lRotateModVal = ofVec3f(0.0,0.0,0.0);
-    
-    //object
-    params.oRotX = false;
-    params.oRotY = false;
-    params.oRotZ = false;
-    params.o_rotate = ofVec3f(0.0,0.0,0.0);
-    params.oRotateMod = ofVec3f(0.0,0.0,0.0);
-    params.oRotateModVal = ofVec3f(0.0,0.0,0.0);
+//    //setup default params
+//    params.playAll = false;
+//    params.playAllFinalize = false;
+//    params.isSelected = false;
+//    params.isLoaded = false;
+//    params.isPlaying = false;
+//    params.instancePlayingId = -1;// -1 = all
+//    params.lastInstancePlayed = -1;
+//    params.still = false;
+//    params.oscControlled = true;
+//    params.randomized = false;
+//    params.mirrored = false;
+//    params.mirrorX = false;
+//    params.mirrorY = false;
+//    params.mirrorZ = false;
+//    params.tweenType = 11;
+//    params.playNoteOff = true;  //this is the noteOn/Off switch. On = play only on NoteOn.  Off = play noteOn THEN noteOff.
+//    params.type = "";
+//    params.numOfSeg = 1;
+//    
+//    
+//    
+//    params.mirror_distance = 10.0;
+//    //params.currentSegment = 0;//moved to instances
+//    params.stillFrame = 0;
+//    params.totalFrames = 0;
+//    params.testSpeed = 500;
+//    
+//    params.spin = ofVec3f(0.0,0.0,0.0);
+//    params.spinRange = ofVec3f(0.0,0.0,0.0);
+//    params.spinX = false;
+//    params.spinY = false;
+//    params.spinZ = false;
+//    params.ltransMod = 0;
+//
+//    //global
+//    params.g_copies = 1;
+//    params.gScale = false;
+//    params.g_scale = 10.0;
+//    params.gScaleMod = 0.0;
+//    params.gScaleModVal = 0.0;
+//    params.gTransX = false;
+//    params.gTransY = false;
+//    params.gTransZ = false;
+//    params.g_trans = ofVec3f(0.0,0.0,0.0);
+//    params.gTransMod = ofVec3f(0.0,0.0,0.0);
+//    params.gTransModVal = ofVec3f(0.0,0.0,0.0);
+//    params.gRotX = false;
+//    params.gRotY = false;
+//    params.gRotY = false;
+//    params.g_rotate = ofVec3f(0.0,0.0,0.0);
+//    params.gRotateMod = ofVec3f(0.0,0.0,0.0);
+//    params.gRotateModVal = ofVec3f(0.0,0.0,0.0);
+//    
+//    //local
+//    params.l_copies = 12;
+//    params.l_slices = 2;
+//    params.lScale = false;
+//    params.l_scale = 1.0;
+//    params.lScaleMod = 0.0;
+//    params.lScaleModVal = 0.0;
+//    params.lTransX = false;
+//    params.lTransY = false;
+//    params.lTransZ = false;
+//    params.l_trans = ofVec3f(0.0,0.0,0.0);
+//    params.lTransMod = ofVec3f(0.0,0.0,0.0);
+//    params.lTransModVal = ofVec3f(0.0,0.0,0.0);
+//    params.lRotX = false;
+//    params.lRotY = false;
+//    params.lRotY = false;
+//    params.l_rotate = ofVec3f(0.0,0.0,30.0);
+//    params.lRotateMod = ofVec3f(0.0,0.0,0.0);
+//    params.lRotateModVal = ofVec3f(0.0,0.0,0.0);
+//    
+//    //object
+//    params.oRotX = false;
+//    params.oRotY = false;
+//    params.oRotZ = false;
+//    params.o_rotate = ofVec3f(0.0,0.0,0.0);
+//    params.oRotateMod = ofVec3f(0.0,0.0,0.0);
+//    params.oRotateModVal = ofVec3f(0.0,0.0,0.0);
     
 }
 
+
 //--------------------------------------------------------------
 void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
+    
+    //setup the default params.
+    trackParameters.setDefault(params);
+    
     
     instances.reserve(50);//TIP: http://arturocastro.net/blog/2011/10/28/stl::vector/
     for(int t=0; t<50;t++){
@@ -169,7 +175,7 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     setupGui(index);
     
     //output all my params to check
-    reportParams(index);
+    //trackParameters.reportParams(params, index);
     
 }
 
@@ -185,22 +191,6 @@ vector<int> vboMeshObj::parseJSON(string _param){
     }
     
     return returnedVector;
-}
-
-//--------------------------------------------------------------
-void vboMeshObj::reportParams(int _i){
-    
-    ofLogVerbose("ofxUI") << "track " << _i <<
-    "g_copies(" << params.g_copies << ")," <<
-    "g_scale(" << params.g_scale  << ")," <<
-    "g_rotate(" << params.g_rotate << ")," <<
-    "g_trans(" << params.g_trans << ")," <<
-    "l_copies(" << params.l_copies << ")," <<
-    "l_scale(" << params.l_scale << ")," <<
-    "l_rotate(" << params.l_rotate << ")," <<
-    "l_trans(" << params.l_trans << ")," <<
-    "totalFrames(" << params.totalFrames << ")";
-    
 }
 
 
@@ -895,48 +885,12 @@ void vboMeshObj::clear(){
     
 }
 
-//--------------------------------------------------------------
-void vboMeshObj::setMirror(bool _mirror){
-    params.mirrored = _mirror;
-}
-
-//--------------------------------------------------------------
-void vboMeshObj::setMirrorX(bool _mirrorX){
-    params.mirrorX = _mirrorX;
-}
-
-//--------------------------------------------------------------
-void vboMeshObj::setMirrorY(bool _mirrorY){
-    params.mirrorY = _mirrorY;
-}
-
-//--------------------------------------------------------------
-void vboMeshObj::setMirrorZ(bool _mirrorZ){
-    params.mirrorZ = _mirrorZ;
-}
 
 //--------------------------------------------------------------
 void vboMeshObj::setMirrorDistance(float _mirDist){
     params.mirror_distance = _mirDist;
 }
 
-//--------------------------------------------------------------
-void vboMeshObj::setPlayNoteOff(bool _playNoteOff){
-    params.playNoteOff = _playNoteOff;
-}
-
-//--------------------------------------------------------------
-void vboMeshObj::setPlayAll(bool _playAll){
-    //params.playAll = true|false;
-    params.playAll = _playAll;
-    
-}
-
-//--------------------------------------------------------------
-void vboMeshObj::setFinalize(int _finalize){
-    ofLogVerbose("OSC") << "trigger finalize";
-    params.playAllFinalize = true;
-}
 
 //--------------------------------------------------------------
 void vboMeshObj::setLocalCopies(int _buffers){
@@ -945,16 +899,19 @@ void vboMeshObj::setLocalCopies(int _buffers){
     setSliceAngle(_buffers);
 }
 
+
 //--------------------------------------------------------------
 void vboMeshObj::setLocalSlices(int _slices){
     params.l_slices = _slices;
 }
+
 
 //--------------------------------------------------------------
 void vboMeshObj::setSliceAngle(int _copies){
     float sliceAngle = 360.0/_copies;
     params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);
 }
+
 
 //--------------------------------------------------------------
 void vboMeshObj::setLocalScale(float _scale){

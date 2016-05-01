@@ -12,6 +12,7 @@
 #include "bwUtil.h"
 #include "ofxOsc.h"
 #include "vboMeshObj.h"
+//#include "trackParams.h"
 
 
 class oscRouter {

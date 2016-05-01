@@ -74,6 +74,7 @@
 		7E71B0A11B21DF4500370C53 /* ofxUIWaveform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E71B00C1B21D01600370C53 /* ofxUIWaveform.cpp */; };
 		7E71B0A31B21DF4500370C53 /* ofxUIWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E71B00E1B21D01600370C53 /* ofxUIWidget.cpp */; };
 		7E71B0A61B21DF4500370C53 /* ofxUIWidgetWithLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E71B0111B21D01600370C53 /* ofxUIWidgetWithLabel.cpp */; };
+		7E9845EA1CD3EEDF0028758E /* trackParams.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9845E81CD3EEDF0028758E /* trackParams.cpp */; };
 		7E9926B91AC60E560074D7AC /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E9926A71AC60E560074D7AC /* Syphon.framework */; };
 		7E9926BA1AC60E560074D7AC /* SyphonNameboundClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9926AA1AC60E560074D7AC /* SyphonNameboundClient.m */; };
 		7E9926BC1AC60E560074D7AC /* ofxSyphonClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7E9926B01AC60E560074D7AC /* ofxSyphonClient.mm */; };
@@ -300,6 +301,8 @@
 		7E71B0111B21D01600370C53 /* ofxUIWidgetWithLabel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxUIWidgetWithLabel.cpp; sourceTree = "<group>"; };
 		7E71B0121B21D01600370C53 /* ofxUIWidgetWithLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxUIWidgetWithLabel.h; sourceTree = "<group>"; };
 		7E71B0131B21D01600370C53 /* ofxUIWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxUIWrapper.h; sourceTree = "<group>"; };
+		7E9845E81CD3EEDF0028758E /* trackParams.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trackParams.cpp; sourceTree = "<group>"; };
+		7E9845E91CD3EEDF0028758E /* trackParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trackParams.h; sourceTree = "<group>"; };
 		7E9926861AC60D8D0074D7AC /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		7E9926A71AC60E560074D7AC /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Syphon.framework; sourceTree = "<group>"; };
 		7E9926A91AC60E560074D7AC /* SyphonNameboundClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyphonNameboundClient.h; sourceTree = "<group>"; };
@@ -1065,6 +1068,8 @@
 				7EA30B4B1AF8DDED004C84EF /* objFileLoader.h */,
 				9F8DDE911CD2534100C5BE01 /* oscRouter.cpp */,
 				9F8DDE921CD2534100C5BE01 /* oscRouter.h */,
+				7E9845E81CD3EEDF0028758E /* trackParams.cpp */,
+				7E9845E91CD3EEDF0028758E /* trackParams.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1296,6 +1301,7 @@
 				3AEFE4FA8AD5C72671AD07F8 /* ofxRtMidiOut.cpp in Sources */,
 				7E70A09F1ADBDDD5006890D3 /* bwUtil.cpp in Sources */,
 				1A86B7721CAEBC6F1C572C45 /* ofxBaseMidi.cpp in Sources */,
+				7E9845EA1CD3EEDF0028758E /* trackParams.cpp in Sources */,
 				63F9FE1D90234FA6DE6F509E /* ofxMidi.cpp in Sources */,
 				0BFC9C20FD7E3C8D5873AA97 /* ofxMidiIn.cpp in Sources */,
 				C6FE64F74F1EA1D98C8F9847 /* ofxMidiMessage.cpp in Sources */,

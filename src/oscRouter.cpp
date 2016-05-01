@@ -101,35 +101,29 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
         
         //int idx = m.getArgAsInt32(0);
         tracks[idx].clear();
+    
         
+    //trackParams::setOSCtoggle
+    } else if (m.getAddress() == "/loaded"){
+        tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
+    } else if (m.getAddress() == "/still"){
+        tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     } else if (m.getAddress() == "/playNoteOff"){
-        
-        tracks[idx].setPlayNoteOff(m.getArgAsInt32(1));
-        
+        tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     } else if (m.getAddress() == "/playAll"){
-        
-        tracks[idx].setPlayAll(m.getArgAsInt32(1));
-        
+        tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     } else if (m.getAddress() == "/finalize"){
-        
-        tracks[idx].setFinalize(m.getArgAsInt32(1));
-        
+        tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     } else if (m.getAddress() == "/mirror"){
-        
-        tracks[idx].setMirror(m.getArgAsInt32(1));
-        
+        tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     } else if (m.getAddress() == "/mirrorX"){
-        
-        tracks[idx].setMirrorX(m.getArgAsInt32(1));
-        
+        tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     } else if (m.getAddress() == "/mirrorY"){
-        
-        tracks[idx].setMirrorY(m.getArgAsInt32(1));
-        
+        tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     } else if (m.getAddress() == "/mirrorZ"){
-        
-        tracks[idx].setMirrorZ(m.getArgAsInt32(1));
-        
+        tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
+    
+    
     } else if (m.getAddress() == "/mirrorDistance"){
         
         tracks[idx].setMirrorDistance(float(m.getArgAsInt32(1)));
@@ -152,10 +146,11 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
     } else if (m.getAddress() == "/randlocalRotX"){
         // LOCAL ROTATE --------------------------------------
         ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
-        tracks[idx].tweenLocRotX(float(m.getArgAsInt32(1)),1000.0);
+        //tracks[idx].tweenLocRotX(float(m.getArgAsInt32(1)),1000.0);
     } else if (m.getAddress() == "/tweenlocalRotX"){
         ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
-        tracks[idx].tweenLocRotX(float(m.getArgAsInt32(1)),1000.0);
+        //tracks[idx].tweenLocRotX(float(m.getArgAsInt32(1)),1000.0);
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomLocalRotX, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 0);
         
     } else if (m.getAddress() == "/setlocalRotX"){
         ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
@@ -225,12 +220,14 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
     } else if (m.getAddress() == "/randObjRotX") {
         // OBJECT ROTATE --------------------------------------
         ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
-        tracks[idx].tweenObjRotX(float(m.getArgAsInt32(1)), 1000.0);
+        //tracks[idx].tweenObjRotX(float(m.getArgAsInt32(1)), 1000.0);
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomObjRotX, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
         
     } else if (m.getAddress() == "/tweenObjRotX") {
         
         ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
-        tracks[idx].tweenObjRotX(float(m.getArgAsInt32(1)),1000.0);
+        //tracks[idx].tweenObjRotX(float(m.getArgAsInt32(1)),1000.0);
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomObjRotX, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
         
     } else if (m.getAddress() == "/setObjRotX") {
         tracks[idx].setObjRotX(float(m.getArgAsInt32(1)));
@@ -238,11 +235,15 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
     } else if (m.getAddress() == "/randObjRotY") {
         
         ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
-        tracks[idx].tweenObjRotY(float(m.getArgAsInt32(1)), 1000.0);
+        //tracks[idx].tweenObjRotY(float(m.getArgAsInt32(1)), 1000.0);
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomObjRotY, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+
         
     } else if (m.getAddress() == "/tweenObjRotY") {
         ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
-        tracks[idx].tweenObjRotY(float(m.getArgAsInt32(1)),1000.0);
+        //tracks[idx].tweenObjRotY(float(m.getArgAsInt32(1)),1000.0);
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomObjRotY, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+
         
     } else if (m.getAddress() == "/setObjRotY") {
         tracks[idx].setObjRotY(float(m.getArgAsInt32(1)));
@@ -250,12 +251,16 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
     } else if (m.getAddress() == "/randObjRotZ") {
         
         ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
-        tracks[idx].tweenObjRotZ(float(m.getArgAsInt32(1)), 1000.0);
+        //tracks[idx].tweenObjRotZ(float(m.getArgAsInt32(1)), 1000.0);
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomObjRotZ, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+
         
     } else if (m.getAddress() == "/tweenObjRotZ") {
         
         ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
-        tracks[idx].tweenObjRotZ(float(m.getArgAsInt32(1)),1000.0);
+        //tracks[idx].tweenObjRotZ(float(m.getArgAsInt32(1)),1000.0);
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomObjRotZ, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+
         
     } else if (m.getAddress() == "/setObjRotZ") {
         tracks[idx].setObjRotZ(float(m.getArgAsInt32(1)));

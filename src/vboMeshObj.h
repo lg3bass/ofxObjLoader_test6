@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxObjLoader.h"
 #include "objFileLoader.h"
+#include "trackParams.h"
 #include "ofParameterGroup.h"
 #include "ofParameter.h"
 #include "bwUtil.h"
@@ -19,7 +20,7 @@ class vboMeshObj {
     vector<ofVboMesh> vboMesh1;
     int index;//keep track of what instance you are
     
-
+    trackParams trackParameters;
     
     //intances
     struct instance {
@@ -46,112 +47,13 @@ class vboMeshObj {
     };
     vector<instance> instances;
     
+    //setup the track params.
+    guiParams params;
+
     //matCaps
     ofImage matCap;
     ofShader shader;
     vector<string> matcaps;
-    
-    
-    //drawing params
-    struct guiParams {
-        bool playAll;                   //play all the buffers to the next segment
-        bool playAllFinalize;           //play all the buffers to the end of object sequence
-        bool isSelected;
-        bool isLoaded;
-        bool isPlaying;
-        int instancePlayingId;
-        int lastInstancePlayed;
-        bool still;
-        bool oscControlled;
-        bool randomized;
-        bool mirrored;
-        bool mirrorX;
-        bool mirrorY;
-        bool mirrorZ;
-        int tweenType;
-        bool playNoteOff;
-        string type;
-        int numOfSeg;
-        
-        //tweens
-        bool randLocalPosBoolX;
-        bool randLocalPosBoolY;
-        bool randLocalPosBoolZ;
-        bool randLocalRotBoolX;
-        bool randLocalRotBoolY;
-        bool randLocalRotBoolZ;
-        bool randObjRotBoolX;
-        bool randObjRotBoolY;
-        bool randObjRotBoolZ;
-                
-        float mirror_distance;
-        //int currentSegment;
-        vector<int> cuePoints;
-        vector<int> durrationPoints;
-        vector<int> midpointCues;
-        vector<int> segmentLengths;
-        int stillFrame;
-        int totalFrames;
-        int testSpeed;//speed
-        
-        bool spinX;
-        bool spinY;
-        bool spinZ;
-        ofVec3f spin;
-        ofVec3f spinRange;
-        int ltransMod;
-        
-        //mod params
-        //global
-        int g_copies;
-        bool gScale;
-        float g_scale;
-        float gScaleMod;
-        float gScaleModVal;
-        bool gTransX;
-        bool gTransY;
-        bool gTransZ;
-        ofVec3f g_trans;
-        ofVec3f gTransMod;
-        ofVec3f gTransModVal;
-        bool gRotX;
-        bool gRotY;
-        bool gRotZ;
-        ofVec3f g_rotate;
-        ofVec3f gRotateMod;
-        ofVec3f gRotateModVal;
-        
-        //local
-        int l_copies;
-        int l_slices;
-        bool lScale;
-        float l_scale;
-        float lScaleMod;
-        float lScaleModVal;
-        bool lTransX;
-        bool lTransY;
-        bool lTransZ;
-        ofVec3f l_trans;
-        ofVec3f lTransMod;
-        ofVec3f lTransModVal;
-        bool lRotX;
-        bool lRotY;
-        bool lRotZ;
-        ofVec3f l_rotate;
-        ofVec3f lRotateMod;
-        ofVec3f lRotateModVal;
-        
-        //object
-        bool oRotX;
-        bool oRotY;
-        bool oRotZ;
-        ofVec3f o_rotate;
-        ofVec3f oRotateMod;
-        ofVec3f oRotateModVal;
-        
-    };    
-    guiParams params;
-    
     
     /* Debug parameters ofxgui */
     ofParameterGroup parameters;
@@ -164,8 +66,6 @@ class vboMeshObj {
     ofParameter<string> gui_isPlayingList;
     ofParameter<string> gui_currentSegment;
 
-    
-    
     vector <ofxTween> backTweens;
     vector <ofxTween> bounceTweens;
     vector <ofxTween> circTweens;
@@ -228,7 +128,6 @@ class vboMeshObj {
     
     void setup(const objFileLoader::extObjFile &_input);
     vector<int> parseJSON(string _param);
-    void reportParams(int _index);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
     void loadVboMesh(const objFileLoader::extObjFile &_input);
     void setMatCap(int _imgIndex);
@@ -244,15 +143,9 @@ class vboMeshObj {
     void clear();
     
     //OSC
-    void setMirror(bool _mirror);
-    void setMirrorX(bool _mirrorX);
-    void setMirrorY(bool _mirrorY);
-    void setMirrorZ(bool _mirrorZ);
+
+
     void setMirrorDistance(float _mirDist);
-    
-    void setPlayAll(bool _playAll);
-    void setFinalize(int _finalize);
-    void setPlayNoteOff(bool _playNoteOff);
     void setLocalCopies(int _buffers);
     void setLocalSlices(int _slices);
     void setSliceAngle(int _copies);
@@ -281,8 +174,6 @@ class vboMeshObj {
     void setObjRotY(float _rotY);
     void tweenObjRotZ(float _rotZ, float _duration);
     void setObjRotZ(float _rotZ);
-    
-    
     
     void bassControl(float &_amp, int _noteLength);
     

@@ -1,17 +1,20 @@
 #pragma once
 #include "ofAppGlutWindow.h"
 #include "ofMain.h"
+#include "oscRouter.h"
+#include "objFileLoader.h"
+#include "vboMeshObj.h"
+//#include "trackParams.h"//Why if I comment this out does it work?
+#include "bwUtil.h"
+
 #include "ofxSyphon.h"
 //#include "ofxAutoReloadedShader.h"
 #include "ofxGui.h"
-#include "objFileLoader.h"
-#include "vboMeshObj.h"
 #include "ofxUI.h"
 #include "ofxOsc.h"
-#include "oscRouter.h"
 #include "ofxTween.h"
 #include "ofxJSON.h"
-#include "bwUtil.h"
+
 
 
 #define NUM_TRACKS 21
