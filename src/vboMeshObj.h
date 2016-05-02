@@ -117,9 +117,6 @@ class vboMeshObj {
     ofxTween posRandomObjRotY;//object rotation Y
     ofxTween posRandomObjRotZ;//object rotation Z
     
-    ofVec3f lastLocRot = ofVec3f(0.0,0.0,0.0);
-    ofVec3f lastLocTrans = ofVec3f(0.0,0.0,0.0);
-    ofVec3f lastObjRot = ofVec3f(0.0,0.0,0.0);
     
     //constructor
     vboMeshObj();
@@ -143,38 +140,12 @@ class vboMeshObj {
     void clear();
     
     //OSC
-
-
     void setMirrorDistance(float _mirDist);
     void setLocalCopies(int _buffers);
     void setLocalSlices(int _slices);
     void setSliceAngle(int _copies);
     void setLocalScale(float _scale);
  
-    //-- tween local Rotate
-    void tweenLocRotX(float _rotX, float _duration);
-    void setLocRotX(float _rotX);
-    void tweenLocRotY(float _rotY, float _duration);
-    void setLocRotY(float _rotY);
-    void tweenLocRotZ(float _rotZ, float _duration);
-    void setLocRotZ(float _rotZ);
-
-    //-- tween local Translate
-    void tweenLocTransX(float _rotX, float _duration);
-    void setLocTransX(float _rotX);
-    void tweenLocTransY(float _rotY, float _duration);
-    void setLocTransY(float _rotY);
-    void tweenLocTransZ(float _rotZ, float _duration);
-    void setLocTransZ(float _rotZ);
-    
-    //-- tween obj rotate
-    void tweenObjRotX(float _rotX, float _duration);
-    void setObjRotX(float _rotX);
-    void tweenObjRotY(float _rotY, float _duration);
-    void setObjRotY(float _rotY);
-    void tweenObjRotZ(float _rotZ, float _duration);
-    void setObjRotZ(float _rotZ);
-    
     void bassControl(float &_amp, int _noteLength);
     
     void guiEvent(ofxUIEventArgs &e);

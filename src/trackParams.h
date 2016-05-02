@@ -65,18 +65,22 @@ struct guiParams {
     float g_scale;
     float gScaleMod;
     float gScaleModVal;
+
     bool gTransX;
     bool gTransY;
     bool gTransZ;
     ofVec3f g_trans;
     ofVec3f gTransMod;
     ofVec3f gTransModVal;
+    ofVec3f lastGlobalTrans;
+
     bool gRotX;
     bool gRotY;
     bool gRotZ;
     ofVec3f g_rotate;
     ofVec3f gRotateMod;
     ofVec3f gRotateModVal;
+    ofVec3f lastGlobalRot;
     
     //local
     int l_copies;
@@ -85,12 +89,7 @@ struct guiParams {
     float l_scale;
     float lScaleMod;
     float lScaleModVal;
-    bool lTransX;
-    bool lTransY;
-    bool lTransZ;
-    ofVec3f l_trans;
-    ofVec3f lTransMod;
-    ofVec3f lTransModVal;
+
     bool lRotX;
     bool lRotY;
     bool lRotZ;
@@ -99,10 +98,19 @@ struct guiParams {
     ofVec3f lRotateModVal;
     ofVec3f lastLocRot;
     
+    bool lTransX;
+    bool lTransY;
+    bool lTransZ;
+    ofVec3f l_trans;
+    ofVec3f lTransMod;
+    ofVec3f lTransModVal;
+    ofVec3f lastLocTrans;
+
     //object
     bool oRotX;
     bool oRotY;
     bool oRotZ;
+    //vector<bool> oRot;//test boolean vector
     ofVec3f o_rotate;
     ofVec3f oRotateMod;
     ofVec3f oRotateModVal;
@@ -132,14 +140,15 @@ public:
     trackParams();
     
     void setDefault(guiParams &params);
+
     void reportParams(guiParams &params, int _index);
     
     void setOSCtoggle(guiParams &params, string paramName, bool isActive);
     
     void setOSCtween(guiParams &params, ofxTween &tween, string paramName, ofxEasing &easingCurve, float _rotX, float _duration);
     
+    void setOSCdial(guiParams &params, string paramName, float _value);
     
-    void testOSC();
     
 };
 
