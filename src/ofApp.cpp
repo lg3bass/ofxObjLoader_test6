@@ -248,7 +248,7 @@ void ofApp::keyPressed(int key){
             
             if(modkey){
                 //randLocalPosition(<lowRand>,<highRand>,<durration>,<delay>);
-                tracks[keyIndex].randLocalPosition(-15,15,600,400);
+                
             }
             if(ctrlKey){
                 tracks[keyIndex].clear();

@@ -121,7 +121,7 @@
 <Widget>
     <Kind>17</Kind>
     <Name>material3.jpg</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>17</Kind>
@@ -221,12 +221,12 @@
 <Widget>
     <Kind>42</Kind>
     <Name>SPEED</Name>
-    <Value>1067</Value>
+    <Value>500</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>LOADED</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -261,22 +261,27 @@
 <Widget>
     <Kind>2</Kind>
     <Name>playNoteOff</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>playAll</Name>
-    <Value>1</Value>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>finalize</Name>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
     <Name>FRAME</Name>
-    <Value>16</Value>
+    <Value>20</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>MIRROR</Name>
-    <Value>10.000000000</Value>
+    <Value>10.000001907</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -286,7 +291,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(G)SCALE</Name>
-    <Value>5.246666431</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -401,7 +406,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)SCALE</Name>
-    <Value>0.736000001</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -461,7 +466,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)TRANS-X</Name>
-    <Value>-20.662067413</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -476,7 +481,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(L)TRANS-Y</Name>
-    <Value>12.630897522</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -506,7 +511,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-X</Name>
-    <Value>90.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -521,7 +526,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-Y</Name>
-    <Value>45.599998474</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>
@@ -536,7 +541,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>(O)ROTATE-Z</Name>
-    <Value>-38.399993896</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>31</Kind>

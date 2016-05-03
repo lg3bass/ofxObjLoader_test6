@@ -26,7 +26,6 @@ void trackParams::setDefault(guiParams &params){
     params.lastInstancePlayed = -1;
     params.still = false;
     params.oscControlled = true;
-    params.randomized = false;
     params.mirrored = false;
     params.mirrorX = false;
     params.mirrorY = false;
@@ -123,7 +122,6 @@ void trackParams::reportParams(guiParams &params, int _i){
     "lastInstancePlayed(" << params.lastInstancePlayed << ")," <<
     "still(" << params.still << ")," <<
     "oscControlled(" << params.oscControlled << ")," <<
-    "randomized(" << params.randomized << ")," <<
     "mirrored(" << params.mirrored << ")," <<
     "mirrorX(" << params.mirrorX << ")," <<
     "mirrorY(" << params.mirrorY << ")," <<
@@ -188,9 +186,9 @@ void trackParams::reportParams(guiParams &params, int _i){
 //--------------------------------------------------------------
 void trackParams::setOSCtoggle(guiParams &params, string paramName, bool isActive){
     if(paramName == "/loaded"){
-        params.mirrored = isActive;
+        params.isLoaded = isActive;
     } else if(paramName == "/still"){
-        params.mirrored = isActive;
+        params.still = isActive;
     } else if (paramName == "/playNoteOff"){
         params.playNoteOff = isActive;
     } else if (paramName == "/playAll"){
@@ -268,7 +266,10 @@ void trackParams::setOSCdial(guiParams &params, string paramName, float _value){
     
     
     if(paramName == "/start"){
-
+    } else if(paramName == "/mirrorDistance"){
+        params.mirror_distance = _value;
+    } else if(paramName == "/localScale"){
+        params.l_scale = _value;
     } else if(paramName == "/setLocalRotX"){
         params.l_rotate.x = _value;
     } else if(paramName == "/setLocalRotY"){

@@ -83,18 +83,6 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
         //----------noteOff(VMMnoteId| _durration)
         tracks[idx].noteOff(VMMnoteID, m.getArgAsInt32(5));
         
-    } else if (m.getAddress() == "/randomTrans"){
-        
-        ofLogVerbose("OSC") << m.getAddress() <<
-        "track:" << m.getArgAsInt32(0) <<
-        ", low:" << m.getArgAsInt32(1) <<
-        ", high:" << m.getArgAsInt32(2) <<
-        ", durration:" << m.getArgAsInt32(3) <<
-        ", delay:" << m.getArgAsInt32(4);
-        
-        //float _start(low), float _end(high), int _durration, int _delay
-        tracks[idx].randLocalPosition(m.getArgAsInt32(1),m.getArgAsInt32(2),m.getArgAsInt32(3),m.getArgAsInt32(4));
-        
     } else if (m.getAddress() == "/clear"){
         
         ofLogVerbose("OSC") << m.getAddress() << endl << "track:" << m.getArgAsInt32(0);
@@ -126,9 +114,7 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
     
     } else if (m.getAddress() == "/mirrorDistance"){
         
-        tracks[idx].setMirrorDistance(float(m.getArgAsInt32(1)));
-        
-        //tracks[idx].setPlayAll(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), float(m.getArgAsInt32(1)));
         
     } else if (m.getAddress() == "/localCopies"){
         //ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << m.getArgAsInt32(1);
@@ -141,7 +127,7 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
     } else if (m.getAddress() == "/localScale"){
         
         cout << "/localScale " << m.getArgAsFloat(1) << endl;
-        tracks[idx].setLocalScale(m.getArgAsFloat(1));
+        tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), m.getArgAsFloat(1));
 
         
         

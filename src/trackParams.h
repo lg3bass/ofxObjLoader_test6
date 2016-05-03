@@ -20,7 +20,6 @@ struct guiParams {
     int lastInstancePlayed;
     bool still;
     bool oscControlled;
-    bool randomized;
     bool mirrored;
     bool mirrorX;
     bool mirrorY;

@@ -391,28 +391,6 @@ void vboMeshObj::update(){
     
     
     
-    
-    
-    if(params.randomized){
-        //randomized positions.
-        //params.l_trans = ofVec3f(positiontweenbounce_x.update(),positiontweenbounce_y.update(),params.l_trans.z);
-
-        if(positiontweenbounce_x.isCompleted()){
-            //params.randomized = false;
-        }
-        
-        params.o_rotate = ofVec3f(posRandomObjRotX.update(),params.o_rotate.y,params.o_rotate.z);
-        
-        if(posRandomObjRotX.isCompleted()){
-            params.randomized = false;
-        }
-        
-    }//end params.randomized
-    
-    
-    
-    
-    
     //FLOATING DEBUG MENU ON RIGHT
     //=======================================================================
     //validate what's playing in ofxGUI
@@ -506,7 +484,6 @@ void vboMeshObj::setupGui(int _index){
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addLabelButton("CLEAR", false,50,20,0,0);
-    gui->addLabelButton("RANDOM", false,50,20,0,0);
     gui->addIntSlider("SPEED", 1, 2000, &params.testSpeed, 150,8,0,0);
     
     //loaded.
@@ -526,9 +503,6 @@ void vboMeshObj::setupGui(int _index){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addLabelToggle("mirror y", &params.mirrorY,75,12,0,0,false);
     gui->addLabelToggle("mirror z", &params.mirrorZ,75,12,0,0,false);
-    
-
-    
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addToggle("playNoteOff", &params.playNoteOff);
@@ -730,27 +704,6 @@ void vboMeshObj::setIndicator(){
     }
 }
 
-//--------------------------------------------------------------
-void vboMeshObj::randLocalPosition(float _start, float _end, int _durration, int _delay){
-    
-    //store the last position
-    lastPosition = params.l_trans;
-    
-    float randX = ofRandom(_start, _end);
-    float randY = ofRandom(_start, _end);
-    //unsigned durration = 1000;
-    //unsigned delay = 500;
-    
-    
-    positiontweenbounce_x.setParameters(12,easingback, ofxTween::easeOut,lastPosition.x,randX,_durration,_delay);
-    positiontweenbounce_y.setParameters(13,easingback, ofxTween::easeOut,lastPosition.y,randY,_durration,_delay);
-    
-    //start the animation
-    params.randomized = true;
-    
-}
-
-
 
 //--------------------------------------------------------------
 void vboMeshObj::resetBufferInstance(int _buffer, string _mode){
@@ -805,12 +758,6 @@ void vboMeshObj::clear(){
 
 
 //--------------------------------------------------------------
-void vboMeshObj::setMirrorDistance(float _mirDist){
-    params.mirror_distance = _mirDist;
-}
-
-
-//--------------------------------------------------------------
 void vboMeshObj::setLocalCopies(int _buffers){
     //clear();
     params.l_copies = _buffers;
@@ -829,15 +776,6 @@ void vboMeshObj::setSliceAngle(int _copies){
     float sliceAngle = 360.0/_copies;
     params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);
 }
-
-
-//--------------------------------------------------------------
-void vboMeshObj::setLocalScale(float _scale){
-    params.l_scale = _scale;
-}
-
-
-
 
 
 //--------------------------------------------------------------
@@ -933,22 +871,15 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
     } else if(name == "CLEAR"){
         ofxUIButton *clearbut = (ofxUIButton *) e.widget;
         if(clearbut->getValue()){
-            clear();
-            
+            clear();            
         }
-    } else if(name == "RANDOM"){
-        ofxUIButton *randbut = (ofxUIButton *) e.widget;
-        if(randbut->getValue()){
-            randLocalPosition(-15,15,600,400);
-        }
+        
+
     } else if(name == "(L)COPIES " + ofToString(index)){
         ofxUIIntSlider *lcopies = (ofxUIIntSlider *) e.widget;
         //set the z angle to correlate to the number of slices
         
         setSliceAngle(lcopies->getValue());
-        
-        
-        
     }
     
 

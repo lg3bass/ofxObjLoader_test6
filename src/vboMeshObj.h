@@ -93,16 +93,6 @@ class vboMeshObj {
     ofxEasingLinear 	easinglinear;
     
     
-    //INITIAL RANDOMIZED EXPERIMENT - TBD
-    //tween randLocalPosition
-    ofxTween positiontweenbounce_x;
-    ofxTween positiontweenbounce_y;
-
-    //last positions
-    ofVec3f lastPosition = ofVec3f(0.0,0.0,0.0);// not used
-    //------------------------------------
-    
-    
     //local tweens
     ofxTween posRandomLocalRotX;
     ofxTween posRandomLocalRotY;
@@ -135,16 +125,15 @@ class vboMeshObj {
     void setupGui(int _index);
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();
-    void randLocalPosition(float _start, float _end, int _durration, int _delay);
     void resetBufferInstance(int _buffer, string _mode);
     void clear();
     
     //OSC
-    void setMirrorDistance(float _mirDist);
+
     void setLocalCopies(int _buffers);
     void setLocalSlices(int _slices);
     void setSliceAngle(int _copies);
-    void setLocalScale(float _scale);
+
  
     void bassControl(float &_amp, int _noteLength);
     

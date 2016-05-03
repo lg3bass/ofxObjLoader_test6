@@ -269,6 +269,11 @@
     <Value>0</Value>
 </Widget>
 <Widget>
+    <Kind>2</Kind>
+    <Name>finalize</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
     <Kind>42</Kind>
     <Name>FRAME</Name>
     <Value>270</Value>
@@ -276,7 +281,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>MIRROR</Name>
-    <Value>10.000000000</Value>
+    <Value>10.000001907</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
