@@ -112,8 +112,7 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
         tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     
     
-    } else if (m.getAddress() == "/mirrorDistance"){
-        
+    } else if (m.getAddress() == "/mirrorDistance"){        
         tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), float(m.getArgAsInt32(1)));
         
     } else if (m.getAddress() == "/localCopies"){
@@ -121,12 +120,9 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
         tracks[idx].setLocalCopies(m.getArgAsInt32(1));
         
     } else if (m.getAddress() == "/localSlices"){
-        
         tracks[idx].setLocalSlices(m.getArgAsInt32(1));
         
     } else if (m.getAddress() == "/localScale"){
-        
-        cout << "/localScale " << m.getArgAsFloat(1) << endl;
         tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), m.getArgAsFloat(1));
 
         
