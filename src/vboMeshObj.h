@@ -20,9 +20,12 @@ class vboMeshObj {
     vector<ofVboMesh> vboMesh1;
     int index;//keep track of what instance you are
     
+    //------------------------------------
+    //ALL OF THE TRACK PARAMETERS.
     trackParams trackParameters;
     
-    //intances
+    //------------------------------------
+    //ALL OF THE INSTANCES (move to class)
     struct instance {
         bool cued2play;
         bool isPlaying;
@@ -49,12 +52,15 @@ class vboMeshObj {
     
     //setup the track params.
     guiParams params;
-
+    
+    //------------------------------------
     //matCaps
     ofImage matCap;
     ofShader shader;
     vector<string> matcaps;
     
+    
+    //------------------------------------
     /* Debug parameters ofxgui */
     ofParameterGroup parameters;
     ofParameter<int> gui_buffers;
@@ -66,6 +72,9 @@ class vboMeshObj {
     ofParameter<string> gui_isPlayingList;
     ofParameter<string> gui_currentSegment;
 
+    
+    //------------------------------------
+    // ofxTween
     vector <ofxTween> backTweens;
     vector <ofxTween> bounceTweens;
     vector <ofxTween> circTweens;
@@ -129,20 +138,19 @@ class vboMeshObj {
     void clear();
     
     //OSC
-
     void setLocalCopies(int _buffers);
     void setLocalSlices(int _slices);
     void setSliceAngle(int _copies);
-
- 
     void bassControl(float &_amp, int _noteLength);
     
+    //GUI
     void guiEvent(ofxUIEventArgs &e);
     
+    //Computer Keyboard
     void keyPressed(int key);
     void keyReleased(int key);
     
-    //PLAY
+    //Animate
     void advanceInstance();
     void advanceSegment(int _buffer);
     void noteOn(int _buffer, int _noteId, int _note, int _velocity, int _delta);
