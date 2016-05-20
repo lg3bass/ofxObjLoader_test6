@@ -94,7 +94,6 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     
     //output all my params to check
     //trackParameters.reportParams(params, index);
-    
 }
 
 //--------------------------------------------------------------
@@ -196,6 +195,12 @@ void vboMeshObj::draw(){
                 glRotatef(i*params.l_rotate.x+params.lRotateModVal.x,1,0,0);
                 glRotatef(i*params.l_rotate.y+params.lRotateModVal.y,0,1,0);
                 glRotatef(i*params.l_rotate.z+params.lRotateModVal.z,0,0,1);
+                
+                //float z = params.l_rotate.z;
+                float temp = i*params.l_rotate.z+params.lRotateModVal.z;
+                
+                //cout << ofToString(temp) << endl;
+                //glRotatef(temp,0,0,1);
 
                 glTranslatef(params.l_trans.x+params.lTransModVal.x, params.l_trans.y+params.lTransModVal.y, params.l_trans.z+params.lTransModVal.z);
             
@@ -348,20 +353,48 @@ void vboMeshObj::update(){
     //====================================================
     
     //RUNNING OBJECT ROTATION TWEENS??
-    if(params.randObjRotBoolX){
-        params.o_rotate = ofVec3f(posRandomObjRotX.update(),params.o_rotate.y,params.o_rotate.z);
-        posRandomObjRotX.isCompleted() ? params.randObjRotBoolX = false : params.randObjRotBoolX = true;
+    //-- I want to move all of this tweening to a new animation class.
+    
+//    // this possibly might work.
+//    int boolIndex = 0;
+//    
+//    if(params.randGlobalPosBool[boolIndex]){
+//        params.l_rotate[boolIndex] = posRandomGlobalRot[boolIndex].update();
+//        posRandomGlobalRot[boolIndex].isCompleted() ? params.randGlobalPosBool[boolIndex] = false : params.randGlobalPosBool[boolIndex] = true;
+//    }
+//    
+    
+    
+    
+    //GLOBAL ROTATION
+    if(params.randGlobalRotBoolX){
+        params.g_rotate = ofVec3f(posRandomGlobalRotX.update(),params.g_rotate.y,params.g_rotate.z);
+        posRandomGlobalRotX.isCompleted() ? params.randGlobalRotBoolX = false : params.randGlobalRotBoolX = true;
     }
-    if(params.randObjRotBoolY){
-        params.o_rotate = ofVec3f(params.o_rotate.x,posRandomObjRotY.update(),params.o_rotate.z);
-        posRandomObjRotY.isCompleted() ? params.randObjRotBoolY = false : params.randObjRotBoolY = true;
+    if(params.randGlobalRotBoolY){
+        params.g_rotate = ofVec3f(params.g_rotate.x,posRandomGlobalRotY.update(),params.g_rotate.z);
+        posRandomGlobalRotY.isCompleted() ? params.randGlobalRotBoolY = false : params.randGlobalRotBoolY = true;
     }
-    if(params.randObjRotBoolZ){
-        params.o_rotate = ofVec3f(params.o_rotate.x,params.o_rotate.y,posRandomObjRotZ.update());
-        posRandomObjRotZ.isCompleted() ? params.randObjRotBoolZ = false : params.randObjRotBoolZ = true;
+    if(params.randGlobalRotBoolZ){
+        params.g_rotate = ofVec3f(params.g_rotate.x,params.g_rotate.y,posRandomGlobalRotZ.update());
+        posRandomGlobalRotZ.isCompleted() ? params.randGlobalRotBoolZ = false : params.randGlobalRotBoolZ = true;
     }
     
-    //RUNNING LOCAL ROTATION TWEENS??
+    //GLOBAL TRANSLATE
+    if(params.randGlobalPosBoolX){
+        params.g_trans = ofVec3f(posRandomGlobalX.update(),params.g_trans.y,params.g_trans.z);
+        posRandomGlobalX.isCompleted() ? params.randGlobalPosBoolX = false : params.randGlobalPosBoolX = true;
+    }
+    if(params.randGlobalPosBoolY){
+        params.g_trans = ofVec3f(params.g_trans.x,posRandomGlobalY.update(),params.g_trans.z);
+        posRandomGlobalY.isCompleted() ? params.randGlobalPosBoolY = false : params.randGlobalPosBoolY = true;
+    }
+    if(params.randGlobalPosBoolZ){
+        params.g_trans = ofVec3f(params.g_trans.x,params.g_trans.y,posRandomGlobalZ.update());
+        posRandomGlobalZ.isCompleted() ? params.randGlobalPosBoolZ = false : params.randGlobalPosBoolZ = true;
+    }
+    
+    //LOCAL ROTATE
     if(params.randLocalRotBoolX){
         params.l_rotate = ofVec3f(posRandomLocalRotX.update(),params.l_rotate.y,params.l_rotate.z);
         posRandomLocalRotX.isCompleted() ? params.randLocalRotBoolX = false : params.randLocalRotBoolX = true;
@@ -375,7 +408,7 @@ void vboMeshObj::update(){
         posRandomLocalRotZ.isCompleted() ? params.randLocalRotBoolZ = false : params.randLocalRotBoolZ = true;
     }
     
-    //RUNNING LOCAL TRANSLATE TWEENS??
+    //LOCAL TRANSLATE
     if(params.randLocalPosBoolX){
         params.l_trans = ofVec3f(posRandomLocalX.update(),params.l_trans.y,params.l_trans.z);
         posRandomLocalX.isCompleted() ? params.randLocalPosBoolX = false : params.randLocalPosBoolX = true;
@@ -389,7 +422,19 @@ void vboMeshObj::update(){
         posRandomLocalZ.isCompleted() ? params.randLocalPosBoolZ = false : params.randLocalPosBoolZ = true;
     }
     
-    
+    //OBJECT
+    if(params.randObjRotBoolX){
+        params.o_rotate = ofVec3f(posRandomObjRotX.update(),params.o_rotate.y,params.o_rotate.z);
+        posRandomObjRotX.isCompleted() ? params.randObjRotBoolX = false : params.randObjRotBoolX = true;
+    }
+    if(params.randObjRotBoolY){
+        params.o_rotate = ofVec3f(params.o_rotate.x,posRandomObjRotY.update(),params.o_rotate.z);
+        posRandomObjRotY.isCompleted() ? params.randObjRotBoolY = false : params.randObjRotBoolY = true;
+    }
+    if(params.randObjRotBoolZ){
+        params.o_rotate = ofVec3f(params.o_rotate.x,params.o_rotate.y,posRandomObjRotZ.update());
+        posRandomObjRotZ.isCompleted() ? params.randObjRotBoolZ = false : params.randObjRotBoolZ = true;
+    }
     
     //FLOATING DEBUG MENU ON RIGHT
     //=======================================================================
@@ -758,27 +803,6 @@ void vboMeshObj::clear(){
 
 
 //--------------------------------------------------------------
-void vboMeshObj::setLocalCopies(int _buffers){
-    //clear();
-    params.l_copies = _buffers;
-    setSliceAngle(_buffers);
-}
-
-
-//--------------------------------------------------------------
-void vboMeshObj::setLocalSlices(int _slices){
-    params.l_slices = _slices;
-}
-
-
-//--------------------------------------------------------------
-void vboMeshObj::setSliceAngle(int _copies){
-    float sliceAngle = 360.0/_copies;
-    params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);
-}
-
-
-//--------------------------------------------------------------
 void vboMeshObj::bassControl(float &_amp, int _noteLength){
     
     
@@ -879,7 +903,11 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         ofxUIIntSlider *lcopies = (ofxUIIntSlider *) e.widget;
         //set the z angle to correlate to the number of slices
         
-        setSliceAngle(lcopies->getValue());
+
+        float sliceAngle = 360.0/lcopies->getValue();
+        params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);
+        
+        
     }
     
 

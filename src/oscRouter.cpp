@@ -113,19 +113,63 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
     
     
     } else if (m.getAddress() == "/mirrorDistance"){        
-        tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), float(m.getArgAsInt32(1)));
+        tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
         
     } else if (m.getAddress() == "/localCopies"){
         //ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << m.getArgAsInt32(1);
-        tracks[idx].setLocalCopies(m.getArgAsInt32(1));
+        //tracks[idx].setLocalCopies(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
         
     } else if (m.getAddress() == "/localSlices"){
-        tracks[idx].setLocalSlices(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
         
     } else if (m.getAddress() == "/localScale"){
         tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), m.getArgAsFloat(1));
 
         
+        // GLOBAL ROTATE --------------------------------------
+    } else if (m.getAddress() == "/randGlobalRotX" || m.getAddress() == "/tweenGlobalRotX"){
+        
+        ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomGlobalRotX, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+        
+    } else if (m.getAddress() == "/randGlobalRotY" || m.getAddress() == "/tweenGlobalRotY"){
+        
+        ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomGlobalRotY, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+        
+    } else if (m.getAddress() == "/randGlobalRotZ" || m.getAddress() == "/tweenGlobalRotZ"){
+        
+        ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomGlobalRotZ, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+        
+    } else if (m.getAddress() == "/setGlobalRotX" || m.getAddress() == "/setGlobalRotY" || m.getAddress() == "/setGlobalRotZ"){
+        
+        ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), float(m.getArgAsInt32(1)));
+        
+        
+        
+        // GLOBAL TRANSLATE --------------------------------------
+    } else if (m.getAddress() == "/randGlobalTransX" || m.getAddress() == "/tweenGlobalTransX"){
+        
+        ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomGlobalX, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+        
+    } else if (m.getAddress() == "/randGlobalTransY" || m.getAddress() == "/tweenGlobalTransY"){
+        
+        ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomGlobalY, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+        
+    } else if (m.getAddress() == "/randGlobalTransZ" || m.getAddress() == "/tweenGlobalTransZ"){
+        
+        ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCtween(tracks[idx].params, tracks[idx].posRandomGlobalZ, m.getAddress(), tracks[idx].easingquad, float(m.getArgAsInt32(1)), 1000.0);
+        
+    } else if (m.getAddress() == "/setGlobalTransX" || m.getAddress() == "/setGlobalTransY" || m.getAddress() == "/setGlobalTransZ"){
+        
+        ofLogVerbose("OSC") << m.getAddress() << " " << m.getArgAsInt32(0) << " " << float(m.getArgAsInt32(1));
+        tracks[idx].trackParameters.setOSCdial(tracks[idx].params, m.getAddress(), float(m.getArgAsInt32(1)));
         
         
         

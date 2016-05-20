@@ -213,8 +213,35 @@ void trackParams::setOSCtween(guiParams &params, ofxTween &tween, string paramNa
     
     if(paramName == "/start"){
 
-
-     // LOCAL ROTATE --------------------------------------    
+    // GLOBAL ROTATE --------------------------------------
+    } else if (paramName == "/randGlobalRotX" || paramName == "/tweenGlobalRotX"){
+        params.lastGlobalRot.x = params.g_rotate.x;    //store the last position
+        tween.setParameters(easingCurve, ofxTween::easeOut,params.lastGlobalRot.x,_ammount, _duration,0);
+        params.randGlobalRotBoolX = true; //start the animation
+    } else if (paramName == "/randGlobalRotY" || paramName == "/tweenGlobalRotY"){
+        params.lastGlobalRot.y = params.g_rotate.y;    //store the last position
+        tween.setParameters(easingCurve, ofxTween::easeOut,params.lastGlobalRot.y,_ammount, _duration,0);
+        params.randGlobalRotBoolY = true; //start the animation
+    } else if (paramName == "/randGlobalRotZ" || paramName == "/tweenGlobalRotZ"){
+        params.lastGlobalRot.z = params.g_rotate.z;    //store the last position
+        tween.setParameters(easingCurve, ofxTween::easeOut,params.lastGlobalRot.z,_ammount, _duration,0);
+        params.randGlobalRotBoolZ = true; //start the animation
+        
+    // GLOBAL TRANSLATE --------------------------------------
+    } else if (paramName == "/randGlobalTransX" || paramName == "/tweenGlobalTransX"){
+        params.lastGlobalTrans.x = params.g_trans.x;    //store the last position
+        tween.setParameters(easingCurve, ofxTween::easeOut,params.lastGlobalTrans.x,_ammount, _duration,0);
+        params.randGlobalPosBoolX = true; //start the animation
+    } else if (paramName == "/randGlobalTransY" || paramName == "/tweenGlobalTransY"){
+        params.lastGlobalTrans.y = params.g_trans.y;    //store the last position
+        tween.setParameters(easingCurve, ofxTween::easeOut,params.lastGlobalTrans.y,_ammount, _duration,0);
+        params.randGlobalPosBoolY = true; //start the animation
+    } else if (paramName == "/randGlobalTransZ" || paramName == "/tweenGlobalTransZ"){
+        params.lastGlobalTrans.z = params.g_trans.z;    //store the last position
+        tween.setParameters(easingCurve, ofxTween::easeOut,params.lastGlobalTrans.z,_ammount, _duration,0);
+        params.randGlobalPosBoolZ = true; //start the animation
+        
+    // LOCAL ROTATE --------------------------------------
     } else if (paramName == "/randLocalRotX" || paramName == "/tweenLocalRotX"){
         params.lastLocRot.x = params.l_rotate.x;    //store the last position
         tween.setParameters(easingCurve, ofxTween::easeOut,params.lastLocRot.x,_ammount, _duration,0);
@@ -262,30 +289,44 @@ void trackParams::setOSCtween(guiParams &params, ofxTween &tween, string paramNa
 
 //--------------------------------------------------------------
 void trackParams::setOSCdial(guiParams &params, string paramName, float _value){
-    //setLocalTransX
-    
+    //ofLogNotice("OSC") << "trackParams::setOSCdial " << paramName << " " << _value;
     
     if(paramName == "/start"){
+    } else if(paramName == "/localCopies"){
+        int _copies = int(_value);
+        params.l_copies = _copies;
+        float sliceAngle = 360.0/_copies;
+        params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);        
+    } else if(paramName == "/localSlices"){
+        params.l_slices = int(_value);
     } else if(paramName == "/mirrorDistance"){
         params.mirror_distance = _value;
     } else if(paramName == "/localScale"){
-        params.l_scale = _value;
+        params.l_scale = float(_value);
+    } else if(paramName == "/setGlobalRotX"){
+        params.g_rotate.x = _value;
+    } else if(paramName == "/setGlobalRotY"){
+        params.g_rotate.y = _value;
+    } else if(paramName == "/setGlobalRotZ"){
+        params.g_rotate.z = _value;
+    } else if(paramName == "/setGlobalTransX"){
+        params.g_trans.x = _value;
+    } else if(paramName == "/setGlobalTransY"){
+        params.g_trans.y = _value;
+    } else if(paramName == "/setGlobalTransZ"){
+        params.g_trans.z = _value;
     } else if(paramName == "/setLocalRotX"){
         params.l_rotate.x = _value;
     } else if(paramName == "/setLocalRotY"){
         params.l_rotate.y = _value;
     } else if(paramName == "/setLocalRotZ"){
         params.l_rotate.z = _value;
-        
-        
     } else if(paramName == "/setLocalTransX"){
         params.l_trans.x = _value;
     } else if(paramName == "/setLocalTransY"){
         params.l_trans.y = _value;
     } else if(paramName == "/setLocalTransZ"){
         params.l_trans.z = _value;
-        
-        
     } else if(paramName == "/setObjRotX"){
         params.o_rotate.x = _value;
     } else if(paramName == "/setObjRotY"){

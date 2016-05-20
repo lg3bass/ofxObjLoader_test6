@@ -101,6 +101,15 @@ class vboMeshObj {
     ofxEasingSine       easingsine;
     ofxEasingLinear 	easinglinear;
     
+    //global tweens
+    //vector<ofxTween> posRandomGlobalRot;
+    ofxTween posRandomGlobalRotX;
+    ofxTween posRandomGlobalRotY;
+    ofxTween posRandomGlobalRotZ;
+    
+    ofxTween posRandomGlobalX;
+    ofxTween posRandomGlobalY;
+    ofxTween posRandomGlobalZ;
     
     //local tweens
     ofxTween posRandomLocalRotX;
@@ -138,9 +147,6 @@ class vboMeshObj {
     void clear();
     
     //OSC
-    void setLocalCopies(int _buffers);
-    void setLocalSlices(int _slices);
-    void setSliceAngle(int _copies);
     void bassControl(float &_amp, int _noteLength);
     
     //GUI

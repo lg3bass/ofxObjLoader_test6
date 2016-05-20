@@ -30,16 +30,32 @@ struct guiParams {
     int numOfSeg;
     
     //tweens
+    //bool randGlobalPosBool[3] = {false, false, false};
+    //vector<bool> randGlobalPosBool;
+    bool randGlobalPosBoolX;
+    bool randGlobalPosBoolY;
+    bool randGlobalPosBoolZ;
+    
+    //vector<bool>randGlobalRotBool;
+    bool randGlobalRotBoolX;
+    bool randGlobalRotBoolY;
+    bool randGlobalRotBoolZ;
+    
+    //vector<bool> randLocalPosBool;
     bool randLocalPosBoolX;
     bool randLocalPosBoolY;
     bool randLocalPosBoolZ;
+    
+    //vector<bool>randLocalRotBool;
     bool randLocalRotBoolX;
     bool randLocalRotBoolY;
     bool randLocalRotBoolZ;
+    
+    //vector<bool>randObjRotBool;
     bool randObjRotBoolX;
     bool randObjRotBoolY;
     bool randObjRotBoolZ;
-    
+
     float mirror_distance;
     //int currentSegment;
     vector<int> cuePoints;
