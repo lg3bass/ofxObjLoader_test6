@@ -32,5 +32,7 @@
 			"spin-rate" : 10.0,
 			"fft" : false
 		}
-	}
+	},
+	"obj-export-scale" : 1,
+	"obj-export-filename" : "extrudeSoccerBall02_sn0_5-150.mb"
 }
