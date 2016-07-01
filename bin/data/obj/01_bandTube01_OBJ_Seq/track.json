@@ -3,7 +3,7 @@
 	"objSeq-basefilename" : "01_bandTube01_OBJ_Seq",
 	"objSeq-type" : "one-shot",
 	"objSeq-playRandom" : false,
-	"objSeq-noteEvents" : "noteOff",
+	"objSeq-noteEvents" : "noteOn",
 	"objSeq-cues" : [ 30 ],
 	"objSeq-segmentLengths" : [ 30 ],
 	"objSeq-midpoint-cues" : [ 15 ],

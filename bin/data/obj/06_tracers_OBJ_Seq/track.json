@@ -3,7 +3,7 @@
 	"objSeq-basefilename" : "06_tracers_OBJ_Seq",
 	"objSeq-type" : "sequence",
 	"objSeq-playRandom" : false,
-	"objSeq-noteEvents" : "noteOff",
+	"objSeq-noteEvents" : "noteOn",
 	"objSeq-cues" : [30,60,90,120,150,180,210,240,270,300,330],
 	"objSeq-segmentLengths" : [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
 	"objSeq-midpoint-cues" : [15,45,75,105,135,165,195,225,255,285,315],

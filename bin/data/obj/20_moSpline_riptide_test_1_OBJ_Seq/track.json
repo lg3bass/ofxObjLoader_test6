@@ -3,7 +3,7 @@
 	"objSeq-basefilename" : "20_moSpline_riptide_test_1_OBJ_Seq",
 	"objSeq-type" : "one-shot",
 	"objSeq-playRandom" : false,
-	"objSeq-noteEvents" : "noteOff",
+	"objSeq-noteEvents" : "noteOn",
 	"objSeq-cues" : [ 30 ],
 	"objSeq-segmentLengths" : [ 30 ],
 	"objSeq-midpoint-cues" : [ 15 ],
@@ -32,5 +32,7 @@
 			"spin-rate" : 10.0,
 			"fft" : false
 		}
-	}
+	},
+	"obj-export-scale" : 0,
+	"obj-export-filename" : "filename.ma"
 }

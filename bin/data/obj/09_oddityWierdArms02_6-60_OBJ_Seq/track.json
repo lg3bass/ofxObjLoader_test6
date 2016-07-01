@@ -32,5 +32,7 @@
 			"spin-rate" : 10.0,
 			"fft" : false
 		}
-	}
+	},
+	"obj-export-scale" : 0,
+	"obj-export-filename" : "filename.ma"
 }

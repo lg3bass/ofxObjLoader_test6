@@ -3,7 +3,7 @@
 	"objSeq-basefilename" : "02_bassStar_OBJ_Seq",
 	"objSeq-type" : "sequence",
 	"objSeq-playRandom" : false,
-	"objSeq-noteEvents" : "noteOff",
+	"objSeq-noteEvents" : "noteOn",
 	"objSeq-cues" : [ 20,40,60,80,100,120,140 ],
 	"objSeq-segmentLengths" : [ 20,20,20,20,20,20,20 ],
 	"objSeq-midpoint-cues" : [ 10,30,50,70,90,110,130 ],
