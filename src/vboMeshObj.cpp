@@ -46,27 +46,20 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
         
     }
     
+    
+    //trackManager
+    //1. *NEW load()
+    //All of this code need to move to a load() function.
+    
     //pull in the objFileLoader data
     trackData = _input;
+    //trackData = ((ofApp*)ofGetAppPtr())->appFileLoader.externalObjFiles[_index];  //point to the main level instead of passing in.
     
     //separate out the JSON data.
     jsonTrackData = _input.jsonData;
     
-    index = jsonTrackData["index"].asInt();
+    index = jsonTrackData["index"].asInt();//This index may not be necessary
     
-    setShader(jsonTrackData["matCap-shader"].asString());
-    
-    
-    //DEBUGGING PARAMS
-    parameters.setName("TRACK "+ofToString(index));
-    parameters.add(gui_buffers.set("buffers",params.l_copies));
-    parameters.add(gui_cued2PlayList.set("cue","0,0,0,0,0,0,0,0,0,0,0,0"));
-    parameters.add(gui_instanceList.set("noteID","0,0,0,0,0,0,0,0,0,0,0,0"));
-    parameters.add(gui_isTweeningList.set("isTweening","0,0,0,0,0,0,0,0,0,0,0,0"));
-    parameters.add(gui_isPlayingList.set("isPlaying","0,0,0,0,0,0,0,0,0,0,0,0"));
-    parameters.add(gui_currentSegment.set("currentSegment","0,0,0,0,0,0,0,0,0,0,0,0"));
-    parameters.add(gui_instancePlayingId.set("instancePlayingId",params.instancePlayingId));
-
     params.cuePoints = parseJSON("objSeq-cues");
     params.durrationPoints = parseJSON("objSeq-durations");
     params.midpointCues = parseJSON("objSeq-midpoint-cues");
@@ -84,10 +77,29 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
         params.playNoteOff = false;
     }
     
+    
+    
+    setShader(jsonTrackData["matCap-shader"].asString());//move to vboMeshObj::setMatCap()
+    
+    
     //get all the matcaps from ofApp
     matcaps = ((ofApp*)ofGetAppPtr())->appFileLoader.externalMatCapFiles;
     
     setMatCap(0);
+    
+    
+    
+    
+    //DEBUGGING PARAMS
+    parameters.setName("TRACK "+ofToString(index));
+    parameters.add(gui_buffers.set("buffers",params.l_copies));
+    parameters.add(gui_cued2PlayList.set("cue","0,0,0,0,0,0,0,0,0,0,0,0"));
+    parameters.add(gui_instanceList.set("noteID","0,0,0,0,0,0,0,0,0,0,0,0"));
+    parameters.add(gui_isTweeningList.set("isTweening","0,0,0,0,0,0,0,0,0,0,0,0"));
+    parameters.add(gui_isPlayingList.set("isPlaying","0,0,0,0,0,0,0,0,0,0,0,0"));
+    parameters.add(gui_currentSegment.set("currentSegment","0,0,0,0,0,0,0,0,0,0,0,0"));
+    parameters.add(gui_instancePlayingId.set("instancePlayingId",params.instancePlayingId));
+    
     
     //setup the ofxUI GUI
     setupGui(index);
