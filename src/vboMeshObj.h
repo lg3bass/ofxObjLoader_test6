@@ -131,7 +131,9 @@ class vboMeshObj {
     
     ofxUICanvas* gui;
     
-    void setup(const objFileLoader::extObjFile &_input);
+    void setup(int _input);
+    //void setup(const objFileLoader::extObjFile &_input);
+    void loadTrackData(int _index);
     vector<int> parseJSON(string _param);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
     void loadVboMesh(const objFileLoader::extObjFile &_input);

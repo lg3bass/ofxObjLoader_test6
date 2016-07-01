@@ -37,6 +37,10 @@ void trackParams::setDefault(guiParams &params){
     
     params.mirror_distance = 10.0;
     //params.currentSegment = 0;//moved to instances
+    
+    
+    
+    
     params.stillFrame = 0;
     params.totalFrames = 0;
     params.testSpeed = 500;

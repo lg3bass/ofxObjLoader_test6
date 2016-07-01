@@ -51,7 +51,8 @@ void ofApp::setup(){
     
     //3. setup the tracks
     for(int t=1; t<NUM_TRACKS;t++){
-        tracks[t].setup(appFileLoader.externalObjFiles[t]);
+        tracks[t].setup(t);
+        //tracks[t].setup(appFileLoader.externalObjFiles[t]);
     }
     
     

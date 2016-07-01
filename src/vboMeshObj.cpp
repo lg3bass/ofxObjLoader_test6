@@ -9,7 +9,7 @@ vboMeshObj::vboMeshObj() {
 
 
 //--------------------------------------------------------------
-void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
+void vboMeshObj::setup(int _input){
     
     //1. SETUP default track params.
     trackParameters.setDefault(params);
@@ -47,36 +47,38 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     }
     
     
-    //trackManager
-    //1. *NEW load()
-    //All of this code need to move to a load() function.
+    //* NEW trackManager
+    loadTrackData(_input);
     
-    //pull in the objFileLoader data
-    trackData = _input;
-    //trackData = ((ofApp*)ofGetAppPtr())->appFileLoader.externalObjFiles[_index];  //point to the main level instead of passing in.
     
-    //separate out the JSON data.
-    jsonTrackData = _input.jsonData;
     
-    index = jsonTrackData["index"].asInt();//This index may not be necessary
-    
-    params.cuePoints = parseJSON("objSeq-cues");
-    params.durrationPoints = parseJSON("objSeq-durations");
-    params.midpointCues = parseJSON("objSeq-midpoint-cues");
-    params.segmentLengths = parseJSON("objSeq-segmentLengths");
-    
-    params.stillFrame = jsonTrackData["objSeq-still"].asInt();
-    params.totalFrames = jsonTrackData["objSeq-files"].asInt();
-    
-    params.type = jsonTrackData["objSeq-type"].asString();
-    params.numOfSeg = jsonTrackData["objSeq-numOfSeg"].asInt();
-    
-    if(jsonTrackData["objSeq-noteEvents"].asString() == "noteOff"){
-        params.playNoteOff = true;
-    } else {
-        params.playNoteOff = false;
-    }
-    
+
+//        
+//        //pull in the objFileLoader data
+//        trackData = _input;
+//        
+//        //separate out the JSON data.
+//        jsonTrackData = _input.jsonData;
+//        
+//        index = jsonTrackData["index"].asInt();//This index may not be necessary
+//        
+//        params.cuePoints = parseJSON("objSeq-cues");
+//        params.durrationPoints = parseJSON("objSeq-durations");
+//        params.midpointCues = parseJSON("objSeq-midpoint-cues");
+//        params.segmentLengths = parseJSON("objSeq-segmentLengths");
+//        
+//        params.stillFrame = jsonTrackData["objSeq-still"].asInt();
+//        params.totalFrames = jsonTrackData["objSeq-files"].asInt();
+//        
+//        params.type = jsonTrackData["objSeq-type"].asString();
+//        params.numOfSeg = jsonTrackData["objSeq-numOfSeg"].asInt();
+//        
+//        if(jsonTrackData["objSeq-noteEvents"].asString() == "noteOff"){
+//            params.playNoteOff = true;
+//        } else {
+//            params.playNoteOff = false;
+//        }
+//        
     
     
     setShader(jsonTrackData["matCap-shader"].asString());//move to vboMeshObj::setMatCap()
@@ -107,6 +109,43 @@ void vboMeshObj::setup(const objFileLoader::extObjFile &_input){
     //output all my params to check
     //trackParameters.reportParams(params, index);
 }
+
+
+//--------------------------------------------------------------
+void vboMeshObj::loadTrackData(int _index){
+    
+    //get data from track.json for a specific folder by index
+    trackData = ((ofApp*)ofGetAppPtr())->appFileLoader.externalObjFiles[_index];
+    
+    //separate out the JSON data.
+    jsonTrackData = trackData.jsonData;
+
+    //Keep track of the index number of the folder.
+    //index = _index;
+    index = jsonTrackData["index"].asInt();//This index may not be necessary
+    
+    //These params need to be set
+    params.cuePoints = parseJSON("objSeq-cues");
+    params.durrationPoints = parseJSON("objSeq-durations");
+    params.midpointCues = parseJSON("objSeq-midpoint-cues");
+    params.segmentLengths = parseJSON("objSeq-segmentLengths");
+    
+    params.stillFrame = jsonTrackData["objSeq-still"].asInt();
+    params.totalFrames = jsonTrackData["objSeq-files"].asInt();
+    
+    params.type = jsonTrackData["objSeq-type"].asString();
+    params.numOfSeg = jsonTrackData["objSeq-numOfSeg"].asInt();
+    
+    if(jsonTrackData["objSeq-noteEvents"].asString() == "noteOff"){
+        params.playNoteOff = true;
+    } else {
+        params.playNoteOff = false;
+    }
+
+    
+    
+}
+
 
 //--------------------------------------------------------------
 vector<int> vboMeshObj::parseJSON(string _param){
