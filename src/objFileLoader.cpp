@@ -32,7 +32,11 @@ void objFileLoader::loadObjFiles(string _path){
         
         externalObjFiles.push_back(extObjFile());
         //get metadata on file folders
+        
+        
         externalObjFiles[j].name = dir.getName(j);
+        availObjSeq.push_back(externalObjFiles[j].name);
+        
         externalObjFiles[j].path = path+"/"+dir.getName(j)+"/";
         
         ofDirectory objDirectory(dir.getPath(j));

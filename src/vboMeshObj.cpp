@@ -11,6 +11,8 @@ vboMeshObj::vboMeshObj() {
 //--------------------------------------------------------------
 void vboMeshObj::setup(int _input){
     
+    
+    
     //1. SETUP default track params.
     trackParameters.setDefault(params);
     
@@ -47,50 +49,21 @@ void vboMeshObj::setup(int _input){
     }
     
     
-    //* NEW trackManager
-    loadTrackData(_input);
+    index = _input;         //index tied to track number
+    objSeqIndex = _input;   //initially tied to ofApp::setup()
     
-    
-    
-
-//        
-//        //pull in the objFileLoader data
-//        trackData = _input;
-//        
-//        //separate out the JSON data.
-//        jsonTrackData = _input.jsonData;
-//        
-//        index = jsonTrackData["index"].asInt();//This index may not be necessary
-//        
-//        params.cuePoints = parseJSON("objSeq-cues");
-//        params.durrationPoints = parseJSON("objSeq-durations");
-//        params.midpointCues = parseJSON("objSeq-midpoint-cues");
-//        params.segmentLengths = parseJSON("objSeq-segmentLengths");
-//        
-//        params.stillFrame = jsonTrackData["objSeq-still"].asInt();
-//        params.totalFrames = jsonTrackData["objSeq-files"].asInt();
-//        
-//        params.type = jsonTrackData["objSeq-type"].asString();
-//        params.numOfSeg = jsonTrackData["objSeq-numOfSeg"].asInt();
-//        
-//        if(jsonTrackData["objSeq-noteEvents"].asString() == "noteOff"){
-//            params.playNoteOff = true;
-//        } else {
-//            params.playNoteOff = false;
-//        }
-//        
-    
-    
-    setShader(jsonTrackData["matCap-shader"].asString());//move to vboMeshObj::setMatCap()
-    
-    
-    //get all the matcaps from ofApp
+    //List of all matcap files avail
     matcaps = ((ofApp*)ofGetAppPtr())->appFileLoader.externalMatCapFiles;
     
+    //List of a all OBJ sequence folder avail.
+    availObjSeq = ((ofApp*)ofGetAppPtr())->appFileLoader.availObjSeq;
+    
+    
+    //* NEW trackManager
+    loadTrackData(_input);  //load blank data
+    
+    setShader(jsonTrackData["matCap-shader"].asString());//move to vboMeshObj::setMatCap()
     setMatCap(0);
-    
-    
-    
     
     //DEBUGGING PARAMS
     parameters.setName("TRACK "+ofToString(index));
@@ -116,15 +89,15 @@ void vboMeshObj::loadTrackData(int _index){
     
     //get data from track.json for a specific folder by index
     trackData = ((ofApp*)ofGetAppPtr())->appFileLoader.externalObjFiles[_index];
-    
+
     //separate out the JSON data.
     jsonTrackData = trackData.jsonData;
 
-    //Keep track of the index number of the folder.
-    //index = _index;
-    index = jsonTrackData["index"].asInt();//This index may not be necessary
-    
     //These params need to be set
+    params.sequenceName = jsonTrackData["objSeq-basefilename"].asString();
+    
+    params.title = jsonTrackData["obj-export-filename"].asString();
+    
     params.cuePoints = parseJSON("objSeq-cues");
     params.durrationPoints = parseJSON("objSeq-durations");
     params.midpointCues = parseJSON("objSeq-midpoint-cues");
@@ -141,7 +114,8 @@ void vboMeshObj::loadTrackData(int _index){
     } else {
         params.playNoteOff = false;
     }
-
+    
+    params.trackAssigned = true;
     
     
 }
@@ -211,122 +185,119 @@ void vboMeshObj::setShader(string _shader){
 
 //--------------------------------------------------------------
 void vboMeshObj::draw(){
-    
-    if(params.isLoaded){
-        
-        //accumulate transform stacks.
-        for(int j=1;j<params.g_copies+1;j++){
-            glPushMatrix();
-            //global scale
-            glScalef(params.g_scale+params.gScaleModVal, params.g_scale+params.gScaleModVal, params.g_scale+params.gScaleModVal);//scale of this layer
-            //global trans
-            glTranslatef(j*params.g_trans.x+params.gTransModVal.x,j*params.g_trans.y+params.gTransModVal.y,j*params.g_trans.z+params.gTransModVal.z);
-            //global rot
-            
-            if(params.spinX){
-                glRotatef(sin((ofGetFrameNum()*0.2)*params.spin.x)*params.spinRange.x,1,0,0);
-            } else {
-                glRotatef(params.g_rotate.x,1,0,0);
-            }
-            if(params.spinY){
-                glRotatef(sin((ofGetFrameNum()*0.2)*params.spin.y)*params.spinRange.y,0,1,0);
-            } else {
-                glRotatef(params.g_rotate.y,0,1,0);
-            }
-            if(params.spinZ){
-                glRotatef(sin((ofGetFrameNum()*0.2)*params.spin.z)*params.spinRange.z,0,0,1);
-            } else {
-                glRotatef(params.g_rotate.z,0,0,1);
-            }
-
-            //glRotatef(params.g_rotate.z,0,0,1);
-            
-            for(int i=0;i<params.l_copies;i++){
+    if(params.trackAssigned){
+         if(params.isLoaded){
+            //accumulate transform stacks.
+            for(int j=1;j<params.g_copies+1;j++){
                 glPushMatrix();
-                glRotatef(i*params.l_rotate.x+params.lRotateModVal.x,1,0,0);
-                glRotatef(i*params.l_rotate.y+params.lRotateModVal.y,0,1,0);
-                glRotatef(i*params.l_rotate.z+params.lRotateModVal.z,0,0,1);
+                //global scale
+                glScalef(params.g_scale+params.gScaleModVal, params.g_scale+params.gScaleModVal, params.g_scale+params.gScaleModVal);//scale of this layer
+                //global trans
+                glTranslatef(j*params.g_trans.x+params.gTransModVal.x,j*params.g_trans.y+params.gTransModVal.y,j*params.g_trans.z+params.gTransModVal.z);
+                //global rot
                 
-                //float z = params.l_rotate.z;
-                float temp = i*params.l_rotate.z+params.lRotateModVal.z;
-                
-                //cout << ofToString(temp) << endl;
-                //glRotatef(temp,0,0,1);
+                if(params.spinX){
+                    glRotatef(sin((ofGetFrameNum()*0.2)*params.spin.x)*params.spinRange.x,1,0,0);
+                } else {
+                    glRotatef(params.g_rotate.x,1,0,0);
+                }
+                if(params.spinY){
+                    glRotatef(sin((ofGetFrameNum()*0.2)*params.spin.y)*params.spinRange.y,0,1,0);
+                } else {
+                    glRotatef(params.g_rotate.y,0,1,0);
+                }
+                if(params.spinZ){
+                    glRotatef(sin((ofGetFrameNum()*0.2)*params.spin.z)*params.spinRange.z,0,0,1);
+                } else {
+                    glRotatef(params.g_rotate.z,0,0,1);
+                }
 
-                glTranslatef(params.l_trans.x+params.lTransModVal.x, params.l_trans.y+params.lTransModVal.y, params.l_trans.z+params.lTransModVal.z);
-            
-                glScalef(params.l_scale+params.lScaleModVal,params.l_scale+params.lScaleModVal,params.l_scale+params.lScaleModVal);
+                //glRotatef(params.g_rotate.z,0,0,1);
                 
-                shader.begin();
-                shader.setUniformTexture("tMatCap", matCap, 1);
-                
-                    glPushMatrix();
-                        glRotatef(params.o_rotate.x+params.oRotateModVal.x,1,0,0);
-                        glRotatef(params.o_rotate.y+params.oRotateModVal.y,0,1,0);
-                        glRotatef(params.o_rotate.z+params.oRotateModVal.z,0,0,1);
-                        if(params.still){
-                            vboMesh1[params.stillFrame].draw();
-                        } else {
-                            //Which timeline do I draw?
-                            //timeline 1
-                            vboMesh1[instances[i].frame].draw();
-                            
-                            //timeline 2
-                            //vboMesh1[instance[1].frame].draw();
-                            
-                            //timeline 3
-                            //vboMesh1[instance[2].frame].draw();
-                            
-                            //.....
-                        }
-                    glPopMatrix();
-                
-                shader.end();
-                
-                glPopMatrix();
-                
-            }
-            
-            if(params.mirrored){
-                for(int i=params.l_copies-1;i>-1;i--){
+                for(int i=0;i<params.l_copies;i++){
                     glPushMatrix();
                     glRotatef(i*params.l_rotate.x+params.lRotateModVal.x,1,0,0);
                     glRotatef(i*params.l_rotate.y+params.lRotateModVal.y,0,1,0);
                     glRotatef(i*params.l_rotate.z+params.lRotateModVal.z,0,0,1);
                     
-                    glTranslatef(params.l_trans.x+params.lTransModVal.x, params.l_trans.y+params.lTransModVal.y, params.l_trans.z+params.lTransModVal.z+params.mirror_distance);
+                    //float z = params.l_rotate.z;
+                    float temp = i*params.l_rotate.z+params.lRotateModVal.z;
                     
-                    
-                    glScalef(params.mirrorX ? params.l_scale+params.lScaleModVal : -(params.l_scale+params.lScaleModVal),
-                             params.mirrorY ? params.l_scale+params.lScaleModVal : -(params.l_scale+params.lScaleModVal),
-                             params.mirrorZ ? params.l_scale+params.lScaleModVal : -(params.l_scale+params.lScaleModVal)
-                             );
+                    //cout << ofToString(temp) << endl;
+                    //glRotatef(temp,0,0,1);
+
+                    glTranslatef(params.l_trans.x+params.lTransModVal.x, params.l_trans.y+params.lTransModVal.y, params.l_trans.z+params.lTransModVal.z);
+                
+                    glScalef(params.l_scale+params.lScaleModVal,params.l_scale+params.lScaleModVal,params.l_scale+params.lScaleModVal);
                     
                     shader.begin();
                     shader.setUniformTexture("tMatCap", matCap, 1);
                     
                         glPushMatrix();
-                        glRotatef(params.o_rotate.x+params.oRotateModVal.x,1,0,0);
-                        glRotatef(params.o_rotate.y+params.oRotateModVal.y,0,1,0);
-                        glRotatef(params.o_rotate.z+params.oRotateModVal.z,0,0,1);
-                        if(params.still){
-                            vboMesh1[params.stillFrame].draw();
-                        } else {
-                            vboMesh1[instances[i].frame].draw();
-                        }
+                            glRotatef(params.o_rotate.x+params.oRotateModVal.x,1,0,0);
+                            glRotatef(params.o_rotate.y+params.oRotateModVal.y,0,1,0);
+                            glRotatef(params.o_rotate.z+params.oRotateModVal.z,0,0,1);
+                            if(params.still){
+                                vboMesh1[params.stillFrame].draw();
+                            } else {
+                                //Which timeline do I draw?
+                                //timeline 1
+                                vboMesh1[instances[i].frame].draw();
+                                
+                                //timeline 2
+                                //vboMesh1[instance[1].frame].draw();
+                                
+                                //timeline 3
+                                //vboMesh1[instance[2].frame].draw();
+                                
+                                //.....
+                            }
                         glPopMatrix();
                     
                     shader.end();
                     
                     glPopMatrix();
+                    
                 }
+                
+                if(params.mirrored){
+                    for(int i=params.l_copies-1;i>-1;i--){
+                        glPushMatrix();
+                        glRotatef(i*params.l_rotate.x+params.lRotateModVal.x,1,0,0);
+                        glRotatef(i*params.l_rotate.y+params.lRotateModVal.y,0,1,0);
+                        glRotatef(i*params.l_rotate.z+params.lRotateModVal.z,0,0,1);
+                        
+                        glTranslatef(params.l_trans.x+params.lTransModVal.x, params.l_trans.y+params.lTransModVal.y, params.l_trans.z+params.lTransModVal.z+params.mirror_distance);
+                        
+                        
+                        glScalef(params.mirrorX ? params.l_scale+params.lScaleModVal : -(params.l_scale+params.lScaleModVal),
+                                 params.mirrorY ? params.l_scale+params.lScaleModVal : -(params.l_scale+params.lScaleModVal),
+                                 params.mirrorZ ? params.l_scale+params.lScaleModVal : -(params.l_scale+params.lScaleModVal)
+                                 );
+                        
+                        shader.begin();
+                        shader.setUniformTexture("tMatCap", matCap, 1);
+                        
+                            glPushMatrix();
+                            glRotatef(params.o_rotate.x+params.oRotateModVal.x,1,0,0);
+                            glRotatef(params.o_rotate.y+params.oRotateModVal.y,0,1,0);
+                            glRotatef(params.o_rotate.z+params.oRotateModVal.z,0,0,1);
+                            if(params.still){
+                                vboMesh1[params.stillFrame].draw();
+                            } else {
+                                vboMesh1[instances[i].frame].draw();
+                            }
+                            glPopMatrix();
+                        
+                        shader.end();
+                        
+                        glPopMatrix();
+                    }
+                }
+                glPopMatrix();
             }
-            glPopMatrix();
         }
-        
-        
-        
-    }
+    }//trackAssigned
     
 }
 
@@ -487,6 +458,10 @@ void vboMeshObj::update(){
         posRandomObjRotZ.isCompleted() ? params.randObjRotBoolZ = false : params.randObjRotBoolZ = true;
     }
     
+    if(params.still){
+        params.stillFrame >= params.totalFrames ? params.stillFrame = params.totalFrames : params.stillFrame = params.stillFrame;
+    }
+    
     //FLOATING DEBUG MENU ON RIGHT
     //=======================================================================
     //validate what's playing in ofxGUI
@@ -555,7 +530,7 @@ void vboMeshObj::setupGui(int _index){
     // TAKE 2
     gui = new ofxUICanvas();
     
-    gui->setWidth(150);
+    gui->setWidth(300);
     
     //set the background color and text(syphon)
     gui->setColorFill(ofColor::darkGrey);
@@ -565,18 +540,63 @@ void vboMeshObj::setupGui(int _index){
     
     gui->setName("TRACK" + index);
     
-    gui->addLabel(jsonTrackData["objSeq-basefilename"].asString());
-   
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    //SEQUENCE SELECTOR GROUP
+    gui->setWidth(270);
+    
+    gui->addImageButton("SEQ_decrement", "GUI/decrement.png", false, 15, 15);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addSpacer(100, 5);
+    gui->addTextArea("TRACKNAME", "UNDEFINED000",OFX_UI_FONT_SMALL);
+    gui->addImageButton("SEQ_increment", "GUI/increment.png", false, 15, 15);
+
+    
+    
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+
+    //MATCAP SELECTOR GROUP
+    gui->setWidth(270);
+    
+    gui->addImageButton("MAT_decrement", "GUI/decrement.png", false, 15, 15);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addTextArea("TEXTURENAME", "UNDEFINED000",OFX_UI_FONT_SMALL);
+    gui->addImageButton("MAT_increment", "GUI/increment.png", false, 15, 15);
+
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->setWidth(270);
+    gui->addImageButton("FRAME_decrement", "GUI/decrement.png", false, 15, 15);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addIntSlider("FRAME", 1, 500, &params.stillFrame, 266,10,0,0);
+    setGuiSnapUnits("FRAME",1.0);
+    gui->addImageButton("FRAME_increment", "GUI/increment.png", false, 15, 15);
+    
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    
+    gui->addSpacer(300, 10);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addDropDownList("MATCAP", matcaps, 250, 0,0);
+    gui->addDropDownList("SEQUENCES", availObjSeq, 250, 0,0);
+    
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+
+    gui->addToggle("LOADED", &params.isLoaded);
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addToggle("STILL", &params.still);
     
     gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
-   
+    
+    
+    
     //test button
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    //gui->addLabelToggle("spinZ", &params.spinZ,50,12,0,0,false);
-    gui->addLabelButton("TEST", false,50,20,0,0);
+    gui->addLabelButton("LOAD", false,100,20,0,0);
+    
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    gui->addNumberDialer("SEQUENCE", 1, 15, 1, 0);
+    
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+    gui->addLabelButton("TEST", false,50,20,0,0);//fire the animation
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addLabelButton("CLEAR", false,50,20,0,0);
@@ -584,13 +604,11 @@ void vboMeshObj::setupGui(int _index){
     
     //loaded.
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addToggle("LOADED", &params.isLoaded);
+    //gui->addToggle("BANDTUBE", &params.bandTube);
     
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    
-    gui->addToggle("STILL", &params.still);
-    
+
     gui->addToggle("OSC", &params.oscControlled);//not sure if this is useful anymore.
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addToggle("MIRROR", &params.mirrored);
     
     
@@ -608,7 +626,8 @@ void vboMeshObj::setupGui(int _index){
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     
-    gui->addIntSlider("FRAME", 1, params.totalFrames, &params.stillFrame, 300,8,0,0);
+    
+    
     gui->addSlider("MIRROR",-100.0,100.0, &params.mirror_distance,150,8,0,0);
     
     gui->addSpacer(320, 1);
@@ -778,6 +797,10 @@ void vboMeshObj::setupGui(int _index){
     //add this tracks gui to the tabbar
     ((ofApp*)ofGetAppPtr())->guiTabBar->addCanvas(gui);
     ((ofApp*)ofGetAppPtr())->guis.push_back(gui);
+    
+    
+
+    
 }
 
 //--------------------------------------------------------------
@@ -898,18 +921,50 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
     string name = e.widget->getName();
     int kind = e.widget->getKind();
     string canvasParent = e.widget->getCanvasParent()->getName();
-    
-    if (name == "LOADED") {
+    if (name == "SEQUENCES") {
+        ofxUIDropDownList *dd = (ofxUIDropDownList *) e.widget;
+        
+        if(!dd->getSelectedIndeces().empty()){
+            ofLogNotice("matcap") << "setting the object sequence";
+            if(params.isLoaded){
+                //clear the vbomesh before changing.
+                vboMesh1.clear();
+                params.isLoaded = false;
+                clear();
+                if(dd->getSelectedIndeces()[0] > 0){
+                    loadTrackData(dd->getSelectedIndeces()[0]);
+ 
+                }
+                
+            } else {
+                if(dd->getSelectedIndeces()[0] > 0){
+                    loadTrackData(dd->getSelectedIndeces()[0]);
+                }
+            }
+        }
+        
+
+        
+        
+    } else if (name == "LOADED") {
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         ofLogNotice("objloader") << "LOADING TRACK:" << index << " - button pressed:" << toggle->getValue();
         
-        if(params.isLoaded){
-            //load all the vboMeshes
-            loadVboMesh(trackData);
+        if(params.trackAssigned){
+            if(params.isLoaded){
+                //load all the vboMeshes
+                loadVboMesh(trackData);
+            }
+            if(!params.isLoaded){
+                vboMesh1.clear();
+            }
+            
+            
+        } else {
+            ofLogNotice("objLoader") << "no object sequence selected yet";
+            //params.isLoaded = false;
         }
-        if(!params.isLoaded){
-            vboMesh1.clear();
-        }
+
         
     } else if(name == "STILL"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
@@ -958,7 +1013,53 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         float sliceAngle = 360.0/lcopies->getValue();
         params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);
         
+        //ADD_TOGGLE
+    } else if(name == "LOAD"){
+        ofxUIButton *addbut = (ofxUIButton *) e.widget;
+        if(addbut->getValue()){
+            
+            
+            //chage the TRACK name.
+            ofxUITextArea *text1 = (ofxUITextArea *)gui->getWidget("TRACKNAME");
+            text1->setTextString(bwUtil::shortenString(params.sequenceName));
+            
+            
+            //change a range frame slider
+            ofxUIIntSlider *intSldr1 = (ofxUIIntSlider *)gui->getWidget("FRAME");
+            intSldr1->setMaxAndMin(params.totalFrames, 0);
+            
+        }
+    } else if(name == "ADDED BUTTON"){
+        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+        if(toggle->getValue()){
+            cout << "ADDED BUTTON WAS CLICKED" << endl;
+            
+        }
+    } else if(name == "SEQ_increment"){
+        ofxUIImageToggle *seqInc = (ofxUIImageToggle *) e.widget;
         
+        if(seqInc->getValue()){
+            objSeqIndex++;
+            cout << "OBJ Sequence index: " << ofToString(objSeqIndex) << endl;
+            
+            //chage the TRACK name.
+            ofxUITextArea *text1 = (ofxUITextArea *)gui->getWidget("TRACKNAME");
+            text1->setTextString(bwUtil::shortenString(availObjSeq[objSeqIndex]));
+        }
+        
+    } else if(name == "SEQ_decrement"){
+        ofxUIImageToggle *seqDec = (ofxUIImageToggle *) e.widget;
+        if(seqDec->getValue()){
+            objSeqIndex--;
+            cout << "OBJ Sequence index: " << ofToString(objSeqIndex) << endl;
+            
+            //chage the TRACK name.
+            ofxUITextArea *text1 = (ofxUITextArea *)gui->getWidget("TRACKNAME");
+            text1->setTextString(bwUtil::shortenString(availObjSeq[objSeqIndex]));
+        }
+        
+        
+        //cout << "OBJ Sequence index: " << ofToString(objSeqIndex) << endl;
     }
     
 

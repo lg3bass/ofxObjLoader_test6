@@ -18,7 +18,11 @@ class vboMeshObj {
     ofxJSONElement jsonTrackData;
     
     vector<ofVboMesh> vboMesh1;
-    int index;//keep track of what instance you are
+    int index;          //What track number you are as shown in the track labels and GUI
+    int objSeqIndex;    //What object sequence is loaded
+    
+    //list of Files
+    vector<string> availObjSeq;
     
     //------------------------------------
     //ALL OF THE TRACK PARAMETERS.
@@ -130,6 +134,8 @@ class vboMeshObj {
     vboMeshObj();
     
     ofxUICanvas* gui;
+    //ofxUICanvas* gui2;
+
     
     void setup(int _input);
     //void setup(const objFileLoader::extObjFile &_input);

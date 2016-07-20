@@ -13,6 +13,7 @@ Thumbs.db
 # OF #
 ######################
 /bin/*.app
+/bin/data/obj/00_blank/
 /bin/data/obj/00_oddity_domb_OBJ_Seq/
 /bin/data/obj/01_bandTube01_OBJ_Seq/*.obj
 /bin/data/obj/01_bandTube01_OBJ_Seq/*.mtl
@@ -55,3 +56,4 @@ Thumbs.db
 /bin/data/obj/20_moSpline_riptide_test_1_OBJ_Seq/*.obj
 /bin/data/obj/20_moSpline_riptide_test_1_OBJ_Seq/*.mtl
 /bin/data/obj_old/
+/bin/data/obj_unused/

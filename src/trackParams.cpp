@@ -17,8 +17,15 @@ trackParams::trackParams(){
 //--------------------------------------------------------------
 void trackParams::setDefault(guiParams &params){
     
+    params.title = "TEST TITLE";
+    
+    params.sequenceName = "undefined";
+    
+    params.trackIndex = 0;
+    
     params.playAll = false;
     params.playAllFinalize = false;
+    params.trackAssigned = false;
     params.isSelected = false;
     params.isLoaded = false;
     params.isPlaying = false;
