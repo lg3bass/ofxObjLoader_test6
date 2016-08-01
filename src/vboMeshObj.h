@@ -20,6 +20,7 @@ class vboMeshObj {
     vector<ofVboMesh> vboMesh1;
     int index;          //What track number you are as shown in the track labels and GUI
     int objSeqIndex;    //What object sequence is loaded
+    int matcapIndex;    //What matcap shader is selected.
     
     //list of Files
     vector<string> availObjSeq;
@@ -138,8 +139,8 @@ class vboMeshObj {
 
     
     void setup(int _input);
-    //void setup(const objFileLoader::extObjFile &_input);
     void loadTrackData(int _index);
+    void setTrack(int _index);
     vector<int> parseJSON(string _param);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
     void loadVboMesh(const objFileLoader::extObjFile &_input);
@@ -149,10 +150,12 @@ class vboMeshObj {
     void update();
     void KeyboardLaunch(int _string, int _note, int _tweenType, int _instanceId, bool _noteOff = false);
     void setupGui(int _index);
+    void updateGui(int _index);
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();
     void resetBufferInstance(int _buffer, string _mode);
     void clear();
+
     
     //OSC
     void bassControl(float &_amp, int _noteLength);

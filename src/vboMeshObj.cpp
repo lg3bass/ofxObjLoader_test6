@@ -49,8 +49,9 @@ void vboMeshObj::setup(int _input){
     }
     
     
-    index = _input;         //index tied to track number
+    index = _input;         //generally, what track number 1-10;
     objSeqIndex = _input;   //initially tied to ofApp::setup()
+    matcapIndex = 0;        //initially set the matcap to the first file (red someting)
     
     //List of all matcap files avail
     matcaps = ((ofApp*)ofGetAppPtr())->appFileLoader.externalMatCapFiles;
@@ -63,7 +64,7 @@ void vboMeshObj::setup(int _input){
     loadTrackData(_input);  //load blank data
     
     setShader(jsonTrackData["matCap-shader"].asString());//move to vboMeshObj::setMatCap()
-    setMatCap(0);
+    setMatCap(matcapIndex);
     
     //DEBUGGING PARAMS
     parameters.setName("TRACK "+ofToString(index));
@@ -118,6 +119,31 @@ void vboMeshObj::loadTrackData(int _index){
     params.trackAssigned = true;
     
     
+
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::setTrack(int _index){
+    
+    //reset the instance playing id's
+    clear();
+    
+    //set params.
+    params.isLoaded = false;
+    params.still = false;
+
+    //clear the vboMesh
+    vboMesh1.clear();
+    
+    //update the track data
+    loadTrackData(_index);
+    
+    //update the gui.
+    updateGui(_index);
+    
+    
+    
+    cout << "OBJ Sequence index: " << ofToString(_index) << endl;
 }
 
 
@@ -549,8 +575,6 @@ void vboMeshObj::setupGui(int _index){
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     gui->addTextArea("TRACKNAME", "UNDEFINED000",OFX_UI_FONT_SMALL);
     gui->addImageButton("SEQ_increment", "GUI/increment.png", false, 15, 15);
-
-    
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
 
@@ -559,7 +583,7 @@ void vboMeshObj::setupGui(int _index){
     
     gui->addImageButton("MAT_decrement", "GUI/decrement.png", false, 15, 15);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addTextArea("TEXTURENAME", "UNDEFINED000",OFX_UI_FONT_SMALL);
+    gui->addTextArea("MAT_name", "UNDEFINED000",OFX_UI_FONT_SMALL);
     gui->addImageButton("MAT_increment", "GUI/increment.png", false, 15, 15);
 
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
@@ -572,13 +596,6 @@ void vboMeshObj::setupGui(int _index){
     gui->addImageButton("FRAME_increment", "GUI/increment.png", false, 15, 15);
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    
-    gui->addSpacer(300, 10);
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addDropDownList("MATCAP", matcaps, 250, 0,0);
-    gui->addDropDownList("SEQUENCES", availObjSeq, 250, 0,0);
-    
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
 
     gui->addToggle("LOADED", &params.isLoaded);
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
@@ -586,14 +603,6 @@ void vboMeshObj::setupGui(int _index){
     
     gui->setWidgetFontSize(OFX_UI_FONT_SMALL);
     
-    
-    
-    //test button
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    gui->addLabelButton("LOAD", false,100,20,0,0);
-    
-    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-    gui->addNumberDialer("SEQUENCE", 1, 15, 1, 0);
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
     gui->addLabelButton("TEST", false,50,20,0,0);//fire the animation
@@ -625,8 +634,6 @@ void vboMeshObj::setupGui(int _index){
     gui->addToggle("finalize", &params.playAllFinalize);
     
     gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
-    
-    
     
     gui->addSlider("MIRROR",-100.0,100.0, &params.mirror_distance,150,8,0,0);
     
@@ -804,6 +811,20 @@ void vboMeshObj::setupGui(int _index){
 }
 
 //--------------------------------------------------------------
+void vboMeshObj::updateGui(int _index){
+    
+    //Change the track name.
+    ofxUITextArea *text1 = (ofxUITextArea *)gui->getWidget("TRACKNAME");
+    text1->setTextString(bwUtil::shortenString(params.sequenceName));
+    
+    //change a range frame slider
+    ofxUIIntSlider *intSldr1 = (ofxUIIntSlider *)gui->getWidget("FRAME");
+    intSldr1->setMaxAndMin(params.totalFrames, 0);
+    
+}
+
+
+//--------------------------------------------------------------
 void vboMeshObj::setGuiSnapUnits(string _name, float _unit){
     
     ofxUISlider *slider = (ofxUISlider *)gui->getWidget(_name);
@@ -921,32 +942,7 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
     string name = e.widget->getName();
     int kind = e.widget->getKind();
     string canvasParent = e.widget->getCanvasParent()->getName();
-    if (name == "SEQUENCES") {
-        ofxUIDropDownList *dd = (ofxUIDropDownList *) e.widget;
-        
-        if(!dd->getSelectedIndeces().empty()){
-            ofLogNotice("matcap") << "setting the object sequence";
-            if(params.isLoaded){
-                //clear the vbomesh before changing.
-                vboMesh1.clear();
-                params.isLoaded = false;
-                clear();
-                if(dd->getSelectedIndeces()[0] > 0){
-                    loadTrackData(dd->getSelectedIndeces()[0]);
- 
-                }
-                
-            } else {
-                if(dd->getSelectedIndeces()[0] > 0){
-                    loadTrackData(dd->getSelectedIndeces()[0]);
-                }
-            }
-        }
-        
-
-        
-        
-    } else if (name == "LOADED") {
+    if (name == "LOADED") {
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         ofLogNotice("objloader") << "LOADING TRACK:" << index << " - button pressed:" << toggle->getValue();
         
@@ -974,21 +970,6 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         } else {
             params.still = false;
         }
-    } else if(name == "MATCAP"){
-        ofxUIDropDownList *dd = (ofxUIDropDownList *) e.widget;
-        
-        //dd->activateToggle("silver.jpg");
-        
-        
-        if(!dd->getSelectedIndeces().empty()){
-            ofLogNotice("matcap") << "setting the matcap";
-            setMatCap(dd->getSelectedIndeces()[0]);
-        }
-        
-        
-        ofLogNotice("matcap") << ofToString(dd->getSelectedIndeces());
-
-        
     } else if(name == "TEST"){
         ofxUIButton *testbut = (ofxUIButton *) e.widget;
         if(testbut->getValue()){
@@ -1013,57 +994,69 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
         float sliceAngle = 360.0/lcopies->getValue();
         params.l_rotate = ofVec3f(0.0,0.0,sliceAngle);
         
-        //ADD_TOGGLE
-    } else if(name == "LOAD"){
-        ofxUIButton *addbut = (ofxUIButton *) e.widget;
-        if(addbut->getValue()){
-            
-            
-            //chage the TRACK name.
-            ofxUITextArea *text1 = (ofxUITextArea *)gui->getWidget("TRACKNAME");
-            text1->setTextString(bwUtil::shortenString(params.sequenceName));
-            
-            
-            //change a range frame slider
-            ofxUIIntSlider *intSldr1 = (ofxUIIntSlider *)gui->getWidget("FRAME");
-            intSldr1->setMaxAndMin(params.totalFrames, 0);
-            
-        }
-    } else if(name == "ADDED BUTTON"){
-        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-        if(toggle->getValue()){
-            cout << "ADDED BUTTON WAS CLICKED" << endl;
-            
-        }
+        
     } else if(name == "SEQ_increment"){
         ofxUIImageToggle *seqInc = (ofxUIImageToggle *) e.widget;
-        
         if(seqInc->getValue()){
             objSeqIndex++;
-            cout << "OBJ Sequence index: " << ofToString(objSeqIndex) << endl;
-            
-            //chage the TRACK name.
-            ofxUITextArea *text1 = (ofxUITextArea *)gui->getWidget("TRACKNAME");
-            text1->setTextString(bwUtil::shortenString(availObjSeq[objSeqIndex]));
+            if(objSeqIndex >= availObjSeq.size()){
+                objSeqIndex = 1;
+            }
+            setTrack(objSeqIndex);
         }
         
     } else if(name == "SEQ_decrement"){
         ofxUIImageToggle *seqDec = (ofxUIImageToggle *) e.widget;
         if(seqDec->getValue()){
-            objSeqIndex--;
-            cout << "OBJ Sequence index: " << ofToString(objSeqIndex) << endl;
-            
-            //chage the TRACK name.
-            ofxUITextArea *text1 = (ofxUITextArea *)gui->getWidget("TRACKNAME");
-            text1->setTextString(bwUtil::shortenString(availObjSeq[objSeqIndex]));
+                objSeqIndex--;
+            if(objSeqIndex <= 0){
+                objSeqIndex = availObjSeq.size()-1;
+            }
+            setTrack(objSeqIndex);
         }
+    } else if(name == "MAT_increment"){
+        ofxUIImageToggle *matInc = (ofxUIImageToggle *) e.widget;
+        if(matInc->getValue()){
+            matcapIndex++;
+            if(matcapIndex >= matcaps.size()){
+                matcapIndex = 1;
+            }
+            setMatCap(matcapIndex);
+        }
+        //Change the matcap name.
+        ofxUITextArea *matcapText = (ofxUITextArea *)gui->getWidget("MAT_name");
+        matcapText->setTextString(bwUtil::shortenString(matcaps[matcapIndex]));
+        ofLogNotice("matcap") << bwUtil::shortenString(matcaps[matcapIndex]);
         
+    } else if(name == "MAT_decrement"){
+        ofxUIImageToggle *matDec = (ofxUIImageToggle *) e.widget;
+        if(matDec->getValue()){
+            matcapIndex--;
+            if(matcapIndex <= 0){
+                matcapIndex = matcaps.size()-1;
+            }
+            setMatCap(matcapIndex);
+        }
+        //Change the matcap name.
+        ofxUITextArea *matcapText = (ofxUITextArea *)gui->getWidget("MAT_name");
+        matcapText->setTextString(bwUtil::shortenString(matcaps[matcapIndex]));
+        ofLogNotice("matcap") << bwUtil::shortenString(matcaps[matcapIndex]);
         
-        //cout << "OBJ Sequence index: " << ofToString(objSeqIndex) << endl;
+    } else if(name == "FRAME_increment"){
+        ofxUIImageToggle *frameInc = (ofxUIImageToggle *) e.widget;
+        if(frameInc->getValue()){
+            if(params.stillFrame < params.totalFrames){
+                params.stillFrame++;
+            }
+        }
+    } else if(name == "FRAME_decrement"){
+        ofxUIImageToggle *frameDec = (ofxUIImageToggle *) e.widget;
+        if(frameDec->getValue()){
+            if(params.stillFrame > 0){
+                params.stillFrame--;
+            }
+        }
     }
-    
-
-    
 }
 
 //--------------------------------------------------------------
