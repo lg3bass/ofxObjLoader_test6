@@ -141,6 +141,7 @@ class vboMeshObj {
     void setup(int _input);
     void loadTrackData(int _index);
     void setTrack(int _index);
+    void loadTrack();
     vector<int> parseJSON(string _param);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
     void loadVboMesh(const objFileLoader::extObjFile &_input);

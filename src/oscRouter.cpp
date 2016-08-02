@@ -91,9 +91,18 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
         tracks[idx].clear();
     
         
-    //trackParams::setOSCtoggle
-    } else if (m.getAddress() == "/loaded"){
+
+        
+    } else if (m.getAddress() == "/OSCsetTrack"){
+        //set the objSeqIndex param
+        tracks[idx].objSeqIndex = m.getArgAsInt32(1);
+        tracks[idx].setTrack(m.getArgAsInt32(1));
+        
+    } else if (m.getAddress() == "/butter"){
         tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
+        tracks[idx].loadTrack();
+        
+        
     } else if (m.getAddress() == "/still"){
         tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     } else if (m.getAddress() == "/playNoteOff"){

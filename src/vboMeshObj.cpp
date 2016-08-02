@@ -116,7 +116,8 @@ void vboMeshObj::loadTrackData(int _index){
         params.playNoteOff = false;
     }
     
-    params.trackAssigned = true;
+    //moved to loadVBOmesh
+    //params.trackAssigned = true;
     
     
 
@@ -144,6 +145,20 @@ void vboMeshObj::setTrack(int _index){
     
     
     cout << "OBJ Sequence index: " << ofToString(_index) << endl;
+}
+
+//--------------------------------------------------------------
+void vboMeshObj::loadTrack(){
+    
+    //executes the loading of the track.
+    if(params.isLoaded){
+        //load all the vboMeshes
+        loadVboMesh(trackData);
+    }
+    if(!params.isLoaded){
+        vboMesh1.clear();
+    }
+    
 }
 
 
@@ -195,6 +210,9 @@ void vboMeshObj::loadVboMesh(const objFileLoader::extObjFile &_input){
     
     //TODO -- add timer event, add progress bar
     ofLogNotice("objloader") << "track " << index << " loaded!";
+    
+    //track is setup.
+    params.trackAssigned = true;
 }
 
 
@@ -945,21 +963,25 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
     if (name == "LOADED") {
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         ofLogNotice("objloader") << "LOADING TRACK:" << index << " - button pressed:" << toggle->getValue();
+
         
-        if(params.trackAssigned){
-            if(params.isLoaded){
-                //load all the vboMeshes
-                loadVboMesh(trackData);
-            }
-            if(!params.isLoaded){
-                vboMesh1.clear();
-            }
-            
-            
-        } else {
-            ofLogNotice("objLoader") << "no object sequence selected yet";
-            //params.isLoaded = false;
-        }
+        loadTrack();
+        
+//        if(params.isLoaded){
+//            //load all the vboMeshes
+//            loadVboMesh(trackData);
+//        }
+//        if(!params.isLoaded){
+//            vboMesh1.clear();
+//        }
+        
+        
+//        if(params.trackAssigned){
+//            
+//        } else {
+//            ofLogNotice("objLoader") << "no object sequence selected yet";
+//            //params.isLoaded = false;
+//        }
 
         
     } else if(name == "STILL"){

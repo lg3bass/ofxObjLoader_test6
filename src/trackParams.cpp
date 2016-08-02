@@ -196,8 +196,12 @@ void trackParams::reportParams(guiParams &params, int _i){
 
 //--------------------------------------------------------------
 void trackParams::setOSCtoggle(guiParams &params, string paramName, bool isActive){
-    if(paramName == "/loaded"){
+    if(paramName == "/butter"){
         params.isLoaded = isActive;
+        
+        
+        
+        
     } else if(paramName == "/still"){
         params.still = isActive;
     } else if (paramName == "/playNoteOff"){
