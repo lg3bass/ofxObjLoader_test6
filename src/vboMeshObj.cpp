@@ -63,8 +63,7 @@ void vboMeshObj::setup(int _input){
     //* NEW trackManager
     loadTrackData(_input);  //load blank data
     
-    setShader(jsonTrackData["matCap-shader"].asString());//move to vboMeshObj::setMatCap()
-    setMatCap(matcapIndex);
+
     
     //DEBUGGING PARAMS
     parameters.setName("TRACK "+ofToString(index));
@@ -79,6 +78,11 @@ void vboMeshObj::setup(int _input){
     
     //setup the ofxUI GUI
     setupGui(index);
+    
+    //move to after setupGui
+    setShader(jsonTrackData["matCap-shader"].asString());//move to vboMeshObj::setMatCap()
+    setMatCap(matcapIndex);
+    
     
     //output all my params to check
     //trackParameters.reportParams(params, index);
@@ -220,6 +224,13 @@ void vboMeshObj::loadVboMesh(const objFileLoader::extObjFile &_input){
 void vboMeshObj::setMatCap(int _imgIndex){
     string matCapFile = "matCap/"+ofToString(matcaps[_imgIndex]);
     matCap.loadImage(matCapFile);
+    
+    
+    //Change the matcap name.
+    ofxUITextArea *matcapText = (ofxUITextArea *)gui->getWidget("MAT_name");
+    matcapText->setTextString(bwUtil::shortenString(matcaps[_imgIndex]));
+    ofLogNotice("matcap") << bwUtil::shortenString(matcaps[_imgIndex]);
+    
 }
 
 //--------------------------------------------------------------
@@ -1046,9 +1057,9 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
             setMatCap(matcapIndex);
         }
         //Change the matcap name.
-        ofxUITextArea *matcapText = (ofxUITextArea *)gui->getWidget("MAT_name");
-        matcapText->setTextString(bwUtil::shortenString(matcaps[matcapIndex]));
-        ofLogNotice("matcap") << bwUtil::shortenString(matcaps[matcapIndex]);
+//        ofxUITextArea *matcapText = (ofxUITextArea *)gui->getWidget("MAT_name");
+//        matcapText->setTextString(bwUtil::shortenString(matcaps[matcapIndex]));
+//        ofLogNotice("matcap") << bwUtil::shortenString(matcaps[matcapIndex]);
         
     } else if(name == "MAT_decrement"){
         ofxUIImageToggle *matDec = (ofxUIImageToggle *) e.widget;
@@ -1060,9 +1071,9 @@ void vboMeshObj::guiEvent(ofxUIEventArgs &e)
             setMatCap(matcapIndex);
         }
         //Change the matcap name.
-        ofxUITextArea *matcapText = (ofxUITextArea *)gui->getWidget("MAT_name");
-        matcapText->setTextString(bwUtil::shortenString(matcaps[matcapIndex]));
-        ofLogNotice("matcap") << bwUtil::shortenString(matcaps[matcapIndex]);
+//        ofxUITextArea *matcapText = (ofxUITextArea *)gui->getWidget("MAT_name");
+//        matcapText->setTextString(bwUtil::shortenString(matcaps[matcapIndex]));
+//        ofLogNotice("matcap") << bwUtil::shortenString(matcaps[matcapIndex]);
         
     } else if(name == "FRAME_increment"){
         ofxUIImageToggle *frameInc = (ofxUIImageToggle *) e.widget;
