@@ -59,3 +59,7 @@ Thumbs.db
 /bin/data/obj/21_oddityDomb01_0-30_OBJ_Seq/*.mtl
 /bin/data/obj_old/
 /bin/data/obj_unused/
+
+# XCODE #
+######################
+xcuserdata/
