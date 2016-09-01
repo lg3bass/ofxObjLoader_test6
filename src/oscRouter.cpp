@@ -90,10 +90,21 @@ void oscRouter::processOSCmessage(ofxOscMessage &m, vector<vboMeshObj> &tracks, 
         //int idx = m.getArgAsInt32(0);
         tracks[idx].clear();
     
+    } else if (m.getAddress() == "/OSCsetMatCap"){
+    
+        ofLogVerbose("OSC") << m.getAddress() << endl << "/OSCsetMatCap " << m.getArgAsInt32(0);
+        tracks[idx].matcapIndex = m.getArgAsInt32(1);
+        tracks[idx].setMatCap(m.getArgAsInt32(1));
         
-    //trackParams::setOSCtoggle
-    } else if (m.getAddress() == "/loaded"){
+    } else if (m.getAddress() == "/OSCsetTrack"){
+        ofLogVerbose("OSC") << m.getAddress() << endl << "/OSCsetTrack " << m.getArgAsInt32(0);
+        tracks[idx].objSeqIndex = m.getArgAsInt32(1);
+        tracks[idx].setTrack(m.getArgAsInt32(1));
+        
+    } else if (m.getAddress() == "/butter"){
         tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
+        tracks[idx].loadTrack();
+        
     } else if (m.getAddress() == "/still"){
         tracks[idx].trackParameters.setOSCtoggle(tracks[idx].params, m.getAddress(), m.getArgAsInt32(1));
     } else if (m.getAddress() == "/playNoteOff"){

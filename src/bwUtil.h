@@ -12,5 +12,7 @@ namespace bwUtil
     
     int getUniqueRandomInt(int low, int high, int prev);
     
+    string shortenString(string _input);
+    
     
 }

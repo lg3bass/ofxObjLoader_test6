@@ -17,8 +17,15 @@ trackParams::trackParams(){
 //--------------------------------------------------------------
 void trackParams::setDefault(guiParams &params){
     
+    params.title = "TEST TITLE";
+    
+    params.sequenceName = "undefined";
+    
+    params.trackIndex = 0;
+    
     params.playAll = false;
     params.playAllFinalize = false;
+    params.trackAssigned = false;
     params.isSelected = false;
     params.isLoaded = false;
     params.isPlaying = false;
@@ -37,6 +44,10 @@ void trackParams::setDefault(guiParams &params){
     
     params.mirror_distance = 10.0;
     //params.currentSegment = 0;//moved to instances
+    
+    
+    
+    
     params.stillFrame = 0;
     params.totalFrames = 0;
     params.testSpeed = 500;
@@ -185,8 +196,12 @@ void trackParams::reportParams(guiParams &params, int _i){
 
 //--------------------------------------------------------------
 void trackParams::setOSCtoggle(guiParams &params, string paramName, bool isActive){
-    if(paramName == "/loaded"){
+    if(paramName == "/butter"){
         params.isLoaded = isActive;
+        
+        
+        
+        
     } else if(paramName == "/still"){
         params.still = isActive;
     } else if (paramName == "/playNoteOff"){

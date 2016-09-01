@@ -40,6 +40,11 @@ namespace bwUtil
         
     }
     
-    
+    string shortenString(string _input) {
+        string outputString = _input.substr (0,31);//31 max characters allowed in ofxUITextArea -- because of width.
+        //cout << "OLD:" << _input << "|NEW:" << outputString << endl;
+        return outputString;
+        
+    }
     
 }

@@ -18,7 +18,12 @@ class vboMeshObj {
     ofxJSONElement jsonTrackData;
     
     vector<ofVboMesh> vboMesh1;
-    int index;//keep track of what instance you are
+    int index;          //What track number you are as shown in the track labels and GUI
+    int objSeqIndex;    //What object sequence is loaded
+    int matcapIndex;    //What matcap shader is selected.
+    
+    //list of Files
+    vector<string> availObjSeq;
     
     //------------------------------------
     //ALL OF THE TRACK PARAMETERS.
@@ -130,8 +135,13 @@ class vboMeshObj {
     vboMeshObj();
     
     ofxUICanvas* gui;
+    //ofxUICanvas* gui2;
+
     
-    void setup(const objFileLoader::extObjFile &_input);
+    void setup(int _input);
+    void loadTrackData(int _index);
+    void setTrack(int _index);
+    void loadTrack();
     vector<int> parseJSON(string _param);
     vector<ofVboMesh> passObjTwoVboMesh(vector<ofFile> _files);
     void loadVboMesh(const objFileLoader::extObjFile &_input);
@@ -141,10 +151,12 @@ class vboMeshObj {
     void update();
     void KeyboardLaunch(int _string, int _note, int _tweenType, int _instanceId, bool _noteOff = false);
     void setupGui(int _index);
+    void updateGui(int _index);
     void setGuiSnapUnits(string _name,float _unit);
     void setIndicator();
     void resetBufferInstance(int _buffer, string _mode);
     void clear();
+
     
     //OSC
     void bassControl(float &_amp, int _noteLength);

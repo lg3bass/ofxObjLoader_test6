@@ -16,8 +16,8 @@
 #include "ofxJSON.h"
 
 
-
-#define NUM_TRACKS 21
+//default 21
+#define NUM_TRACKS 11
 #define PORT 7000
 
 class ofApp : public ofBaseApp{
@@ -93,6 +93,9 @@ class ofApp : public ofBaseApp{
         //ofxUI
         ofxUITabBar *guiTabBar;
         vector<ofxUICanvas *> guis;
+    
+        ofxUICanvas* trackGui;//not used -- test
+    
     
         //ofxOSC
         ofxOscReceiver receiver;

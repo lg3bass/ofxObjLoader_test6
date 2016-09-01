@@ -10,9 +10,15 @@
 #include "ofxTween.h"
 
 struct guiParams {
-
+    
+    string title;
+    string sequenceName;
+    
+    int trackIndex;                 //Which obj sequence is loaded.
+    
     bool playAll;                   //play all the buffers to the next segment
     bool playAllFinalize;           //play all the buffers to the end of object sequence
+    bool trackAssigned;
     bool isSelected;
     bool isLoaded;
     bool isPlaying;
